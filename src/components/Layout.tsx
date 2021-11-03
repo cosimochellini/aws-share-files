@@ -1,18 +1,20 @@
-import { useState } from "react";
-import { styled, useTheme } from "@mui/material/styles";
-
-import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
-import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
-import { Typography, List, IconButton } from "@mui/material";
-
-import { Menu, ChevronLeft, ChevronRight, Inbox } from "@mui/icons-material";
-import { Mail, MoveToInbox } from "@mui/icons-material";
+import { useState, useEffect } from "react";
 import { AppProps } from "next/app";
 
+import { styled, useTheme } from "@mui/material/styles";
+
+import { Typography, List, IconButton } from "@mui/material";
+import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
+import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
+
+import { Mail } from "@mui/icons-material";
+import { Menu, ChevronLeft, ChevronRight, Inbox } from "@mui/icons-material";
+
 const drawerWidth = 240;
+let globalOpen = false;
 
 const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme, open }) => ({
+  ({ theme }) => ({
     flexGrow: 1,
     padding: theme.spacing(3),
     transition: theme.transitions.create("margin", {
@@ -20,7 +22,7 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: `-${drawerWidth}px`,
-    ...(open && {
+    ...(globalOpen && {
       transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
@@ -32,12 +34,12 @@ const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
 
 const MyAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme, open }) => ({
+})(({ theme }) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(open && {
+  ...(globalOpen && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
@@ -56,25 +58,22 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function Layout({
-  Component,
-  pageProps,
-}: AppProps) {
+export default function Layout({ Component, pageProps }: AppProps) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  useEffect(() => {
+    globalOpen = !open;
+  }, [open]);
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleDrawerOpen = () => setOpen(true);
+
+  const handleDrawerClose = () => setOpen(false);
 
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <MyAppBar position="fixed" open={open}>
+      <MyAppBar position="fixed">
         <Toolbar>
           <IconButton
             color="inherit"
@@ -131,7 +130,7 @@ export default function Layout({
           ))}
         </List>
       </Drawer>
-      <Main open={open}>
+      <Main>
         <DrawerHeader />
         <Component {...pageProps} />
       </Main>
