@@ -13,12 +13,13 @@ export default async function handler(
   res: NextApiResponse<Data>
 ) {
   try {
-    const files = await smbClient.readdir("/");
+    const files = await smbClient.readdir("/mnt2/dati");
 
     res.status(200).json({ files });
   } catch (error) {
     try {
-      const files = await client.listFiles("", "");
+      const files = (await client.list("")) as any as string[];
+      res.status(200).json({ files });
     } catch (error2) {
       res
         .status(500)

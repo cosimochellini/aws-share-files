@@ -1,4 +1,3 @@
-import * as React from "react";
 import theme from "../src/themes";
 import Document, { Html, Head, Main, NextScript } from "next/document";
 

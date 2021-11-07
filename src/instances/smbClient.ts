@@ -1,11 +1,10 @@
 import SMB2 from "@marsaud/smb2";
 import SambaClient from "samba-client";
+import { env } from "./env";
 
-const domain = "WORKGROUP";
-const address = process.env.address as string;
-const username = process.env.user as string;
-const password = process.env.password as string;
 const port = 445;
+const domain = "WORKGROUP";
+const { address, password, username } = env;
 
 console.log(
   `Connecting to ${JSON.stringify({ domain, address, username, password })}`
@@ -21,9 +20,6 @@ export const smbClient = new SMB2({
 });
 
 export const client = new SambaClient({
-  port,
-  domain,
   address,
-  username,
-  password,
+  username: username + "%" + password,
 });
