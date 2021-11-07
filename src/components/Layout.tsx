@@ -58,7 +58,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
   justifyContent: "flex-end",
 }));
 
-export default function Layout({ Component, pageProps }: AppProps) {
+export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   const theme = useTheme();
   const [open, setOpen] = useState(false);
 
@@ -132,7 +132,7 @@ export default function Layout({ Component, pageProps }: AppProps) {
       </Drawer>
       <Main>
         <DrawerHeader />
-        <Component {...pageProps} />
+        {Component && <Component {...pageProps} />}
       </Main>
     </Box>
   );

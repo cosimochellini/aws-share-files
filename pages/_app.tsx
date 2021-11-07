@@ -4,10 +4,8 @@ import type { AppProps } from "next/app";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
 import Layout from "../src/components/Layout";
-import { useRouter } from "next/router";
 
 const AppGrid = ({ Component, pageProps }: AppProps) => {
-  const router = useRouter();
   return (
     <>
       <Head>
@@ -17,7 +15,7 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
       <ThemeProvider theme={theme}>
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
-        <Layout Component={Component} pageProps={pageProps} router={router as any} />
+        <Layout Component={Component} pageProps={pageProps} />
       </ThemeProvider>
     </>
   );

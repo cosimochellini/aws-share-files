@@ -4,7 +4,8 @@ import { client, smbClient } from "../../src/instances/smbClient";
 
 type Data = {
   files?: string[];
-  error?: string;
+  error1?: string;
+  error2?: string;
 };
 
 export default async function handler(
@@ -16,6 +17,12 @@ export default async function handler(
 
     res.status(200).json({ files });
   } catch (error) {
-    res.status(500).json({ error: error as string });
+    try {
+      const files = await client.listFiles("", "");
+    } catch (error2) {
+      res
+        .status(500)
+        .json({ error1: error as string, error2: error2 as string });
+    }
   }
 }
