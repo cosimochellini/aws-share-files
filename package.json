@@ -1,12 +1,13 @@
 {
   "name": "s3-share-files",
-  "version": "0.1.3",
+  "version": "0.2.4",
   "private": false,
   "scripts": {
-    "dev": "yarn version --patch && next dev",
+    "dev": "yarn increase && next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "increase": "npm --no-git-tag-version version patch"
   },
   "dependencies": {
     "@emotion/react": "^11.5.0",

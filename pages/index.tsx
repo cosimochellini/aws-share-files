@@ -1,5 +1,6 @@
 import Copyright from "../src/components/Copyright";
-import { Link, Box, Container, Typography, Button } from "@mui/material";
+import { Box, Container, Typography, Button } from "@mui/material";
+import { Link } from "../src/components/Link";
 
 export default function Index() {
   return (
@@ -10,6 +11,9 @@ export default function Index() {
         </Typography>
         <Link href="/about" color="secondary">
           Go to the about page
+        </Link>
+        <Link href="/root" color="secondary">
+          Go to the root page
         </Link>
         <Button variant="contained" color="error">
           Hello
