@@ -12,9 +12,11 @@ export default function Index() {
         <Link href="/about" color="secondary">
           Go to the about page
         </Link>
+        <br />
         <Link href="/root" color="secondary">
           Go to the root page
         </Link>
+        <br />
         <Button variant="contained" color="error">
           Hello
         </Button>
