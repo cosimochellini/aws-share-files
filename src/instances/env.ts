@@ -1,5 +1,8 @@
 export const env = {
-  address: process.env.address as string,
-  username: process.env.user as string,
-  password: process.env.password as string,
+  s3: {
+    bucket: process.env.S3_BUCKET as string,
+    region: process.env.S3_REGION as string,
+    accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
+    secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
+  },
 };
