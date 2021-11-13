@@ -1,14 +1,12 @@
 import { useState } from "react";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemText from "@mui/material/ListItemText";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import Avatar from "@mui/material/Avatar";
+import { List, ListItem } from "@mui/material";
 import ImageIcon from "@mui/icons-material/Image";
-import type { S3 } from "aws-sdk";
+import { Avatar, ListItemAvatar, ListItemText } from "@mui/material";
+
+import type { ListObjectsOutput, Object } from "aws-sdk/clients/s3";
 
 export default function Root() {
-  const [data, setData] = useState([] as S3.Types.Object[]);
+  const [data, setData] = useState([] as Object[]);
   const [selectedIndex, setSelectedIndex] = useState(0);
 
   const handleListItemClick = (event: any, index: number) =>
@@ -16,7 +14,7 @@ export default function Root() {
 
   fetch("./api/s3/root.function")
     .then((res) => res.json())
-    .then((res: S3.Types.ListObjectsOutput) => setData(res.Contents ?? []));
+    .then((res: ListObjectsOutput) => setData(res.Contents ?? []));
 
   return (
     <div>
