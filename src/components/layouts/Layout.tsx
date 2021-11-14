@@ -1,13 +1,15 @@
 import { AppProps } from "next/app";
 import { useState, useEffect } from "react";
 
-import { styled, useTheme } from "@mui/material/styles";
+import { styled } from "@mui/material/styles";
 import { Typography, List, IconButton } from "@mui/material";
 import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
 import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
 
-import { Mail } from "@mui/icons-material";
-import { Menu, ChevronLeft, ChevronRight, Inbox } from "@mui/icons-material";
+import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
+import Link from "../Link";
+import { navbarItems } from "../../instances/navbar";
+import { env } from "../../instances/env";
 
 const drawerWidth = 240;
 let globalOpen = false;
@@ -58,7 +60,6 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
-  const theme = useTheme();
   const [open, setOpen] = useState(false);
 
   useEffect(() => {
@@ -84,7 +85,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
             <Menu />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Persistent drawer
+            {env.info.appTitle}
           </Typography>
         </Toolbar>
       </MyAppBar>
@@ -103,31 +104,25 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
       >
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
-            {theme.direction === "ltr" ? <ChevronLeft /> : <ChevronRight />}
+            {open ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </DrawerHeader>
         <Divider />
         <List>
-          {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
+          {navbarItems.map(({ name, redirect, icon }) => (
+            <ListItem
+              key={name}
+              button
+              component={(prop) => (
+                <Link key={name} href={redirect} {...prop} passHref />
+              )}
+            >
+              <ListItemIcon>{icon}</ListItemIcon>
+              <ListItemText primary={name} />
             </ListItem>
           ))}
         </List>
         <Divider />
-        <List>
-          {["All mail", "Trash", "Spam"].map((text, index) => (
-            <ListItem button key={text}>
-              <ListItemIcon>
-                {index % 2 === 0 ? <Inbox /> : <Mail />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItem>
-          ))}
-        </List>
       </Drawer>
       <Main>
         <DrawerHeader />

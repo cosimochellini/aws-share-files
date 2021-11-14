@@ -21,11 +21,11 @@ export default function Root() {
   useEffect(() => {
     let items = data;
 
-    if (search.length > 0) {
+    if (search) {
       const searchLower = search.toLowerCase();
 
-      items = items.filter((item) =>
-        item.Key?.toLocaleLowerCase().includes(searchLower)
+      items = items.filter((i) =>
+        i.Key?.toLocaleLowerCase().includes(searchLower)
       );
     }
     setDisplayedItems(items);
@@ -33,7 +33,7 @@ export default function Root() {
 
   return (
     <div>
-      <h1>Hello World</h1>
+      <h1>Files</h1>
       <TextField
         label="Search for author"
         type="search"
@@ -65,7 +65,7 @@ export default function Root() {
         }}
       >
         {displayedItems
-          ?.filter((x) => x.IsFolder)
+          .filter((x) => x.IsFolder)
           .map((item, i) => (
             <ListItem
               key={i}

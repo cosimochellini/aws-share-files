@@ -5,4 +5,7 @@ export const env = {
     accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
   },
+  info: {
+    appTitle: process.env.APP_TITLE as string,
+  },
 };

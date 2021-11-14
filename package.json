@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.2.6",
+  "version": "0.2.10",
   "private": false,
   "scripts": {
     "dev": "yarn increase && next dev",
