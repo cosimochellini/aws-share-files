@@ -1,9 +1,21 @@
-import { useState } from "react";
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import Link from "../Link";
+import { useRouter } from "next/router";
 import { navbarItems } from "../../instances/navbar";
+import { forwardRef, useEffect, useState } from "react";
+import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 
 export default function ButtonNavigation() {
+  const router = useRouter();
   const [value, setValue] = useState(0);
+
+  useEffect(() => {
+    const { pathname } = router;
+
+    const index =
+      navbarItems.findIndex((item) => item.redirect === pathname) ?? 0;
+
+    setValue(index);
+  }, [router]);
 
   return (
     <Paper
@@ -19,6 +31,10 @@ export default function ButtonNavigation() {
           .filter((x) => x.bottomNav)
           .map((item, index) => (
             <BottomNavigationAction
+              // eslint-disable-next-line react/display-name
+              component={forwardRef((prop, ref) => (
+                <Link key={item.name} href={item.redirect} {...prop} />
+              ))}
               key={index}
               label={item.name}
               icon={item.icon}

@@ -3,7 +3,7 @@ import { Folder, Search, Settings } from "@mui/icons-material";
 export const navbarItems = [
   {
     name: "Files",
-    redirect: "/files",
+    redirect: "/root",
     icon: <Folder />,
     bottomNav: true,
   },

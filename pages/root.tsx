@@ -1,89 +1,46 @@
+import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { S3Content } from "../src/classes/S3Content";
-import { Folder, Search } from "@mui/icons-material";
-import { functions } from "../src/instances/functions";
-import { IconButton, InputAdornment, List, ListItem } from "@mui/material";
-import { Avatar, ListItemAvatar, ListItemText, TextField } from "@mui/material";
+import { Files } from "../src/components/Files/Files";
+import { Folders } from "../src/components/Files/Folders";
+import { functions, AwaitedFunctionTypes } from "../src/instances/functions";
 
 export default function Root() {
-  const [search, setSearch] = useState("");
-  const [data, setData] = useState([] as S3Content[]);
-  const [selectedIndex, setSelectedIndex] = useState(0);
-  const [displayedItems, setDisplayedItems] = useState([] as S3Content[]);
+  const [loading, setLoading] = useState(true);
 
-  const handleListItemClick = (_: any, index: number) =>
-    setSelectedIndex(index);
+  const [items, setItems] = useState([] as AwaitedFunctionTypes["s3"]["root"]);
+
+  const [selectedFolder, setSelectedFolder] = useState(
+    null as S3Content | null
+  );
 
   useEffect(() => {
-    functions.s3.root.then((res) => setData(res));
+    functions.s3
+      .root()
+      .then((res) => setItems(res))
+      .catch((err) => console.error(err))
+      .finally(() => setLoading(false));
   }, []);
 
-  useEffect(() => {
-    let items = data;
-
-    if (search) {
-      const searchLower = search.toLowerCase();
-
-      items = items.filter((i) =>
-        i.Key?.toLocaleLowerCase().includes(searchLower)
-      );
-    }
-    setDisplayedItems(items);
-  }, [search, data]);
-
   return (
-    <div>
-      <h1>Files</h1>
-      <TextField
-        label="Search for author"
-        type="search"
-        sx={{
-          width: "100%",
-          maxWidth: 360,
-          bgcolor: "background.paper",
-          borderColor: "black",
-        }}
-        value={search}
-        onChange={(e) => setSearch(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton edge="end">
-                <Search />
-              </IconButton>
-            </InputAdornment>
-          ),
-        }}
-      />
-
-      <List
-        sx={{
-          width: "100%",
-          maxWidth: 360,
-          bgcolor: "background.paper",
-          borderColor: "black",
-        }}
-      >
-        {displayedItems
-          .filter((x) => x.IsFolder)
-          .map((item, i) => (
-            <ListItem
-              key={i}
-              selected={selectedIndex === i}
-              onMouseEnter={(e) => handleListItemClick(e, i)}
-            >
-              <ListItemAvatar>
-                <Avatar>
-                  <Folder />
-                </Avatar>
-              </ListItemAvatar>
-              <ListItemText
-                primary={item.FolderName}
-                secondary={new Date(item.LastModified ?? "").toLocaleString()}
-              />
-            </ListItem>
-          ))}
-      </List>
-    </div>
+    <>
+      <Grid container spacing={3} columnSpacing={{ xs: 1, md: 2 }}>
+        <Grid item xs={12} sm={6}>
+          <Folders
+            files={items}
+            loading={loading}
+            onSearch={setSelectedFolder}
+          />
+        </Grid>
+        <Grid item>
+          <Files
+            files={items}
+            loading={loading}
+            onSearch={(s) => console.log(s)}
+            currentFolder={selectedFolder}
+          ></Files>
+        </Grid>
+      </Grid>
+    </>
   );
 }

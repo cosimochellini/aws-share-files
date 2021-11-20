@@ -1,46 +1,47 @@
+import Link from "../Link";
 import { AppProps } from "next/app";
-import { useState, useEffect } from "react";
+import { env } from "../../instances/env";
+import { useState, useEffect, forwardRef } from "react";
 
 import { styled } from "@mui/material/styles";
+import { navbarItems } from "../../instances/navbar";
+
 import { Typography, List, IconButton } from "@mui/material";
 import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
 import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
 
 import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
-import Link from "../Link";
-import { navbarItems } from "../../instances/navbar";
-import { env } from "../../instances/env";
+import { device } from "../../services/device.service";
 
 const drawerWidth = 240;
-let globalOpen = false;
 
-const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
-  ({ theme }) => ({
-    flexGrow: 1,
-    padding: theme.spacing(3),
+const Main = styled("main" as any, {
+  shouldForwardProp: (prop) => prop !== "open",
+})(({ theme, open }) => ({
+  flexGrow: 1,
+  padding: theme.spacing(3),
+  transition: theme.transitions.create("margin", {
+    easing: theme.transitions.easing.sharp,
+    duration: theme.transitions.duration.leavingScreen,
+  }),
+  marginLeft: `-${drawerWidth}px`,
+  ...(open && {
     transition: theme.transitions.create("margin", {
-      easing: theme.transitions.easing.sharp,
-      duration: theme.transitions.duration.leavingScreen,
+      easing: theme.transitions.easing.easeOut,
+      duration: theme.transitions.duration.enteringScreen,
     }),
-    marginLeft: `-${drawerWidth}px`,
-    ...(globalOpen && {
-      transition: theme.transitions.create("margin", {
-        easing: theme.transitions.easing.easeOut,
-        duration: theme.transitions.duration.enteringScreen,
-      }),
-      marginLeft: 0,
-    }),
-  })
-);
+    marginLeft: 0,
+  }),
+}));
 
 const MyAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
-})(({ theme }) => ({
+})(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
-  ...(globalOpen && {
+  ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
     transition: theme.transitions.create(["margin", "width"], {
@@ -62,28 +63,30 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   const [open, setOpen] = useState(false);
 
-  useEffect(() => {
-    globalOpen = !open;
-  }, [open]);
-
   const handleDrawerOpen = () => setOpen(true);
 
   const handleDrawerClose = () => setOpen(false);
 
+  useEffect(() => {
+    setOpen(!device.isMobile);
+  }, []);
+
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", border: 0, borderRadius: 16 }}>
       <CssBaseline />
-      <MyAppBar position="fixed">
+      <MyAppBar position="fixed" open={open}>
         <Toolbar>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            onClick={handleDrawerOpen}
-            edge="start"
-            sx={{ mr: 2, ...(open && { display: "none" }) }}
-          >
-            <Menu />
-          </IconButton>
+          {!device.isMobile && (
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              onClick={handleDrawerOpen}
+              edge="start"
+              sx={{ mr: 2, ...(open && { display: "none" }) }}
+            >
+              <Menu />
+            </IconButton>
+          )}
           <Typography variant="h6" noWrap component="div">
             {env.info.appTitle}
           </Typography>
@@ -102,7 +105,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         anchor="left"
         open={open}
       >
-        <DrawerHeader>
+        <DrawerHeader open={open}>
           <IconButton onClick={handleDrawerClose}>
             {open ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
@@ -113,9 +116,10 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
             <ListItem
               key={name}
               button
-              component={(prop) => (
-                <Link key={name} href={redirect} {...prop} passHref />
-              )}
+              // eslint-disable-next-line react/display-name
+              component={forwardRef((prop, ref) => (
+                <Link key={name} href={redirect} {...prop} />
+              ))}
             >
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={name} />
@@ -124,7 +128,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         </List>
         <Divider />
       </Drawer>
-      <Main>
+      <Main open={open}>
         <DrawerHeader />
         {Component && <Component {...pageProps} />}
       </Main>

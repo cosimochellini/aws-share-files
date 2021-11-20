@@ -12,6 +12,7 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
   const ButtonNavigation = lazy(
     () => import("../src/components/layouts/ButtonNavigation")
   );
+
   return (
     <>
       <Head>
@@ -23,7 +24,7 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
         <CssBaseline />
         <Layout Component={Component} pageProps={pageProps} />
       </ThemeProvider>
-      {device.isMobile() && (
+      {device.isMobile && (
         <Suspense fallback={<div>Loading...</div>}>
           <ButtonNavigation />
         </Suspense>

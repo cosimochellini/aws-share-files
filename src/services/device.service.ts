@@ -1,11 +1,11 @@
 let isMobile: boolean | null = null;
 
 export const device = {
-  isMobile() {
+  get isMobile() {
     return (isMobile ??=
-      this.window()?.matchMedia("(max-width: 767px)").matches ?? false);
+      this.window?.matchMedia("(max-width: 767px)").matches ?? false);
   },
-  window() {
+  get window() {
     if (typeof window !== "undefined") return window;
     return null;
   },

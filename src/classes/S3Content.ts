@@ -15,9 +15,10 @@ export class S3Content {
   Files?: Object[];
   NestedSize?: number;
 
-  BindNestedSize() {
-    if (!this.IsFolder) return;
+  Hierarchy: string[];
+  FileName: string;
 
+  BindNestedSize() {
     this.NestedSize =
       this.Files?.reduce((acc, file) => acc + (file.Size ?? 0), 0) ?? 0;
   }
@@ -31,6 +32,9 @@ export class S3Content {
     this.Owner = content.Owner;
 
     this.IsFolder = this.Key?.endsWith("/") ?? false;
+
+    this.Hierarchy = this.Key?.split("/").filter((x) => x !== "") ?? [];
+    this.FileName = this.Hierarchy[this.Hierarchy.length - 1] ?? "";
 
     if (this.IsFolder) {
       this.FolderName = this.Key?.substring(0, this.Key.length - 1) ?? "";
