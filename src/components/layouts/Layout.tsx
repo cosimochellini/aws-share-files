@@ -15,8 +15,9 @@ import { device } from "../../services/device.service";
 
 const drawerWidth = 240;
 
-const Main = styled("main" as any, {
+const Main = styled("main", {
   shouldForwardProp: (prop) => prop !== "open",
+  /* @ts-ignore */
 })(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
@@ -36,6 +37,7 @@ const Main = styled("main" as any, {
 
 const MyAppBar = styled(AppBar, {
   shouldForwardProp: (prop) => prop !== "open",
+  /* @ts-ignore */
 })(({ theme, open }) => ({
   transition: theme.transitions.create(["margin", "width"], {
     easing: theme.transitions.easing.sharp,
@@ -74,6 +76,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   return (
     <Box sx={{ display: "flex", border: 0, borderRadius: 16 }}>
       <CssBaseline />
+      {/* @ts-ignore */}
       <MyAppBar position="fixed" open={open}>
         <Toolbar>
           {!device.isMobile && (
@@ -105,6 +108,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         anchor="left"
         open={open}
       >
+        {/* @ts-ignore */}
         <DrawerHeader open={open}>
           <IconButton onClick={handleDrawerClose}>
             {open ? <ChevronLeft /> : <ChevronRight />}
@@ -128,6 +132,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         </List>
         <Divider />
       </Drawer>
+      {/* @ts-ignore */}
       <Main open={open}>
         <DrawerHeader />
         {Component && <Component {...pageProps} />}

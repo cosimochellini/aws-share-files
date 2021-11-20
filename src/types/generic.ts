@@ -17,5 +17,6 @@ export type AwaitedServiceMapper<
 > = {
   [key in keyof T]: T[key] extends () => Promise<any>
     ? Awaited<ResponseType<T[key]>>
-    : AwaitedServiceMapper<T[key]>;
+    : /* @ts-ignore */
+      AwaitedServiceMapper<T[key]>;
 };
