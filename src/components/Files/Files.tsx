@@ -1,28 +1,28 @@
 import { useEffect, useState } from "react";
-import { S3Content } from "../../classes/S3Content";
+import { S3Folder } from "../../classes/S3Folder";
 import { formatter } from "../../formatters/formatter";
 import { AttachFile, Search } from "@mui/icons-material";
-import { AwaitedFunctionTypes } from "../../instances/functions";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
+import { S3FileGroup } from "../../classes/S3FileGroup";
 
 type Props = {
   loading: boolean;
-  files: AwaitedFunctionTypes["s3"]["root"];
-  currentFolder: S3Content | null;
-  onSearch: (query: S3Content) => void;
+  folders: S3Folder[];
+  currentFolder: S3Folder | null;
+  onSearch: (query: S3FileGroup) => void;
 };
 
 export function Files(props: Props) {
-  const { loading, files, currentFolder } = props;
+  const { loading, folders, currentFolder } = props;
 
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [displayedItems, setDisplayedItems] = useState([] as typeof files);
+  const [displayedItems, setDisplayedItems] = useState([] as typeof folders);
 
   useEffect(() => {
-    let items = files;
+    let items = folders;
 
     if (search) {
       const searchLower = search.toLowerCase();
@@ -37,7 +37,7 @@ export function Files(props: Props) {
     }
 
     setDisplayedItems(items);
-  }, [search, files, currentFolder]);
+  }, [search, folders, currentFolder]);
 
   return (
     <>
@@ -73,7 +73,7 @@ export function Files(props: Props) {
         {loading
           ? FilesPlaceholders(6)
           : displayedItems
-              .filter((x) => !x.IsFolder)
+              .flatMap((item) => item.Files)
               .map((item, i) => (
                 <ListItem
                   key={i}

@@ -11,4 +11,4 @@ export const functions = {
 };
 
 export type FunctionTypes = ServiceMapper<typeof functions>;
-export type AwaitedFunctionTypes = AwaitedServiceMapper<typeof functions>;
+export type AwaitedFunctionTypes = AwaitedServiceMapper<FunctionTypes>;

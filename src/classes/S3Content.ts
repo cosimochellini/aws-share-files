@@ -1,5 +1,7 @@
 import { Object, Owner } from "aws-sdk/clients/s3";
 
+type FileInfo = [name: string, extension: string];
+
 export class S3Content {
   Key?: string;
 
@@ -12,11 +14,35 @@ export class S3Content {
   IsFolder: boolean;
 
   FolderName?: string;
-  Files?: Object[];
+  Files: S3Content[];
   NestedSize?: number;
 
   Hierarchy: string[];
   FileName: string;
+  FileInfo: FileInfo;
+
+  Group: typeof S3Content.prototype.GroupedFiles;
+
+  get GroupedFiles() {
+    var map = new Map<string, S3Content[]>();
+
+    for (const file of this.Files) {
+      const [name = ""] = file.FileInfo ?? [];
+
+      const groupFiles = map.get(name);
+
+      if (groupFiles) {
+        map.set(name, [...groupFiles, file]);
+      } else {
+        map.set(name, [file]);
+      }
+    }
+
+    return Array.from(map.entries()).map(([fileName, files]) => ({
+      fileName,
+      files,
+    }));
+  }
 
   BindNestedSize() {
     this.NestedSize =
@@ -36,13 +62,32 @@ export class S3Content {
     this.Hierarchy = this.Key?.split("/").filter((x) => x !== "") ?? [];
     this.FileName = this.Hierarchy[this.Hierarchy.length - 1] ?? "";
 
-    if (this.IsFolder) {
-      this.FolderName = this.Key?.substring(0, this.Key.length - 1) ?? "";
-      this.Files = files.filter(
-        (file) => file.Key?.startsWith(this.Key!) && file.Key !== this.Key
-      );
+    this.FolderName = this.Key?.substring(0, this.Key.length - 1) ?? "";
+    this.Files = files
+      .filter((f) => f.Key?.startsWith(this.Key!) && f.Key !== this.Key)
+      .map((file) => new S3Content(file, files));
 
-      this.BindNestedSize();
-    }
+    this.BindNestedSize();
+
+    this.FileInfo = this.FileName.split(".") as FileInfo;
+
+    this.Group = this.GroupedFiles;
+  }
+}
+
+export abstract class S3BaseContent {
+  public Object: Object;
+
+  public Key: string;
+  public Owner?: Owner;
+  public Hierarchy: string[];
+  public LastModified: Date | undefined;
+
+  constructor(object: Object) {
+    this.Object = object;
+    this.Key = object.Key!;
+    this.Owner = object.Owner;
+    this.Hierarchy = this.Key?.split("/").filter((x) => x !== "") ?? [];
+    this.LastModified = object.LastModified;
   }
 }

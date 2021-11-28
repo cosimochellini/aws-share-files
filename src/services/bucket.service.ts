@@ -1,7 +1,7 @@
 import { env } from "../instances/env";
 import { s3 } from "../instances/s3";
-import { S3Content } from "../classes/S3Content";
 import { ServiceMapper } from "../types/generic";
+import { S3Folder } from "../classes/S3Folder";
 
 export const bucket = {
   async getAllFiles() {
@@ -10,8 +10,9 @@ export const bucket = {
       .promise();
 
     const items = s3response.Contents ?? [];
+    const folders = items.filter((x) => x.Key?.endsWith("/"));
 
-    return items.map((item) => new S3Content(item, items));
+    return folders.map((item) => new S3Folder(item, items));
   },
 };
 
