@@ -42,7 +42,7 @@ export function Folders(props: Props) {
         type="search"
         sx={{
           width: "100%",
-          maxWidth: 360,
+          maxWidth: 720,
           bgcolor: "background.paper",
           borderColor: "black",
         }}

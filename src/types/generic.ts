@@ -1,3 +1,5 @@
+export type FileInfo = [fileName: string, extension: string];
+
 export type Dictionary<T> = { [key: string]: T };
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;

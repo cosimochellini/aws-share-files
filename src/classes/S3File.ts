@@ -1,7 +1,6 @@
 import { Object } from "aws-sdk/clients/s3";
+import { FileInfo } from "../types/generic";
 import { S3BaseContent } from "./S3Content";
-
-type FileInfo = [fileName: string, extension: string];
 
 export class S3File extends S3BaseContent {
   public FileInfo: FileInfo;

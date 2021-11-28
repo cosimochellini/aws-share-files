@@ -3,9 +3,16 @@ import { S3Folder } from "../../classes/S3Folder";
 import { formatter } from "../../formatters/formatter";
 import { AttachFile, Search } from "@mui/icons-material";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
-import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
+import {
+  Avatar,
+  Chip,
+  IconButton,
+  InputAdornment,
+  ListItem,
+} from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
 import { S3FileGroup } from "../../classes/S3FileGroup";
+import { byString, byValue } from "sort-es";
 
 type Props = {
   loading: boolean;
@@ -44,11 +51,11 @@ export function Files(props: Props) {
       <h1>Files</h1>
 
       <TextField
-        label="Search for author"
+        label="Search for a file"
         type="search"
         sx={{
           width: "100%",
-          maxWidth: 360,
+          maxWidth: 720,
           bgcolor: "background.paper",
           borderColor: "black",
         }}
@@ -67,19 +74,20 @@ export function Files(props: Props) {
       <List
         sx={{
           width: "100%",
-          maxWidth: 360,
+          maxWidth: 720,
         }}
       >
         {loading
           ? FilesPlaceholders(6)
           : displayedItems
               .flatMap((item) => item.Files)
-              .map((item, i) => (
+              .sort(byValue("FileName", byString()))
+              .map((file, i) => (
                 <ListItem
                   key={i}
                   selected={selectedIndex === i}
                   onMouseEnter={(_) => setSelectedIndex(i)}
-                  onClick={() => props.onSearch(item)}
+                  onClick={() => props.onSearch(file)}
                 >
                   <ListItemAvatar>
                     <Avatar>
@@ -87,9 +95,13 @@ export function Files(props: Props) {
                     </Avatar>
                   </ListItemAvatar>
                   <ListItemText
-                    primary={item.FileName}
-                    secondary={formatter.dateFormatter(item.LastModified)}
-                  />
+                    primary={file.FileInfo[0]}
+                    secondary={formatter.dateFormatter(file.LastModified)}
+                  ></ListItemText>
+
+                  {file.Files.map(({ extension }) => (
+                    <Chip label={extension} key={extension} size="small" />
+                  ))}
                 </ListItem>
               ))}
       </List>
