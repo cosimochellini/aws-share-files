@@ -1,5 +1,5 @@
 import { Object } from "aws-sdk/clients/s3";
-import { S3BaseContent } from "./S3Content";
+import { S3BaseContent } from "./S3BaseContent";
 import { S3FileGroup } from "./S3FileGroup";
 
 export class S3Folder extends S3BaseContent {
@@ -15,6 +15,6 @@ export class S3Folder extends S3BaseContent {
       (s) => s.Key?.startsWith(this.Object.Key!) && s.Key !== this.Object.Key
     );
 
-    this.Files = S3FileGroup.Create(files, siblings);
+    this.Files = S3FileGroup.Create(files);
   }
 }
