@@ -10,11 +10,10 @@ export const bucket = {
       .listObjects({ Bucket: env.s3.bucket })
       .promise();
 
-    console.log(s3response);
-
     const items = s3response.Contents ?? [];
-    const folders = items.filter((x) => x.Key?.endsWith("/"));
-    return folders
+
+    return items
+      .filter((x) => x.Key?.endsWith("/"))
       .map((item) => new S3Folder(item, items))
       .sort(byValue("FolderName", byString()));
   },

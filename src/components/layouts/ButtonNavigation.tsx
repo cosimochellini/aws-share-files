@@ -1,4 +1,5 @@
 import Link from "../Link";
+import { styled } from "@mui/system";
 import { useRouter } from "next/router";
 import { navbarItems } from "../../instances/navbar";
 import { forwardRef, useEffect, useState } from "react";
@@ -17,30 +18,37 @@ export default function ButtonNavigation() {
     setValue(index);
   }, [router]);
 
+  const BottomDiv = styled("div")({
+    marginBottom: "60px",
+  });
+
   return (
-    <Paper
-      sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-      elevation={3}
-    >
-      <BottomNavigation
-        showLabels
-        value={value}
-        onChange={(_, newValue) => setValue(newValue)}
+    <>
+      <BottomDiv />
+      <Paper
+        sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
+        elevation={3}
       >
-        {navbarItems
-          .filter((x) => x.bottomNav)
-          .map((item, index) => (
-            <BottomNavigationAction
-              // eslint-disable-next-line react/display-name
-              component={forwardRef((prop, ref) => (
-                <Link key={item.name} href={item.redirect} {...prop} />
-              ))}
-              key={index}
-              label={item.name}
-              icon={item.icon}
-            />
-          ))}
-      </BottomNavigation>
-    </Paper>
+        <BottomNavigation
+          showLabels
+          value={value}
+          onChange={(_, newValue) => setValue(newValue)}
+        >
+          {navbarItems
+            .filter((x) => x.bottomNav)
+            .map((item, index) => (
+              <BottomNavigationAction
+                // eslint-disable-next-line react/display-name
+                component={forwardRef((prop, ref) => (
+                  <Link key={item.name} href={item.redirect} {...prop} />
+                ))}
+                key={index}
+                label={item.name}
+                icon={item.icon}
+              />
+            ))}
+        </BottomNavigation>
+      </Paper>
+    </>
   );
 }

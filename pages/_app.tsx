@@ -1,12 +1,12 @@
 import Head from "next/head";
 import theme from "../src/themes";
+import { lazy, Suspense } from "react";
 import type { AppProps } from "next/app";
+import { env } from "../src/instances/env";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
 import Layout from "../src/components/layouts/Layout";
-import { lazy, Suspense } from "react";
 import { device } from "../src/services/device.service";
-import { env } from "../src/instances/env";
 
 const AppGrid = ({ Component, pageProps }: AppProps) => {
   const ButtonNavigation = lazy(
@@ -24,11 +24,11 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
         <CssBaseline />
         <Layout Component={Component} pageProps={pageProps} />
       </ThemeProvider>
-      {device.isMobile && (
+      {device.isMobile ? (
         <Suspense fallback={<div>Loading...</div>}>
           <ButtonNavigation />
         </Suspense>
-      )}
+      ) : null}
     </>
   );
 };

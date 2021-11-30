@@ -41,10 +41,7 @@ export function Folders(props: Props) {
         label="Search for author"
         type="search"
         sx={{
-          width: "100%",
-          maxWidth: 720,
-          bgcolor: "background.paper",
-          borderColor: "black",
+          width: { xs: "100%", sm: "90%" },
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -60,8 +57,7 @@ export function Folders(props: Props) {
       />
       <List
         sx={{
-          width: "100%",
-          maxWidth: 360,
+          width: { xs: "100%", sm: "90%" },
         }}
       >
         {loading
@@ -72,6 +68,7 @@ export function Folders(props: Props) {
                 selected={hoveredItem === i}
                 onMouseEnter={(_) => setHoveredItem(i)}
                 onClick={() => props.onSearch(item)}
+                sx={{ borderRadius: 6 }}
               >
                 <ListItemAvatar>
                   <Avatar>
