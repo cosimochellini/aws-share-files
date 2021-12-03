@@ -16,7 +16,7 @@ export type Props = {
   onClearFolder?: () => void;
 };
 
-export default function Files(props: Props) {
+export function Files(props: Props) {
   const { loading, folders, currentFolder } = props;
 
   const [search, setSearch] = useState("");
@@ -33,10 +33,12 @@ export default function Files(props: Props) {
     let items = folders;
 
     if (search) {
-      const searchLower = search.toLowerCase();
+      const searchLower = search.trim().toLowerCase();
 
-      items = items.filter((i) =>
-        i.Hierarchy.some((h) => h.toLowerCase().includes(searchLower))
+      items = items.filter(
+        (i) =>
+          i.Hierarchy.some((h) => h.toLowerCase().includes(searchLower)) ||
+          i.Files.some((f) => f.FileName.toLowerCase().includes(searchLower))
       );
     }
 
@@ -56,15 +58,6 @@ export default function Files(props: Props) {
     <>
       <h1>Files</h1>
 
-      {currentFolder ? (
-        <Chip
-          label={"Author: " + currentFolder.FolderName}
-          variant="outlined"
-          onDelete={handleDeleteAuthor}
-          sx={{ marginBottom: 2 }}
-        />
-      ) : null}
-
       <TextField
         label="Search for a file"
         type="search"
@@ -81,6 +74,14 @@ export default function Files(props: Props) {
               </IconButton>
             </InputAdornment>
           ),
+          startAdornment: currentFolder ? (
+            <Chip
+              label={"Author: " + currentFolder.FolderName}
+              variant="outlined"
+              onDelete={handleDeleteAuthor}
+              sx={{ marginRight: "5px" }}
+            />
+          ) : null,
         }}
       />
       <List

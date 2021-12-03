@@ -8,4 +8,7 @@ export const env = {
   info: {
     appTitle: process.env.APP_TITLE as string,
   },
+  content: {
+    baseUrl: process.env.CONTENT_API_URL as string,
+  },
 };

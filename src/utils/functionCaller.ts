@@ -1,5 +1,5 @@
-export const caller = <T>(url: string) =>
-  fetch("./api/" + url)
+export const caller = <T>(url: string, query = {}) =>
+  fetch("./api/" + url + "?" + new URLSearchParams(query).toString())
     .then((res) => res.json())
-    .catch((err) => console.log(err))
+    .catch(console.error)
     .then((res: T) => res);
