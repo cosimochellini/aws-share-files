@@ -1,4 +1,5 @@
 import { env } from "../instances/env";
+import { ContentResponse } from "../types/content.types";
 import { ServiceMapper } from "../types/generic";
 
 const contentApiCaller = <T>(section: string, query = {}) => {
@@ -11,7 +12,9 @@ const contentApiCaller = <T>(section: string, query = {}) => {
 
 export const content = {
   findFirstContent(query: string) {
-    return contentApiCaller<any>("/volumes", { q: query });
+    return contentApiCaller<ContentResponse>("/volumes", { q: query }).then(
+      (res) => res.items[0].volumeInfo
+    );
   },
 };
 

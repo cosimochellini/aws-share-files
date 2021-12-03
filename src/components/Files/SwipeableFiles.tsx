@@ -1,13 +1,11 @@
-import { useEffect, useState } from "react";
 import Box from "@mui/material/Box";
-import Files, { Props } from "./Files";
+import { Files, Props } from "./Files";
 import { Global } from "@emotion/react";
-import Button from "@mui/material/Button";
-import { CssBaseline, Grid } from "@mui/material";
 import { grey } from "@mui/material/colors";
+import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
+import { CssBaseline, Grid } from "@mui/material";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
-import { S3Folder } from "../../classes/S3Folder";
 
 const drawerBleeding = 56;
 const StyledBox = styled(Box)(({ theme }) => ({
