@@ -17,6 +17,15 @@ export const bucket = {
       .map((item) => new S3Folder(item, items))
       .sort(byValue("FolderName", byString()));
   },
+
+  async downloadFile(key: string) {
+    return s3
+      .getObject({
+        Bucket: env.s3.bucket,
+        Key: key,
+      })
+      .createReadStream();
+  },
 };
 
 export type bucketTypes = ServiceMapper<typeof bucket>;

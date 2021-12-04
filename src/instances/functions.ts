@@ -8,6 +8,11 @@ export const functions = {
     root() {
       return caller<bucketTypes["getAllFiles"]>("s3/root.function");
     },
+    downloadFile(key: string) {
+      return caller<bucketTypes["downloadFile"]>("s3/downloadFile.function", {
+        key,
+      });
+    },
   },
   content: {
     findFirst(query: string) {

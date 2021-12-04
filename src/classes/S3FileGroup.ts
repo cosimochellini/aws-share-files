@@ -1,8 +1,8 @@
 import { S3File } from "./S3File";
 import { Object } from "aws-sdk/clients/s3";
 import { S3BaseContent } from "./S3BaseContent";
-import { FileInfo } from "../types/generic";
 import { byString, byValue } from "sort-es";
+import { FileInfo } from "./FileInfo";
 
 export class S3FileGroup extends S3BaseContent {
   public FileName: string;
@@ -14,13 +14,13 @@ export class S3FileGroup extends S3BaseContent {
     super(file);
 
     this.FileName = this.Hierarchy[this.Hierarchy.length - 1];
-    this.FileInfo = this.FileName.split(".") as FileInfo;
+    this.FileInfo = new FileInfo(this.FileName);
 
     this.Files = siblings.map((sibling) => {
       const file = new S3File(sibling);
-      const [, extension] = file.FileInfo;
+      const { Extension } = file.FileInfo;
 
-      return { extension, file };
+      return { extension: Extension, file };
     });
   }
 
@@ -34,13 +34,13 @@ export class S3FileGroup extends S3BaseContent {
     const map = [] as { fileName: string; files: S3File[] }[];
 
     for (const file of files) {
-      const fileName = file.FileInfo[0];
+      const { Name } = file.FileInfo;
 
-      if (map.findIndex((f) => f.fileName === fileName) === -1) {
-        map.push({ fileName, files: [] });
+      if (map.findIndex((f) => f.fileName === Name) === -1) {
+        map.push({ fileName: Name, files: [] });
       }
 
-      map.find((f) => f.fileName === fileName)!.files.push(file);
+      map.find((f) => f.fileName === Name)!.files.push(file);
     }
 
     return map

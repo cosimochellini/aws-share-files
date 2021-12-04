@@ -64,7 +64,7 @@ export function Folders(props: Props) {
           ? FilesPlaceholders(6)
           : displayedItems.map((item, i) => (
               <ListItem
-                key={i}
+                key={item.Key}
                 selected={hoveredItem === i}
                 onMouseEnter={(_) => setHoveredItem(i)}
                 onClick={() => props.onSearch(item)}

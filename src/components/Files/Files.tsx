@@ -105,7 +105,7 @@ export function Files(props: Props) {
                   </Avatar>
                 </ListItemAvatar>
                 <ListItemText
-                  primary={file.FileInfo[0]}
+                  primary={file.FileInfo.Name}
                   secondary={file.Hierarchy[0]}
                 ></ListItemText>
 

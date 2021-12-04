@@ -70,7 +70,9 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   const handleDrawerClose = () => setOpen(false);
 
   useEffect(() => {
-    setOpen(!device.isMobile);
+    if (!device.isMobile && device.hasWidth(1200)) {
+      setOpen(true);
+    }
   }, []);
 
   return (

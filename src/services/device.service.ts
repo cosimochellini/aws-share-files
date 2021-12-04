@@ -6,6 +6,10 @@ export const device = {
       this.window?.matchMedia("(max-width: 767px)").matches ?? false);
   },
 
+  hasWidth(width: number) {
+    return (this.window?.innerWidth ?? 0) >= width;
+  },
+
   get isDesktop() {
     return !this.isMobile;
   },
