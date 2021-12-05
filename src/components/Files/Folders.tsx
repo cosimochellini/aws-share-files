@@ -1,3 +1,4 @@
+import { byValue, byString } from "sort-es";
 import { useEffect, useState } from "react";
 import { S3Folder } from "../../classes/S3Folder";
 import { formatter } from "../../formatters/formatter";
@@ -30,7 +31,9 @@ export function Folders(props: Props) {
       );
     }
 
-    setDisplayedItems(items);
+    setDisplayedItems(
+      items.slice(0, 10).sort(byValue((x) => x.FolderName, byString()))
+    );
   }, [search, folders]);
 
   return (

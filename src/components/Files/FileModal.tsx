@@ -1,15 +1,13 @@
-import { red } from "@mui/material/colors";
+import { ReadMore } from "../Text/ReadMore";
 import { useEffect, useState } from "react";
-import { CardHeader, Rating, Skeleton } from "@mui/material";
-import { S3FileGroup } from "../../classes/S3FileGroup";
-import { IconButton, Modal, Typography } from "@mui/material";
-import { ExpandMore, Favorite, MoreVert, Share } from "@mui/icons-material";
-import { Avatar, Card, CardActions, CardContent } from "@mui/material";
+import { FilesAccordion } from "./FilesAccordion";
+import { Modal, Typography } from "@mui/material";
+import { Card, CardContent } from "@mui/material";
 import { functions } from "../../instances/functions";
 import { VolumeInfo } from "../../types/content.types";
-import { ReadMore } from "../Text/ReadMore";
-import { FilesAccordion } from "./FilesAccordion";
 import { device } from "../../services/device.service";
+import { S3FileGroup } from "../../classes/S3FileGroup";
+import { CardHeader, Rating, Skeleton } from "@mui/material";
 
 type Props = {
   file: S3FileGroup | null;
@@ -32,7 +30,7 @@ export function FileModal(props: Props) {
     if (!file) return;
 
     functions.content
-      .findFirst(file.FileInfo.Name)
+      .findFirst(`${file.FileInfo.Name}, ${file.Hierarchy[0]}`)
       .then((v) => setVolume(v))
       .catch(console.error);
   }, [file]);
@@ -86,6 +84,7 @@ export function FileModal(props: Props) {
                   variant="body2"
                   color="text.secondary"
                   sx={{ marginBottom: 3 }}
+                  align="justify"
                 >
                   <ReadMore text={volume.description} />
                 </Typography>

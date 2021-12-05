@@ -23,12 +23,12 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Layout Component={Component} pageProps={pageProps} />
+        {device.isMobile ? (
+          <Suspense fallback={<div>Loading...</div>}>
+            <ButtonNavigation />
+          </Suspense>
+        ) : null}
       </ThemeProvider>
-      {device.isMobile ? (
-        <Suspense fallback={<div>Loading...</div>}>
-          <ButtonNavigation />
-        </Suspense>
-      ) : null}
     </>
   );
 };
