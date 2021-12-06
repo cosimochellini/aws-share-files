@@ -1,12 +1,12 @@
 import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
-import { Files } from "../src/components/Files/Files";
 import { S3Folder } from "../src/classes/S3Folder";
+import { Files } from "../src/components/Files/Files";
 import { device } from "../src/services/device.service";
-import { Folders } from "../src/components/Files/Folders";
-import { functions, AwaitedFunctionTypes } from "../src/instances/functions";
-import { FileModal } from "../src/components/Files/FileModal";
 import { S3FileGroup } from "../src/classes/S3FileGroup";
+import { Folders } from "../src/components/Files/Folders";
+import { FileModal } from "../src/components/Files/FileModal";
+import { functions, AwaitedFunctionTypes } from "../src/instances/functions";
 
 export default function Root() {
   const [loading, setLoading] = useState(true);

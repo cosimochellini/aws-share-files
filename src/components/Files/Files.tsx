@@ -1,12 +1,14 @@
 import { Chip } from "@mui/material";
 import { byString, byValue } from "sort-es";
 import { useEffect, useState } from "react";
+import { ResultCount } from "./ResultCount";
 import { S3Folder } from "../../classes/S3Folder";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { AutoStories, Search } from "@mui/icons-material";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
+import { sharedConfiguration } from "../../instances/sharedConfiguration";
 
 export type Props = {
   loading: boolean;
@@ -15,6 +17,8 @@ export type Props = {
   onSearch?: (query: S3FileGroup) => void;
   onClearFolder?: () => void;
 };
+
+const { itemsConfiguration } = sharedConfiguration;
 
 export function Files(props: Props) {
   const { loading, folders, currentFolder } = props;
@@ -50,7 +54,6 @@ export function Files(props: Props) {
       items
         .flatMap((item) => item.Files)
         .sort(byValue((x) => x.FileName, byString()))
-        .slice(0, 10)
     );
   }, [search, folders, currentFolder]);
 
@@ -89,15 +92,18 @@ export function Files(props: Props) {
           width: { xs: "100%", sm: "90%" },
         }}
       >
-        {loading
-          ? FilesPlaceholders(6)
-          : displayedItems.map((file, i) => (
+        {loading ? (
+          <FilesPlaceholders count={itemsConfiguration.maxCount} />
+        ) : (
+          displayedItems
+            .slice(0, itemsConfiguration.maxCount)
+            .map((file, i) => (
               <ListItem
                 key={file.Key}
-                selected={selectedIndex === i}
-                onMouseEnter={(_) => setSelectedIndex(i)}
-                onClick={() => props.onSearch?.(file)}
                 sx={{ borderRadius: 6 }}
+                selected={selectedIndex === i}
+                onClick={() => props.onSearch?.(file)}
+                onMouseEnter={(_) => setSelectedIndex(i)}
               >
                 <ListItemAvatar>
                   <Avatar>
@@ -110,16 +116,22 @@ export function Files(props: Props) {
                 ></ListItemText>
 
                 <Chip
+                  size="small"
+                  sx={{ marginX: "1px" }}
+                  title={file.Files.map(({ extension }) => extension).join(" ")}
                   label={file.Files.map((f) =>
                     f.extension[0].toUpperCase()
                   ).join(" ")}
-                  title={file.Files.map(({ extension }) => extension).join(" ")}
-                  size="small"
-                  sx={{ marginX: "1px" }}
                 />
               </ListItem>
-            ))}
+            ))
+        )}
       </List>
+      <ResultCount
+        displayName="files"
+        totalItems={displayedItems.length}
+        displayedItems={itemsConfiguration.maxCount}
+      />
     </>
   );
 }

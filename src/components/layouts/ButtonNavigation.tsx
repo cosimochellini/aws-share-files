@@ -27,7 +27,6 @@ export default function ButtonNavigation() {
       <BottomDiv />
       <Paper
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
-        elevation={3}
         variant="outlined"
       >
         <BottomNavigation
@@ -39,10 +38,11 @@ export default function ButtonNavigation() {
             .filter((x) => x.bottomNav)
             .map((item, index) => (
               <BottomNavigationAction
-                // eslint-disable-next-line react/display-name
-                component={forwardRef((prop, ref) => (
-                  <Link key={item.name} href={item.redirect} {...prop} />
-                ))}
+                component={forwardRef(function Item(prop, _) {
+                  return (
+                    <Link {...prop} key={item.name} href={item.redirect} />
+                  );
+                })}
                 key={index}
                 label={item.name}
                 icon={item.icon}
