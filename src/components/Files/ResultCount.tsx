@@ -9,12 +9,12 @@ type Props = {
 
 export function ResultCount(props: Props) {
   const { displayedItems, totalItems } = props;
-  const [shouldDisplayItems, setShouldDisplayItems] = useState(false);
   const [remainingItems, setRemainingItems] = useState(0);
+  const [shouldDisplayItems, setShouldDisplayItems] = useState(false);
 
   useEffect(() => {
-    setShouldDisplayItems(displayedItems < totalItems);
     setRemainingItems(totalItems - displayedItems);
+    setShouldDisplayItems(displayedItems < totalItems);
   }, [displayedItems, totalItems]);
 
   return shouldDisplayItems ? (
