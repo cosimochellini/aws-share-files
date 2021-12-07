@@ -15,7 +15,7 @@ export const bucket = {
     return items
       .filter((x) => x.Key?.endsWith("/"))
       .map((item) => new S3Folder(item, items))
-      .sort(byValue("FolderName", byString()));
+      .sort(byValue((x) => x.FolderName, byString()));
   },
 
   async downloadFile(key: string) {

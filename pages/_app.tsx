@@ -6,12 +6,13 @@ import { env } from "../src/instances/env";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
 import Layout from "../src/components/layouts/Layout";
-import { device } from "../src/services/device.service";
+import { useDevice } from "../src/hooks/device.hook";
 
 const AppGrid = ({ Component, pageProps }: AppProps) => {
   const ButtonNavigation = lazy(
     () => import("../src/components/layouts/ButtonNavigation")
   );
+  const { isMobile } = useDevice();
 
   return (
     <>
@@ -23,7 +24,7 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Layout Component={Component} pageProps={pageProps} />
-        {device.isMobile ? (
+        {isMobile ? (
           <Suspense fallback={<div>Loading...</div>}>
             <ButtonNavigation />
           </Suspense>

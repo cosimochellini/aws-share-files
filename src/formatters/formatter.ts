@@ -1,8 +1,13 @@
 type datable = string | Date | null | undefined;
 
 const defaultLang = "en-US";
+const fileSizes = ["Bytes", "KB", "MB", "GB", "TB"];
 
-const dateIntLn = new Intl.DateTimeFormat(defaultLang);
+const dateIntLn = new Intl.DateTimeFormat(defaultLang, {
+  day: "2-digit",
+  month: "2-digit",
+  year: "numeric",
+});
 
 const rtf = new Intl.RelativeTimeFormat(defaultLang, {
   localeMatcher: "best fit", // other values: "lookup"
@@ -35,5 +40,12 @@ export const formatter = {
       }
     }
     return "";
+  },
+  fileFormatter(bytes: number): string {
+    if (bytes == 0) return "0 Byte";
+
+    const i = Math.floor(Math.log(bytes) / Math.log(1024));
+
+    return Math.round(bytes / Math.pow(1024, i)) + " " + fileSizes[i];
   },
 };

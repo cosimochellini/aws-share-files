@@ -1,8 +1,8 @@
 import { Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { S3Folder } from "../src/classes/S3Folder";
+import { useDevice } from "../src/hooks/device.hook";
 import { Files } from "../src/components/Files/Files";
-import { device } from "../src/services/device.service";
 import { S3FileGroup } from "../src/classes/S3FileGroup";
 import { Folders } from "../src/components/Files/Folders";
 import { FileModal } from "../src/components/Files/FileModal";
@@ -21,6 +21,8 @@ export default function Root() {
     null as S3FileGroup | null
   );
 
+  const { isDesktop } = useDevice();
+
   useEffect(() => {
     functions.s3
       .root()
@@ -32,7 +34,7 @@ export default function Root() {
   return (
     <>
       <Grid container spacing={{ xs: 1, sm: 3 }} alignItems="flex-start">
-        {device.isDesktop ? (
+        {isDesktop ? (
           <Grid item xs={12} sm={6} sx={{ minHeight: 800 }}>
             <Folders
               folders={folders}

@@ -1,13 +1,10 @@
-let isMobile: boolean | null = null;
-
 export const device = {
   get isMobile() {
-    return (isMobile ??=
-      this.window?.matchMedia("(max-width: 767px)").matches ?? false);
+    return this.window?.matchMedia("(max-width: 767px)").matches ?? false;
   },
 
   hasWidth(width: number) {
-    return (this.window?.innerWidth ?? 0) >= width;
+    return (device.window?.innerWidth ?? 0) >= width;
   },
 
   get isDesktop() {

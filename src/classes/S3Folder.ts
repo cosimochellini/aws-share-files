@@ -1,6 +1,6 @@
+import { S3FileGroup } from "./S3FileGroup";
 import { Object } from "aws-sdk/clients/s3";
 import { S3BaseContent } from "./S3BaseContent";
-import { S3FileGroup } from "./S3FileGroup";
 
 export class S3Folder extends S3BaseContent {
   public FolderName: string;
@@ -9,7 +9,7 @@ export class S3Folder extends S3BaseContent {
   constructor(folder: Object, siblings: Object[]) {
     super(folder);
 
-    [this.FolderName] = this.Key.split("/");
+    this.FolderName = this.Key.split("/")[0];
 
     const files = siblings.filter(
       (s) => s.Key?.startsWith(this.Object.Key!) && s.Key !== this.Object.Key

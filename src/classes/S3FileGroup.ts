@@ -28,8 +28,8 @@ export class S3FileGroup extends S3BaseContent {
    * group files by their file + extension
    * @param files
    */
-  public static Create(fileInCurrentFolder: Object[]): S3FileGroup[] {
-    const files = fileInCurrentFolder.map((file) => new S3File(file));
+  public static Create(filesInCurrentFolder: Object[]): S3FileGroup[] {
+    const files = filesInCurrentFolder.map((file) => new S3File(file));
 
     const map = [] as { fileName: string; files: S3File[] }[];
 

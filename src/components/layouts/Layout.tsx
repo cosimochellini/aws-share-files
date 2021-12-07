@@ -1,17 +1,16 @@
 import Link from "../Link";
 import { AppProps } from "next/app";
 import { env } from "../../instances/env";
+import { useDevice } from "../../hooks/device.hook";
 import { useState, useEffect, forwardRef } from "react";
 
 import { styled } from "@mui/material/styles";
 import { navbarItems } from "../../instances/navbar";
 
 import { Typography, List, IconButton } from "@mui/material";
+import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
 import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
-
-import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { device } from "../../services/device.service";
 
 const drawerWidth = 240;
 
@@ -64,16 +63,17 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   const [open, setOpen] = useState(false);
+  const { isMobile, hasWidth } = useDevice();
+
+  useEffect(() => {
+    if (!isMobile && hasWidth(1200)) {
+      setOpen(true);
+    }
+  }, [isMobile, hasWidth]);
 
   const handleDrawerOpen = () => setOpen(true);
 
   const handleDrawerClose = () => setOpen(false);
-
-  useEffect(() => {
-    if (!device.isMobile && device.hasWidth(1200)) {
-      setOpen(true);
-    }
-  }, []);
 
   return (
     <Box sx={{ display: "flex", border: 0, borderRadius: 16 }}>
@@ -81,7 +81,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
       {/* @ts-ignore */}
       <MyAppBar position="fixed" open={open}>
         <Toolbar>
-          {!device.isMobile && (
+          {!isMobile && (
             <IconButton
               color="inherit"
               aria-label="open drawer"
@@ -122,10 +122,9 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
             <ListItem
               key={name}
               button
-              // eslint-disable-next-line react/display-name
-              component={forwardRef((prop, ref) => (
-                <Link key={name} href={redirect} {...prop} />
-              ))}
+              component={forwardRef(function Component(prop, ref) {
+                return <Link key={name} href={redirect} {...prop} />;
+              })}
             >
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={name} />
