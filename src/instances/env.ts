@@ -11,4 +11,13 @@ export const env = {
   content: {
     baseUrl: process.env.CONTENT_API_URL as string,
   },
+  email: {
+    signature: process.env.EMAIL_SIGNATURE as string,
+    host: process.env.EMAIL_HOST as string,
+    port: parseInt(process.env.EMAIL_PORT as string),
+    auth: {
+      user: process.env.EMAIL_USER as string,
+      pass: process.env.EMAIL_PASSWORD as string,
+    },
+  },
 };

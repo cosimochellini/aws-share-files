@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.5.2",
+  "version": "0.5.7",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -17,12 +17,14 @@
     "@mui/material": "^5.2.3",
     "aws-sdk": "^2.1044.0",
     "next": "12.0.7",
+    "nodemailer": "^6.7.2",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "sort-es": "^1.4.0"
   },
   "devDependencies": {
     "@types/node": "16.11.12",
+    "@types/nodemailer": "^6.4.4",
     "@types/react": "17.0.37",
     "dotenv": "^10.0.0",
     "dotenv-webpack": "^7.0.3",

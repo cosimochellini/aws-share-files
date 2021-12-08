@@ -1,15 +1,15 @@
 import type { NextApiResponse } from "next";
 
-export const handleError = async (
+export const handleError = async <T>(
   res: NextApiResponse<unknown>,
-  apiFn: () => unknown | Promise<unknown>
+  apiFn: () => T | Promise<T>
 ) => {
   try {
     const ret = apiFn();
 
-    if (!(ret instanceof Promise)) return;
+    if (!(ret instanceof Promise)) return ret;
 
-    await ret;
+    return await ret;
   } catch (e: any) {
     res.status(500).json({ error: e.message ?? e });
   }
