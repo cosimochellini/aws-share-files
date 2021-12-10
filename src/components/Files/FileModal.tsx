@@ -1,23 +1,15 @@
 import { ReadMore } from "../Text/ReadMore";
 import { useEffect, useState } from "react";
 import { FilesAccordion } from "./FilesAccordion";
-import {
-  Chip,
-  ChipTypeMap,
-  Divider,
-  Grid,
-  Modal,
-  Typography,
-} from "@mui/material";
 import { Card, CardContent } from "@mui/material";
 import { useDevice } from "../../hooks/device.hook";
 import { functions } from "../../instances/functions";
 import { VolumeInfo } from "../../types/content.types";
 import { S3FileGroup } from "../../classes/S3FileGroup";
-import { CardHeader, Rating, Skeleton } from "@mui/material";
-import { Person, MenuBook, CalendarToday, Class } from "@mui/icons-material";
-import { formatter } from "../../formatters/formatter";
 import { VolumeChipArray } from "../Data/VolumeChipArray";
+import { Divider, Modal, Typography } from "@mui/material";
+import { CardHeader, Rating, Skeleton } from "@mui/material";
+import { notification } from "../../instances/notification";
 
 type Props = {
   file: S3FileGroup | null;
@@ -31,11 +23,12 @@ const style = {
   maxWidth: "100%",
   bgcolor: "background.paper",
   boxShadow: 24,
+  overflow: "scroll",
   maxHeight: "80%",
   width: { xs: "95%", sm: "80%", md: "60%", lg: "50%", xl: "40%" },
 };
 
-export function FileModal(props: Props) {
+function FileModal(props: Props) {
   const { file } = props;
 
   const { isDesktop } = useDevice();
@@ -51,7 +44,7 @@ export function FileModal(props: Props) {
     functions.content
       .findFirst(`${file.FileInfo.Name}, ${file.Hierarchy[0]}`)
       .then((v) => setVolume(v))
-      .catch(console.error);
+      .catch(notification.error);
   }, [file]);
 
   const handleClose = () => {
@@ -113,3 +106,6 @@ export function FileModal(props: Props) {
     </>
   );
 }
+
+export { FileModal };
+export default FileModal;

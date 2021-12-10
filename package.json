@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.5.7",
+  "version": "0.5.9",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -15,7 +15,8 @@
     "@emotion/styled": "^11.6.0",
     "@mui/icons-material": "^5.2.1",
     "@mui/material": "^5.2.3",
-    "aws-sdk": "^2.1044.0",
+    "aws-sdk": "^2.1045.0",
+    "mitt": "^3.0.0",
     "next": "12.0.7",
     "nodemailer": "^6.7.2",
     "react": "17.0.2",

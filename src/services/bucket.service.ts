@@ -19,12 +19,16 @@ export const bucket = {
   },
 
   async downloadFile(key: string) {
-    return s3
-      .getObject({
-        Bucket: env.s3.bucket,
-        Key: key,
-      })
-      .createReadStream();
+    const s3Object = s3.getObject({
+      Bucket: env.s3.bucket,
+      Key: key,
+    });
+
+    return {
+      key: key,
+      promise: () => s3Object.promise(),
+      stream: () => s3Object.createReadStream(),
+    };
   },
 };
 

@@ -1,17 +1,20 @@
 import Head from "next/head";
+import "../styles/globals.css";
 import theme from "../src/themes";
 import { lazy, Suspense } from "react";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
-import Layout from "../src/components/layouts/Layout";
 import { useDevice } from "../src/hooks/device.hook";
+import Layout from "../src/components/layouts/Layout";
+import { NotificationHandler } from "../src/components/Global/NotificationHandler";
+
+const ButtonNavigation = lazy(
+  () => import("../src/components/layouts/ButtonNavigation")
+);
 
 const AppGrid = ({ Component, pageProps }: AppProps) => {
-  const ButtonNavigation = lazy(
-    () => import("../src/components/layouts/ButtonNavigation")
-  );
   const { isMobile } = useDevice();
 
   return (
@@ -24,11 +27,12 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
         {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
         <CssBaseline />
         <Layout Component={Component} pageProps={pageProps} />
-        {isMobile ? (
-          <Suspense fallback={<div>Loading...</div>}>
+        {isMobile && (
+          <Suspense fallback={null}>
             <ButtonNavigation />
           </Suspense>
-        ) : null}
+        )}
+        <NotificationHandler />
       </ThemeProvider>
     </>
   );

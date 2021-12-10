@@ -18,6 +18,6 @@ export default async function handler(
       "Content-Disposition": `attachment; filename=${title}`,
     }); // or whatever your logic needs
 
-    item.pipe(res);
+    item.stream().pipe(res);
   });
 }

@@ -12,5 +12,7 @@ export const handleError = async <T>(
     return await ret;
   } catch (e: any) {
     res.status(500).json({ error: e.message ?? e });
+
+    throw e;
   }
 };

@@ -6,10 +6,10 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const { email: to, subject, text } = req.body;
+  const { to, key } = req.query;
 
   const data = await handleError(res, () =>
-    email.sendEmail("cosimo.chellini@gmail.com")
+    email.sendFile(to as string, key as string)
   );
 
   res.status(200).json({ data });

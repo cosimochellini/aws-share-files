@@ -1,11 +1,13 @@
 import { useState } from "react";
 import { ExpandMore } from "@mui/icons-material";
 import type { S3File } from "../../classes/S3File";
-import { Button, Typography } from "@mui/material";
+import { Button, Divider, Typography } from "@mui/material";
 import { useDevice } from "../../hooks/device.hook";
 import { formatter } from "../../formatters/formatter";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { functions } from "../../instances/functions";
+import { notification } from "../../instances/notification";
 
 type Props = {
   currentFile: S3FileGroup;
@@ -22,6 +24,13 @@ export function FilesAccordion(props: Props) {
 
   const handleChange = (panel: string) => (_: unknown, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const sendFile = (key: string) => {
+    functions.email
+      .sendFile("cosimo.chellini@gmail.com", key)
+      .then(() => notification.success("File sent"))
+      .catch(notification.error);
   };
 
   const fileTitle = (file: S3File) => {
@@ -60,6 +69,10 @@ export function FilesAccordion(props: Props) {
               variant="outlined"
             >
               Download
+            </Button>
+            <Divider />
+            <Button variant="outlined" onClick={() => sendFile(file.file.Key)}>
+              Send via email
             </Button>
           </AccordionDetails>
         </Accordion>

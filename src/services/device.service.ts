@@ -1,22 +1,26 @@
 export const device = {
+  get isClient() {
+    return typeof window !== "undefined";
+  },
+
   get isMobile() {
-    return this.window?.matchMedia("(max-width: 767px)").matches ?? false;
+    return device.window?.matchMedia("(max-width: 767px)").matches ?? false;
+  },
+
+  get isDesktop() {
+    return !device.isMobile;
+  },
+
+  get window() {
+    if (device.isClient) return window;
+    return null;
   },
 
   hasWidth(width: number) {
     return (device.window?.innerWidth ?? 0) >= width;
   },
 
-  get isDesktop() {
-    return !this.isMobile;
-  },
-
-  get window() {
-    if (typeof window !== "undefined") return window;
-    return null;
-  },
-
-  get isClient() {
-    return typeof window !== "undefined";
+  runOnClient(callback: () => void) {
+    if (device.isClient) callback();
   },
 };

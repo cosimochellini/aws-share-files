@@ -1,4 +1,5 @@
 import { caller } from "../utils/functionCaller";
+import { emailTypes } from "../services/email.service";
 import { contentTypes } from "../services/content.service";
 import { bucketTypes } from "../../src/services/bucket.service";
 import { AwaitedServiceMapper, ServiceMapper } from "../types/generic";
@@ -20,6 +21,14 @@ export const functions = {
         "content/findFirst.function",
         { query }
       );
+    },
+  },
+  email: {
+    sendFile(to: string, key: string) {
+      return caller<emailTypes["sendFile"]>("email/sendFile.function", {
+        to,
+        key,
+      });
     },
   },
 };

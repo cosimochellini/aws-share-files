@@ -1,12 +1,14 @@
 import { Grid } from "@mui/material";
-import { useEffect, useState } from "react";
 import { S3Folder } from "../src/classes/S3Folder";
 import { useDevice } from "../src/hooks/device.hook";
 import { Files } from "../src/components/Files/Files";
 import { S3FileGroup } from "../src/classes/S3FileGroup";
 import { Folders } from "../src/components/Files/Folders";
-import { FileModal } from "../src/components/Files/FileModal";
+import { lazy, useEffect, useState, Suspense } from "react";
 import { functions, AwaitedFunctionTypes } from "../src/instances/functions";
+import { notification } from "../src/instances/notification";
+
+const FileModalAsync = lazy(() => import("../src/components/Files/FileModal"));
 
 export default function Root() {
   const [loading, setLoading] = useState(true);
@@ -27,7 +29,7 @@ export default function Root() {
     functions.s3
       .root()
       .then((res) => setFolders(res))
-      .catch((err) => console.error(err))
+      .catch(notification.error)
       .finally(() => setLoading(false));
   }, []);
 
@@ -53,7 +55,11 @@ export default function Root() {
           />
         </Grid>
       </Grid>
-      <FileModal file={selectedFileGroup} />
+      {selectedFileGroup && (
+        <Suspense fallback={null}>
+          <FileModalAsync file={selectedFileGroup} />
+        </Suspense>
+      )}
     </>
   );
 }
