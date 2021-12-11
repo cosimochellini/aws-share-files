@@ -18,7 +18,7 @@ export const useDevice = () => {
         isMobile: device.isMobile,
         isDesktop: device.isDesktop,
         isClient: device.isClient,
-        hasWidth: device.hasWidth,
+        hasWidth: (w) => device.hasWidth(w),
       });
     };
 

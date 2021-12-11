@@ -66,9 +66,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   const { isMobile, hasWidth } = useDevice();
 
   useEffect(() => {
-    if (!isMobile && hasWidth(1200)) {
-      setOpen(true);
-    }
+    setOpen(!isMobile && hasWidth(1200));
   }, [isMobile, hasWidth]);
 
   const handleDrawerOpen = () => setOpen(true);

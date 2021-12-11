@@ -1,13 +1,12 @@
 import { useState } from "react";
-import { ExpandMore } from "@mui/icons-material";
 import type { S3File } from "../../classes/S3File";
-import { Button, Divider, Typography } from "@mui/material";
 import { useDevice } from "../../hooks/device.hook";
+import { SendFileViaEmail } from "./SendFileViaEmail";
+import { IconButton, Typography } from "@mui/material";
 import { formatter } from "../../formatters/formatter";
 import { S3FileGroup } from "../../classes/S3FileGroup";
+import { Delete, Download, ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
-import { functions } from "../../instances/functions";
-import { notification } from "../../instances/notification";
 
 type Props = {
   currentFile: S3FileGroup;
@@ -26,13 +25,6 @@ export function FilesAccordion(props: Props) {
     setExpanded(isExpanded ? panel : false);
   };
 
-  const sendFile = (key: string) => {
-    functions.email
-      .sendFile("cosimo.chellini@gmail.com", key)
-      .then(() => notification.success("File sent"))
-      .catch(notification.error);
-  };
-
   const fileTitle = (file: S3File) => {
     const fileName = isMobile
       ? file.FileInfo.Extension.toUpperCase()
@@ -47,33 +39,44 @@ export function FilesAccordion(props: Props) {
     <>
       {currentFile.Files.map((file) => (
         <Accordion
-          TransitionProps={{ unmountOnExit: true }}
-          key={file.file.Key}
-          expanded={file.file.Key === currentExpanded}
-          onChange={handleChange(file.file.Key)}
           variant="outlined"
+          key={file.file.Key}
+          onChange={handleChange(file.file.Key)}
+          TransitionProps={{ unmountOnExit: true }}
+          expanded={file.file.Key === currentExpanded}
         >
           <AccordionSummary
+            id={file.file.Key}
             expandIcon={<ExpandMore />}
             aria-controls="panel1a-content"
-            id={file.file.Key}
           >
-            <Typography sx={{ width: "90%", flexShrink: 0 }}>
+            <Typography
+              sx={{ width: { xs: "70%", sm: "80%", md: "85%" }, flexShrink: 0 }}
+            >
               {fileTitle(file.file)}
             </Typography>
+
+            <IconButton
+              size="small"
+              color="error"
+              target="_blank"
+              sx={{ marginX: 1 }}
+              href={urlDownload(file.file.Key)}
+            >
+              <Delete />
+            </IconButton>
+            <IconButton
+              size="small"
+              target="_blank"
+              color="success"
+              sx={{ marginX: 1 }}
+              href={urlDownload(file.file.Key)}
+            >
+              <Download />
+            </IconButton>
           </AccordionSummary>
           <AccordionDetails>
-            <Button
-              href={urlDownload(file.file.Key)}
-              target="_blank"
-              variant="outlined"
-            >
-              Download
-            </Button>
-            <Divider />
-            <Button variant="outlined" onClick={() => sendFile(file.file.Key)}>
-              Send via email
-            </Button>
+            <SendFileViaEmail fileKey={file.file.Key} />
           </AccordionDetails>
         </Accordion>
       ))}
