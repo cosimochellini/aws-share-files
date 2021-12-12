@@ -6,6 +6,7 @@ import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
 import { CssBaseline } from "@mui/material";
 import { ThemeProvider } from "@mui/system";
+import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";
 import Layout from "../src/components/layouts/Layout";
 import { NotificationHandler } from "../src/components/Global/NotificationHandler";
@@ -14,7 +15,8 @@ const ButtonNavigation = lazy(
   () => import("../src/components/layouts/ButtonNavigation")
 );
 
-const AppGrid = ({ Component, pageProps }: AppProps) => {
+const AppGrid = (props: AppProps) => {
+  const { Component, pageProps } = props;
   const { isMobile } = useDevice();
 
   return (
@@ -23,17 +25,19 @@ const AppGrid = ({ Component, pageProps }: AppProps) => {
         <title>{env.info.appTitle}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
-        <CssBaseline />
-        <Layout Component={Component} pageProps={pageProps} />
-        {isMobile && (
-          <Suspense fallback={null}>
-            <ButtonNavigation />
-          </Suspense>
-        )}
-        <NotificationHandler />
-      </ThemeProvider>
+      <SessionProvider session={pageProps.session}>
+        <ThemeProvider theme={theme}>
+          {/* CssBaseline kickstart an elegant, consistent, and simple baseline to build upon. */}
+          <CssBaseline />
+          <Layout Component={Component} pageProps={pageProps} />
+          {isMobile && (
+            <Suspense fallback={null}>
+              <ButtonNavigation />
+            </Suspense>
+          )}
+          <NotificationHandler />
+        </ThemeProvider>
+      </SessionProvider>
     </>
   );
 };

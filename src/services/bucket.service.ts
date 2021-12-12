@@ -1,4 +1,4 @@
-import { s3 } from "../instances/s3";
+import { s3 } from "../instances/aws";
 import { env } from "../instances/env";
 import { byValue, byString } from "sort-es";
 import { S3Folder } from "../classes/S3Folder";

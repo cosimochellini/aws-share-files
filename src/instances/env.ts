@@ -20,4 +20,11 @@ export const env = {
       pass: process.env.EMAIL_PASSWORD as string,
     },
   },
+  get emailProvider() {
+    const { email } = this;
+    return {
+      server: `smtp://${email.auth.user}:${email.auth.pass}@${email.host}:${email.port}`,
+      from: email.signature,
+    };
+  },
 };
