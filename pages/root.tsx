@@ -14,27 +14,27 @@ const FileModalAsync = lazy(() => import("../src/components/Files/FileModal"));
 export default function Root() {
   const { data: session } = useSession();
 
-//   const [loading, setLoading] = useState(true);
+  //   const [loading, setLoading] = useState(true);
 
-//   const [folders, setFolders] = useState(
-//     [] as AwaitedFunctionTypes["s3"]["root"]
-//   );
+  //   const [folders, setFolders] = useState(
+  //     [] as AwaitedFunctionTypes["s3"]["root"]
+  //   );
 
-//   const [selectedFolder, setSelectedFolder] = useState(null as S3Folder | null);
+  //   const [selectedFolder, setSelectedFolder] = useState(null as S3Folder | null);
 
-//   const [selectedFileGroup, setSelectedFileGroup] = useState(
-//     null as S3FileGroup | null
-//   );
+  //   const [selectedFileGroup, setSelectedFileGroup] = useState(
+  //     null as S3FileGroup | null
+  //   );
 
-//   const { isDesktop } = useDevice();
+  //   const { isDesktop } = useDevice();
 
-//   useEffect(() => {
-//     functions.s3
-//       .root()
-//       .then((res) => setFolders(res))
-//       .catch(notification.error)
-//       .finally(() => setLoading(false));
-//   }, []);
+  //   useEffect(() => {
+  //     functions.s3
+  //       .root()
+  //       .then((res) => setFolders(res))
+  //       .catch(notification.error)
+  //       .finally(() => setLoading(false));
+  //   }, []);
 
   //   return (
   //     <>
@@ -77,7 +77,9 @@ export default function Root() {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn()}>Sign in</button>
+      <button onClick={() => signIn("email", { redirect: false })}>
+        Sign in
+      </button>
     </>
   );
 }
