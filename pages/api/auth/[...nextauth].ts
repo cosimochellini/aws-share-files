@@ -8,4 +8,5 @@ export default NextAuth({
   // Configure one or more authentication providers
   providers: [EmailProvider(env.emailProvider)],
   adapter: DynamoDBAdapter(DocumentClient),
+  secret: env.aws.secretAccessKey,
 });

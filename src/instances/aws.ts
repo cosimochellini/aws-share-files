@@ -3,7 +3,7 @@ import AWS from "aws-sdk/global";
 import S3 from "aws-sdk/clients/s3";
 import { Credentials, DynamoDB } from "aws-sdk";
 
-const { region, accessKeyId, secretAccessKey } = env.s3;
+const { region, accessKeyId, secretAccessKey } = env.aws;
 
 const credentials = new Credentials({ accessKeyId, secretAccessKey });
 

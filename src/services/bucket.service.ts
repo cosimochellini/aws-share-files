@@ -7,7 +7,7 @@ import { ServiceMapper } from "../types/generic";
 export const bucket = {
   async getAllFiles() {
     const s3response = await s3
-      .listObjects({ Bucket: env.s3.bucket })
+      .listObjects({ Bucket: env.aws.bucket })
       .promise();
 
     const items = s3response.Contents ?? [];
@@ -20,7 +20,7 @@ export const bucket = {
 
   async downloadFile(key: string) {
     const s3Object = s3.getObject({
-      Bucket: env.s3.bucket,
+      Bucket: env.aws.bucket,
       Key: key,
     });
 

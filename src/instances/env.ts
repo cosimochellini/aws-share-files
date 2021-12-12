@@ -1,5 +1,5 @@
 export const env = {
-  s3: {
+  aws: {
     bucket: process.env.S3_BUCKET as string,
     region: process.env.S3_REGION as string,
     accessKeyId: process.env.S3_ACCESS_KEY_ID as string,
