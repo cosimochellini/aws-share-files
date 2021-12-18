@@ -6,15 +6,20 @@ import { notification } from "../../instances/notification";
 import { FormControlLabel, Grid, TextField } from "@mui/material";
 import { Button, Card, CardContent, Checkbox } from "@mui/material";
 
-export function NewUserEmail() {
+type Props = {
+  onEmailAdded?: (email: UserEmail) => void;
+};
+
+export function NewUserEmail(props: Props) {
   const { register, handleSubmit, formState, reset } = useForm<UserEmail>();
 
   const onSubmit = handleSubmit((data: UserEmail) => {
-    console.log(data);
-
     functions.email
       .addEmail(data)
-      .then(() => reset())
+      .then(() => {
+        reset();
+        props.onEmailAdded?.(data);
+      })
       .catch(notification.error);
   });
 
