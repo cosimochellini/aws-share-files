@@ -5,7 +5,7 @@ import { useDevice } from "../../hooks/device.hook";
 import { useState, useEffect, forwardRef } from "react";
 
 import { styled } from "@mui/material/styles";
-import { navbarItems } from "../../instances/navbar";
+import { navbarItems, Visibility } from "../../instances/navbar";
 
 import { Typography, List, IconButton } from "@mui/material";
 import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
@@ -116,18 +116,37 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         </DrawerHeader>
         <Divider />
         <List>
-          {navbarItems.map(({ name, redirect, icon }) => (
-            <ListItem
-              key={name}
-              button
-              component={forwardRef(function Component(prop, ref) {
-                return <Link key={name} href={redirect} {...prop} />;
-              })}
-            >
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={name} />
-            </ListItem>
-          ))}
+          {navbarItems
+            .filter((x) => Visibility.All === x.visibility)
+            .map(({ name, redirect, icon }) => (
+              <ListItem
+                key={name}
+                button
+                component={forwardRef(function Component(prop, ref) {
+                  return <Link key={name} href={redirect} {...prop} />;
+                })}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            ))}
+        </List>
+        <Divider />
+        <List>
+          {navbarItems
+            .filter((x) => Visibility.Sidebar === x.visibility)
+            .map(({ name, redirect, icon }) => (
+              <ListItem
+                key={name}
+                button
+                component={forwardRef(function Component(prop, ref) {
+                  return <Link key={name} href={redirect} {...prop} />;
+                })}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            ))}
         </List>
         <Divider />
       </Drawer>

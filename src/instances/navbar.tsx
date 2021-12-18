@@ -1,22 +1,41 @@
-import { Folder, Search, Settings } from "@mui/icons-material";
+import { Folder, Logout, Mail, Search, Settings } from "@mui/icons-material";
+
+export enum Visibility {
+  All = "All",
+  Sidebar = "Sidebar",
+  BottomBar = "BottomBar",
+  Disabled = "Disabled",
+}
 
 export const navbarItems = [
   {
     name: "Files",
     redirect: "/root",
     icon: <Folder />,
-    bottomNav: true,
+    visibility: Visibility.All,
   },
   {
-    name: "Search",
+    name: "Upload",
     redirect: "/search",
     icon: <Search />,
-    bottomNav: true,
+    visibility: Visibility.All,
   },
   {
     name: "Settings",
     redirect: "/settings",
     icon: <Settings />,
-    bottomNav: true,
+    visibility: Visibility.All,
+  },
+  {
+    name: "Manage Email",
+    redirect: "/email/manage",
+    icon: <Mail />,
+    visibility: Visibility.Sidebar,
+  },
+  {
+    name: "Logout",
+    redirect: "/logout",
+    icon: <Logout />,
+    visibility: Visibility.Sidebar,
   },
 ];

@@ -12,16 +12,7 @@ AWS.config.credentials = credentials;
 
 export const s3 = new S3({});
 
-export const DocumentClient = new DynamoDB.DocumentClient({
-  region,
-  credentials,
+export const documentClient = new DynamoDB.DocumentClient({
   convertEmptyValues: true,
   convertResponseTypes: true,
 });
-
-const tryy = async () => {
-  const r = await DocumentClient.scan({ TableName: "users" }).promise();
-  console.log(r);
-};
-
-tryy().then(console.log).catch(console.error);
