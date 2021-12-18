@@ -6,8 +6,8 @@ import { createContext, useContext } from "react";
 export const defaultContext = {
   theme: theme.dark,
   setTheme: (t: Theme) => {},
-  emails: [] as UserEmail[],
-  setEmails: (emails: UserEmail[]) => {},
+  emails: null as UserEmail[] | null,
+  setEmails: (emails: UserEmail[] | null) => {},
 };
 
 export const Context = createContext(defaultContext);

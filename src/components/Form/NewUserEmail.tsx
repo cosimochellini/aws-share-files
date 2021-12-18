@@ -5,20 +5,18 @@ import { functions } from "../../instances/functions";
 import { notification } from "../../instances/notification";
 import { FormControlLabel, Grid, TextField } from "@mui/material";
 import { Button, Card, CardContent, Checkbox } from "@mui/material";
+import { useUserEmail } from "../../hooks/state/useUserEmail.state";
 
-type Props = {
-  onEmailAdded?: (email: UserEmail) => void;
-};
-
-export function NewUserEmail(props: Props) {
-  const { register, handleSubmit, formState, reset } = useForm<UserEmail>();
+export function NewUserEmail() {
+  const { register, handleSubmit, reset } = useForm<UserEmail>();
+  const { refreshEmails } = useUserEmail();
 
   const onSubmit = handleSubmit((data: UserEmail) => {
     functions.email
       .addEmail(data)
       .then(() => {
         reset();
-        props.onEmailAdded?.(data);
+        refreshEmails();
       })
       .catch(notification.error);
   });
