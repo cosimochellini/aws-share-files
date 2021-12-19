@@ -9,10 +9,9 @@ import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
+import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 
 export type Props = {
-  loading: boolean;
-  folders: S3Folder[];
   currentFolder: S3Folder | null;
   onSearch?: (query: S3FileGroup) => void;
   onClearFolder?: () => void;
@@ -21,7 +20,8 @@ export type Props = {
 const { itemsConfiguration } = sharedConfiguration;
 
 export function Files(props: Props) {
-  const { loading, folders, currentFolder } = props;
+  const { currentFolder } = props;
+  const { folders } = useS3Folders();
 
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -34,7 +34,7 @@ export function Files(props: Props) {
   useEffect(() => {
     setSelectedIndex(0);
 
-    let items = folders;
+    let items = folders ?? [];
 
     if (search) {
       const searchLower = search.trim().toLowerCase();
@@ -92,7 +92,7 @@ export function Files(props: Props) {
           width: { xs: "100%", sm: "90%" },
         }}
       >
-        {loading ? (
+        {!folders ? (
           <FilesPlaceholders count={itemsConfiguration.maxCount} />
         ) : (
           displayedItems

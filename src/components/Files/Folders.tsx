@@ -4,28 +4,27 @@ import { useEffect, useState } from "react";
 import { S3Folder } from "../../classes/S3Folder";
 import { formatter } from "../../formatters/formatter";
 import { Folder as FolderIcon, Search } from "@mui/icons-material";
+import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
 
+const { itemsConfiguration } = sharedConfiguration;
+
 type Props = {
-  loading: boolean;
-  folders: S3Folder[];
   onSearch: (query: S3Folder) => void;
 };
 
-const { itemsConfiguration } = sharedConfiguration;
-
 export function Folders(props: Props) {
-  const { loading, folders } = props;
+  const { folders } = useS3Folders();
 
   const [search, setSearch] = useState("");
   const [hoveredItem, setHoveredItem] = useState(0);
-  const [displayedItems, setDisplayedItems] = useState([] as typeof folders);
+  const [displayedItems, setDisplayedItems] = useState([] as S3Folder[]);
 
   useEffect(() => {
-    let items = folders;
+    let items = folders ?? [];
 
     if (search) {
       const searchLower = search.toLowerCase();
@@ -65,7 +64,7 @@ export function Folders(props: Props) {
           width: { xs: "100%", sm: "90%" },
         }}
       >
-        {loading ? (
+        {!folders ? (
           <FilesPlaceholders count={itemsConfiguration.maxCount} />
         ) : (
           displayedItems

@@ -2,10 +2,17 @@ require('dotenv').config()
 
 const path = require('path')
 const Dotenv = require('dotenv-webpack')
+const withPWA = require('next-pwa')
+const runtimeCaching = require('next-pwa/cache')
 
 /** @type {import('next').NextConfig} */
-module.exports = {
+const nextConfig = {
     reactStrictMode: true,
+    pwa: {
+        dest: 'public',
+        runtimeCaching,
+        register: true,
+    },
     webpack: (config) => {
         config.plugins = config.plugins || []
 
@@ -31,3 +38,6 @@ module.exports = {
         ]
     },
 }
+
+
+module.exports = withPWA(nextConfig)

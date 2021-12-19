@@ -27,13 +27,16 @@ const AppGrid = (props: AppProps) => {
 
   const [theme, setTheme] = useState(defaultContext.theme);
   const [emails, setEmails] = useState(defaultContext.emails);
+  const [folders, setFolders] = useState(defaultContext.folders);
   const [isDarkMode] = useDarkMode();
 
   const data = {
     theme,
     emails,
+    folders,
     setTheme,
     setEmails,
+    setFolders,
   };
 
   useEffect(() => {
