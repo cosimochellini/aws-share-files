@@ -77,9 +77,7 @@ export default function Root() {
   return (
     <>
       Not signed in <br />
-      <button onClick={() => signIn("email", { redirect: false })}>
-        Sign in
-      </button>
+      <button onClick={() => signIn()}>Sign in</button>
     </>
   );
 }
