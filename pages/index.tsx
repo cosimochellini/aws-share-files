@@ -13,8 +13,8 @@ export default function Index() {
           Go to the about page
         </Link>
         <br />
-        <Link href="/root" color="secondary">
-          Go to the root page
+        <Link href="/files" color="secondary">
+          Go to the files page
         </Link>
         <br />
         <Button variant="contained" color="error">

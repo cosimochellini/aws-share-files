@@ -8,8 +8,8 @@ import { AwaitedServiceMapper, ServiceMapper } from "../types/generic";
 
 export const functions = {
   s3: {
-    root() {
-      return caller<bucketTypes["getAllFiles"]>("s3/root.function");
+    files() {
+      return caller<bucketTypes["getAllFiles"]>("s3/files.function");
     },
     downloadFile(key: string) {
       return caller<bucketTypes["downloadFile"]>("s3/downloadFile.function", {

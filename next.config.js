@@ -32,8 +32,13 @@ const nextConfig = {
         return [
             {
                 source: '/',
-                destination: '/root',
-                permanent: true,
+                destination: '/files',
+                permanent: false,
+            },
+            {
+                source: '/root',
+                destination: '/files',
+                permanent: false,
             },
         ]
     },

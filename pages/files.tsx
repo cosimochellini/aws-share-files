@@ -8,7 +8,7 @@ import { Folders } from "../src/components/Files/Folders";
 
 const FileModalAsync = lazy(() => import("../src/components/Files/FileModal"));
 
-export default function Root() {
+export default function FilesPage() {
   const [selectedFolder, setSelectedFolder] = useState(null as S3Folder | null);
 
   const [selectedFileGroup, setSelectedFileGroup] = useState(

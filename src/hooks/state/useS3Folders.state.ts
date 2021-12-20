@@ -15,7 +15,7 @@ export const useS3Folders = () => {
       loading = true;
 
       functions.s3
-        .root()
+        .files()
         .then((folders) => setFolders(folders))
         .catch(notification.error)
         .finally(() => (loading = false));

@@ -1,4 +1,4 @@
-import { Folder, Logout, Mail, Search, Settings } from "@mui/icons-material";
+import { Folder, Logout, Mail, Settings, Upload } from "@mui/icons-material";
 
 export enum Visibility {
   All = "All",
@@ -10,14 +10,14 @@ export enum Visibility {
 export const navbarItems = [
   {
     name: "Files",
-    redirect: "/root",
+    redirect: "/files",
     icon: <Folder />,
     visibility: Visibility.All,
   },
   {
     name: "Upload",
-    redirect: "/search",
-    icon: <Search />,
+    redirect: "/upload",
+    icon: <Upload />,
     visibility: Visibility.All,
   },
   {
