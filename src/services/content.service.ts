@@ -14,7 +14,12 @@ const contentApiCaller = <T>(section: string, query = {}) => {
 export const content = {
   findFirstContent(query: string) {
     return contentApiCaller<ContentResponse>("/volumes", { q: query }).then(
-      (res) => res.items[0].volumeInfo
+      (res) => res.items?.[0]?.volumeInfo
+    );
+  },
+  findAllContent(query: string) {
+    return contentApiCaller<ContentResponse>("/volumes", { q: query }).then(
+      (res) => res.items?.map((x) => x.volumeInfo) ?? []
     );
   },
 };

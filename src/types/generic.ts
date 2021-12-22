@@ -26,3 +26,5 @@ export type AwaitedServiceMapper<
 };
 
 export type BaseResponse<T> = NextApiResponse<T | { error: string }>;
+
+export type Nullable<T> = T | null | undefined;

@@ -10,6 +10,7 @@ export const env = {
   },
   content: {
     baseUrl: process.env.CONTENT_API_URL as string,
+    invalidWords: ["z_lib", "org"],
   },
   email: {
     signature: process.env.EMAIL_SIGNATURE as string,

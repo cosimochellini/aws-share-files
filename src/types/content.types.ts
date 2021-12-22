@@ -1,7 +1,7 @@
 export interface ContentResponse {
   kind: string;
   totalItems: number;
-  items: ContentEntity[];
+  items?: ContentEntity[];
 }
 
 export interface ContentEntity {

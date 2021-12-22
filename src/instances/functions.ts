@@ -24,6 +24,12 @@ export const functions = {
         { query }
       );
     },
+    findAllContent(query: string) {
+      return caller<contentTypes["findAllContent"]>(
+        "content/findAll.function",
+        { query }
+      );
+    },
   },
   email: {
     sendFile(to: string, key: string) {
