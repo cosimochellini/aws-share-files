@@ -5,15 +5,15 @@ import { useDevice } from "../src/hooks/device.hook";
 import { Files } from "../src/components/Files/Files";
 import { S3FileGroup } from "../src/classes/S3FileGroup";
 import { Folders } from "../src/components/Files/Folders";
+import { Nullable } from "../src/types/generic";
 
 const FileModalAsync = lazy(() => import("../src/components/Files/FileModal"));
 
 export default function FilesPage() {
-  const [selectedFolder, setSelectedFolder] = useState(null as S3Folder | null);
+  const [selectedFolder, setSelectedFolder] = useState<Nullable<S3Folder>>();
 
-  const [selectedFileGroup, setSelectedFileGroup] = useState(
-    null as S3FileGroup | null
-  );
+  const [selectedFileGroup, setSelectedFileGroup] =
+    useState<Nullable<S3FileGroup>>();
 
   const { isDesktop } = useDevice();
 

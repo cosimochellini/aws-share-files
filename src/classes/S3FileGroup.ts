@@ -1,8 +1,8 @@
 import { S3File } from "./S3File";
-import { Object } from "aws-sdk/clients/s3";
-import { S3BaseContent } from "./S3BaseContent";
-import { byString, byValue } from "sort-es";
 import { FileInfo } from "./FileInfo";
+import { Object } from "aws-sdk/clients/s3";
+import { byString, byValue } from "sort-es";
+import { S3BaseContent } from "./S3BaseContent";
 
 export class S3FileGroup extends S3BaseContent {
   public FileName: string;
@@ -44,7 +44,13 @@ export class S3FileGroup extends S3BaseContent {
     }
 
     return map
-      .map((f) => new S3FileGroup(f.files[0].Object, f.files))
+      .map(
+        (f) =>
+          new S3FileGroup(
+            f.files[0].Object,
+            f.files.map((x) => x.Object)
+          )
+      )
       .sort(byValue((x) => x.FileName, byString()));
   }
 }

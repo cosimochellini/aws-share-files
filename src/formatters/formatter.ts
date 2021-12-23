@@ -1,4 +1,6 @@
-type datable = string | Date | null | undefined;
+import { Nullable } from "../types/generic";
+
+type datable = Nullable<string | Date>;
 
 const defaultLang = "en-US";
 const fileSizes = ["Bytes", "KB", "MB", "GB", "TB"];

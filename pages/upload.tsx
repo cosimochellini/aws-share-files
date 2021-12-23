@@ -8,17 +8,13 @@ import { notification } from "../src/instances/notification";
 import { truncateString } from "../src/utils/truncateString";
 import { InputLabel, Grid, Typography } from "@mui/material";
 import { useCurrentContext } from "../src/hooks/context.hook";
-import { Button, CardContent, FormControl, Theme } from "@mui/material";
+import { Button, CardContent, FormControl } from "@mui/material";
 import { Book, FileUpload, Person, UploadFile } from "@mui/icons-material";
 import { CardHeader, TextField, MenuItem, Select, Card } from "@mui/material";
 
 const fullWidth = { minWidth: { xs: "100%", sm: "90%", md: "70%", lg: "60%" } };
 const maxHeight = 48 * 4.5 + 8;
 const stringLength = device.isMobile ? 20 : 50;
-
-function getStyles(theme: Theme) {
-  return { fontWeight: theme.typography.fontWeightRegular };
-}
 
 export default function Upload() {
   const { theme } = useCurrentContext();
@@ -31,7 +27,7 @@ export default function Upload() {
   const [fileTitle, setFileTitle] = useState("");
   const [fileAuthor, setFileAuthor] = useState("");
 
-  const changeHandler = (event: HTMLInputElement | undefined) => {
+  const changeHandler = (event: Nullable<HTMLInputElement>) => {
     const file = event?.files?.[0] ?? null;
 
     setSelectedFile(file);
@@ -107,7 +103,10 @@ export default function Upload() {
                               <MenuItem
                                 value={index}
                                 key={volume.title}
-                                style={getStyles(theme)}
+                                style={{
+                                  fontWeight:
+                                    theme.typography.fontWeightRegular,
+                                }}
                               >
                                 <Typography variant="subtitle2">
                                   ({volume.authors?.[0]})

@@ -1,5 +1,6 @@
 import { ReadMore } from "../Text/ReadMore";
 import { useEffect, useState } from "react";
+import { Nullable } from "../../types/generic";
 import { FilesAccordion } from "./FilesAccordion";
 import { Card, CardContent } from "@mui/material";
 import { useDevice } from "../../hooks/device.hook";
@@ -8,11 +9,11 @@ import { VolumeInfo } from "../../types/content.types";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { VolumeChipArray } from "../Data/VolumeChipArray";
 import { Divider, Modal, Typography } from "@mui/material";
-import { CardHeader, Rating, Skeleton } from "@mui/material";
 import { notification } from "../../instances/notification";
+import { CardHeader, Rating, Skeleton } from "@mui/material";
 
 type Props = {
-  file: S3FileGroup | null;
+  file: Nullable<S3FileGroup>;
 };
 
 const style = {
@@ -34,7 +35,7 @@ function FileModal(props: Props) {
   const { isDesktop } = useDevice();
 
   const [open, setOpen] = useState(false);
-  const [volume, setVolume] = useState(null as VolumeInfo | null);
+  const [volume, setVolume] = useState<Nullable<VolumeInfo>>();
 
   useEffect(() => {
     setOpen(!!file);

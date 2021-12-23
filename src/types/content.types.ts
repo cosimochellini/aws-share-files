@@ -1,3 +1,5 @@
+import { Nullable } from "./generic";
+
 export interface ContentResponse {
   kind: string;
   totalItems: number;
@@ -12,19 +14,19 @@ export interface ContentEntity {
   volumeInfo: VolumeInfo;
   saleInfo: SaleInfo;
   accessInfo: AccessInfo;
-  searchInfo?: SearchInfo | null;
+  searchInfo: Nullable<SearchInfo>;
 }
 export interface VolumeInfo {
   title: string;
-  authors?: string[] | null;
-  publisher?: string | null;
+  authors: Nullable<string[]>;
+  publisher: Nullable<string>;
   publishedDate: string;
-  description?: string | null;
-  industryIdentifiers?: IndustryIdentifiersEntity[] | null;
+  description: Nullable<string>;
+  industryIdentifiers: Nullable<IndustryIdentifiersEntity[]>;
   readingModes: ReadingModes;
-  pageCount?: number | null;
+  pageCount: Nullable<number>;
   printType: string;
-  categories?: string[] | null;
+  categories: Nullable<string[]>;
   maturityRating: string;
   allowAnonLogging: boolean;
   contentVersion: string;
@@ -34,9 +36,9 @@ export interface VolumeInfo {
   previewLink: string;
   infoLink: string;
   canonicalVolumeLink: string;
-  averageRating?: number | null;
-  ratingsCount?: number | null;
-  subtitle?: string | null;
+  averageRating: Nullable<number>;
+  ratingsCount: Nullable<number>;
+  subtitle: Nullable<string>;
 }
 
 export interface IndustryIdentifiersEntity {
@@ -63,7 +65,7 @@ export interface SaleInfo {
   country: string;
   saleability: string;
   isEbook: boolean;
-  buyLink?: string | null;
+  buyLink: Nullable<string>;
 }
 
 export interface ListPriceOrRetailPrice {
@@ -86,7 +88,7 @@ export interface AccessInfo {
 
 export interface EpubOrPdf {
   isAvailable: boolean;
-  acsTokenLink?: string | null;
+  acsTokenLink: Nullable<string>;
 }
 
 export interface SearchInfo {

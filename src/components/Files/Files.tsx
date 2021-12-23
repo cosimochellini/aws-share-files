@@ -2,6 +2,7 @@ import { Chip } from "@mui/material";
 import { byString, byValue } from "sort-es";
 import { useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
+import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { AutoStories, Search } from "@mui/icons-material";
@@ -12,7 +13,7 @@ import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 
 export type Props = {
-  currentFolder: S3Folder | null;
+  currentFolder: Nullable<S3Folder>;
   onSearch?: (query: S3FileGroup) => void;
   onClearFolder?: () => void;
 };
