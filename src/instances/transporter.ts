@@ -1,5 +1,4 @@
 import { env } from "./env";
-import { sesClient } from "./aws";
 import nodemailer from "nodemailer";
 import { notification } from "./notification";
 
