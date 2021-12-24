@@ -16,4 +16,20 @@ caller.post = <T>(url: string, body = {}) =>
     .catch(notification.error)
     .then((res: T) => res);
 
+caller.formData = <T>(url: string, body = {}) => {
+  const formData = new FormData();
+
+  for (const prop in body) {
+    formData.append(prop, (body as any)[prop]);
+  }
+
+  return fetch("/api/" + url, {
+    method: "POST",
+    body: formData,
+  })
+    .then((res) => res.json())
+    .catch(notification.error)
+    .then((res: T) => res);
+};
+
 export { caller };

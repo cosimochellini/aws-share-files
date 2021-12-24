@@ -1,16 +1,10 @@
 import { useEffect, useState } from "react";
-import { Mail, Send, Star } from "@mui/icons-material";
-import {
-  Button,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-} from "@mui/material";
-import { Menu, MenuItem, Typography, ListItemIcon } from "@mui/material";
 import { functions } from "../../instances/functions";
+import { Mail, Send, Star } from "@mui/icons-material";
 import { notification } from "../../instances/notification";
 import { useUserEmail } from "../../hooks/state/useUserEmail.state";
+import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
+import { Menu, MenuItem, Typography, ListItemIcon } from "@mui/material";
 
 type Props = {
   fileKey: string;
@@ -26,10 +20,10 @@ export function SendFileViaEmail(props: Props) {
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    if (emails?.length) {
-      setEmail(emails[0].email);
-      setSelectedIndex(0);
-    }
+    if (!emails?.length) return;
+
+    setEmail(emails[0].email);
+    setSelectedIndex(0);
   }, [emails]);
 
   const sendFile = (event: any) => {
@@ -56,56 +50,77 @@ export function SendFileViaEmail(props: Props) {
   return (
     <>
       <h4>Send file via email</h4>
-      <List component="nav" sx={{ bgcolor: "background.paper" }}>
-        <ListItem onClick={handleClickListItem}>
-          <ListItemIcon>
-            {emails?.[selectedIndex]?.default ? (
-              <Star fontSize="small" color="warning" />
-            ) : (
-              <Mail fontSize="small" />
-            )}
-          </ListItemIcon>
-          <ListItemText
-            primary={emails?.[selectedIndex]?.description}
-            secondary={emails?.[selectedIndex]?.email}
-          />
-        </ListItem>
-      </List>
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{ role: "listbox" }}
+      <Grid
+        sx={{ marginTop: 2 }}
+        container
+        alignItems="center"
+        justifyContent="center"
+        direction={{ xs: "column", md: "row" }}
+        gap={2}
       >
-        {(emails ?? []).map((email, index) => (
-          <MenuItem
-            key={email.email}
-            value={email.email}
-            selected={index === selectedIndex}
-            onClick={() => handleMenuItemClick(index)}
+        <Grid item xs={12} md={8}>
+          <List
+            component="nav"
+            sx={{
+              border: 1,
+              borderRadius: 2,
+              borderColor: "gray",
+            }}
+            dense
           >
-            <ListItemIcon>
-              {email.default ? (
-                <Star fontSize="small" color="warning" />
-              ) : (
-                <Mail fontSize="small" />
-              )}
-            </ListItemIcon>
-            <ListItemText>{email.description}</ListItemText>
-            <Typography
-              variant="subtitle2"
-              color="text.secondary"
-              fontSize={"small"}
-            >
-              {`(${email.email})`}
-            </Typography>
-          </MenuItem>
-        ))}
-      </Menu>
-      <Button color="primary" onClick={sendFile} variant="outlined">
-        Send
-        <Send sx={{ marginX: 1 }} />
-      </Button>
+            <ListItem onClick={handleClickListItem}>
+              <ListItemIcon>
+                {emails?.[selectedIndex]?.default ? (
+                  <Star fontSize="small" color="warning" />
+                ) : (
+                  <Mail fontSize="small" />
+                )}
+              </ListItemIcon>
+              <ListItemText
+                primary={emails?.[selectedIndex]?.description}
+                secondary={emails?.[selectedIndex]?.email}
+              />
+            </ListItem>
+          </List>
+          <Menu
+            open={open}
+            anchorEl={anchorEl}
+            onClose={handleClose}
+            MenuListProps={{ role: "listbox" }}
+          >
+            {(emails ?? []).map((email, index) => (
+              <MenuItem
+                key={email.email}
+                value={email.email}
+                selected={index === selectedIndex}
+                onClick={() => handleMenuItemClick(index)}
+              >
+                <ListItemIcon>
+                  {email.default ? (
+                    <Star fontSize="small" color="warning" />
+                  ) : (
+                    <Mail fontSize="small" />
+                  )}
+                </ListItemIcon>
+                <ListItemText>{email.description}</ListItemText>
+                <Typography
+                  variant="subtitle2"
+                  color="text.secondary"
+                  fontSize={"small"}
+                >
+                  {`(${email.email})`}
+                </Typography>
+              </MenuItem>
+            ))}
+          </Menu>
+        </Grid>
+        <Grid item xs={12} md={3}>
+          <Button color="primary" onClick={sendFile} variant="outlined">
+            Send
+            <Send sx={{ marginX: 1, margin: "auto" }} />
+          </Button>
+        </Grid>
+      </Grid>
     </>
   );
 }

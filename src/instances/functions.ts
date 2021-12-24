@@ -2,7 +2,7 @@ import { caller } from "../utils/functionCaller";
 import { UserEmail } from "../types/dynamo.types";
 import { emailTypes } from "../services/email.service";
 import { contentTypes } from "../services/content.service";
-import { bucketTypes } from "../../src/services/bucket.service";
+import { bucketTypes, uploadPayload } from "../../src/services/bucket.service";
 import { userEmailsType } from "../services/userEmails.service";
 import { AwaitedServiceMapper, ServiceMapper } from "../types/generic";
 
@@ -15,6 +15,12 @@ export const functions = {
       return caller<bucketTypes["downloadFile"]>("s3/downloadFile.function", {
         key,
       });
+    },
+    uploadFile(payload: uploadPayload) {
+      return caller.formData<bucketTypes["uploadFile"]>(
+        "s3/uploadFile.function",
+        payload
+      );
     },
   },
   content: {

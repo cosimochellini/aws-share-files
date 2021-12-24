@@ -1,5 +1,7 @@
+import { functions } from "../instances/functions";
+
 export const file = {
-  async getFiles() {
-    return ["file1", "file2", "file3", "file4", "file5"];
+  uploadFile(payload: uploadPayload) {
+    return functions.s3.uploadFile(payload);
   },
 };

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Nullable } from "../src/types/generic";
 import { purgeName } from "../src/utils/purgeName";
+import { file } from "../src/services/file.service";
 import { functions } from "../src/instances/functions";
 import { device } from "../src/services/device.service";
 import { VolumeInfo } from "../src/types/content.types";
@@ -14,7 +15,7 @@ import { CardHeader, TextField, MenuItem, Select, Card } from "@mui/material";
 
 const fullWidth = { minWidth: { xs: "100%", sm: "90%", md: "70%", lg: "60%" } };
 const maxHeight = 48 * 4.5 + 8;
-const stringLength = device.isMobile ? 20 : 50;
+const stringLength = device.isMobile ? 20 : 40;
 
 export default function Upload() {
   const { theme } = useCurrentContext();
@@ -31,6 +32,20 @@ export default function Upload() {
     const file = event?.files?.[0] ?? null;
 
     setSelectedFile(file);
+  };
+
+  const uploadFile = () => {
+    if (!selectedFile) return;
+
+    file
+      .uploadFile({
+        name: fileTitle,
+        file: selectedFile,
+        author: fileAuthor,
+        extension: selectedFile.name?.split(".").pop() as string,
+      })
+      .then(() => notification.success("File uploaded successfully"))
+      .catch(notification.error);
   };
 
   useEffect(() => {
@@ -156,7 +171,7 @@ export default function Upload() {
                     <Button
                       variant="contained"
                       color="success"
-                      onClick={() => {}}
+                      onClick={uploadFile}
                       sx={{ marginLeft: 2 }}
                     >
                       Upload <FileUpload />

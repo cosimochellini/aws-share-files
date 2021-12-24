@@ -46,7 +46,7 @@ export const notification = {
 
 
     device.runOnClient(() =>
-      notification.show(notificationType.error, message)
+      notification.show(notificationType.error, message.toString())
     );
   },
 

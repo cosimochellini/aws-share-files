@@ -12,6 +12,7 @@ const nextConfig = {
         dest: 'public',
         runtimeCaching,
         register: true,
+        disable: process.env.NODE_ENV === 'development',
     },
     webpack: (config) => {
         config.plugins = config.plugins || []

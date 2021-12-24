@@ -4,6 +4,13 @@ import { byValue, byString } from "sort-es";
 import { S3Folder } from "../classes/S3Folder";
 import { ServiceMapper } from "../types/generic";
 
+export type uploadPayload = {
+  file: File | Buffer;
+  name: string;
+  author: string;
+  extension: string;
+};
+
 export const bucket = {
   async getAllFiles() {
     const s3response = await s3
@@ -29,6 +36,45 @@ export const bucket = {
       promise: () => s3Object.promise(),
       stream: () => s3Object.createReadStream(),
     };
+  },
+
+  async uploadFile(payload: uploadPayload) {
+    const { file, name, author, extension } = payload;
+
+    console.log({ file, name, author, extension });
+
+    const key = `${author}/${name}.${extension}`;
+
+    await this.createFolder(author);
+
+    const s3Object = s3.upload({
+      Key: key,
+      Body: file,
+      Bucket: env.aws.bucket,
+    });
+
+    return s3Object.promise();
+  },
+
+  async createFolder(folderName: string) {
+    const exists = await this.folderExists(folderName);
+
+    if (exists) return;
+
+    const s3Object = s3.putObject({
+      Bucket: env.aws.bucket,
+      Key: `${folderName}/`,
+    });
+
+    await s3Object.promise();
+  },
+
+  async folderExists(folderName: string) {
+    const s3response = await s3
+      .listObjects({ Bucket: env.aws.bucket, Prefix: folderName })
+      .promise();
+
+    return !!s3response.Contents?.length;
   },
 };
 
