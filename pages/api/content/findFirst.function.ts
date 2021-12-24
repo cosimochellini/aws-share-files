@@ -1,11 +1,10 @@
-import { NextApiRequest, NextApiResponse } from "next";
-import { content, contentTypes } from "../../../src/services/content.service";
+import { content } from "../../../src/services/content.service";
+import { defaultBehavior } from "../../../src/utils/api/composable";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse<contentTypes["findFirstContent"]>
-) {
+export default defaultBehavior(async function (req) {
   const { query } = req.query;
 
-  res.status(200).json(await content.findFirstContent(query as string));
-}
+  const data = await content.findFirstContent(query as string);
+
+  return data;
+});

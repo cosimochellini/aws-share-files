@@ -1,7 +1,7 @@
 import { env } from "./env";
 import AWS from "aws-sdk/global";
 import S3 from "aws-sdk/clients/s3";
-import { Credentials, DynamoDB } from "aws-sdk";
+import { Credentials, DynamoDB, SES } from "aws-sdk";
 
 const { region, accessKeyId, secretAccessKey } = env.aws;
 
@@ -16,3 +16,5 @@ export const documentClient = new DynamoDB.DocumentClient({
   convertEmptyValues: true,
   convertResponseTypes: true,
 });
+
+export const sesClient = new SES({});

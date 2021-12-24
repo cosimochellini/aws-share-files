@@ -1,21 +1,11 @@
-import { NextApiRequest } from "next";
-import {
-  userEmails,
-  userEmailsType,
-} from "../../../src/services/userEmails.service";
 import { UserEmail } from "../../../src/types/dynamo.types";
-import { BaseResponse } from "../../../src/types/generic";
-import { handleError } from "../../../src/utils/api/composable";
+import { defaultBehavior } from "../../../src/utils/api/composable";
+import { userEmails } from "../../../src/services/userEmails.service";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: BaseResponse<userEmailsType["addEmail"]>
-) {
+export default defaultBehavior(async function (req) {
   const { item } = req.body;
 
-  const data = await handleError(res, () =>
-    userEmails.addEmail(item as UserEmail)
-  );
+  const data = await userEmails.addEmail(item as UserEmail);
 
-  res.status(200).json(data);
-}
+  return data;
+});

@@ -41,8 +41,6 @@ export const bucket = {
   async uploadFile(payload: uploadPayload) {
     const { file, name, author, extension } = payload;
 
-    console.log({ file, name, author, extension });
-
     const key = `${author}/${name}.${extension}`;
 
     await this.createFolder(author);

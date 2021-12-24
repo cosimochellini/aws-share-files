@@ -1,27 +1,15 @@
-import { NextApiRequest } from "next";
-import { BaseResponse } from "../../../src/types/generic";
-import {
-  bucket,
-  bucketTypes,
-  uploadPayload,
-} from "../../../src/services/bucket.service";
 import { fileHandler } from "../../../src/utils/api/fileHandler";
-import { handleError } from "../../../src/utils/api/composable";
+import { defaultBehavior } from "../../../src/utils/api/composable";
+import { bucket, uploadPayload } from "../../../src/services/bucket.service";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: BaseResponse<bucketTypes["uploadFile"]>
-) {
-  const data = await handleError(res, async () => {
-    const { body, getFile } = await fileHandler<uploadPayload>(req);
+export default defaultBehavior(async function (req) {
+  const { body, getFile } = await fileHandler<uploadPayload>(req);
 
-    const file = await getFile();
+  const file = await getFile();
+  const data = await bucket.uploadFile({ ...body, file });
 
-    return await bucket.uploadFile({ ...body, file });
-  });
-
-  res.status(200).json(data);
-}
+  return data;
+});
 
 export const config = {
   api: {

@@ -38,7 +38,7 @@ export const functions = {
     },
   },
   email: {
-    sendFile(to: string, key: string) {
+    sendFile({ to, key }: { to: string; key: string }) {
       const query = { to, key };
       return caller<emailTypes["sendFile"]>("email/sendFile.function", query);
     },

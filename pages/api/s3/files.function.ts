@@ -1,10 +1,4 @@
-import { NextApiRequest } from "next";
-import { BaseResponse } from "../../../src/types/generic";
-import { bucket, bucketTypes } from "../../../src/services/bucket.service";
+import { bucket } from "../../../src/services/bucket.service";
+import { defaultBehavior } from "../../../src/utils/api/composable";
 
-export default async function handler(
-  req: NextApiRequest,
-  res: BaseResponse<bucketTypes["getAllFiles"]>
-) {
-  res.status(200).json(await bucket.getAllFiles());
-}
+export default defaultBehavior((req) => bucket.getAllFiles());

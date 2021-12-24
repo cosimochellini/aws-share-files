@@ -17,6 +17,7 @@ function Error({ statusCode, statusMessage }: Props) {
 }
 
 Error.getInitialProps = ({ res, err }: any): Props => {
+
   const statusCode = res ? res.statusCode : err ? err.statusCode : 404;
   const statusMessage = res
     ? res.statusMessage

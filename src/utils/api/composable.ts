@@ -1,20 +1,22 @@
+import { NextApiRequest } from "next";
 import type { BaseResponse } from "../../types/generic";
 
-export const handleError = async <T, K>(
-  res: BaseResponse<K>,
-  apiFn: () => T | Promise<T>
+export const defaultBehavior = (
+  apiFn: (req: NextApiRequest, res: BaseResponse) => unknown | Promise<unknown>
 ) => {
-  try {
-    const ret = apiFn();
+  return async (req: NextApiRequest, res: BaseResponse) => {
+    try {
+      const ret = apiFn(req, res);
 
-    if (!(ret instanceof Promise)) return ret;
+      const data = ret instanceof Promise ? await ret : ret;
 
-    return await ret;
-  } catch (e: any) {
-    const error = (e.message ?? e) as string;
+      res.status(200).json(data);
+    } catch (e: any) {
+      const error = e.message ?? e;
 
-    res.status(500).json({ error });
+      res.status(500).json({ error: error.toString() });
 
-    throw e;
-  }
+      throw e;
+    }
+  };
 };

@@ -5,6 +5,8 @@ import { notification } from "../../instances/notification";
 import { useUserEmail } from "../../hooks/state/useUserEmail.state";
 import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
 import { Menu, MenuItem, Typography, ListItemIcon } from "@mui/material";
+import { UserEmail } from "../../types/dynamo.types";
+import { Nullable } from "../../types/generic";
 
 type Props = {
   fileKey: string;
@@ -14,24 +16,22 @@ export function SendFileViaEmail(props: Props) {
   const { fileKey } = props;
   const { emails } = useUserEmail();
 
-  const [email, setEmail] = useState("");
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const [selectedIndex, setSelectedIndex] = useState(1);
+  const [selectedIndex, setSelectedIndex] = useState<Nullable<number>>();
+  const [selectedEmail, setSelectedEmail] = useState<Nullable<UserEmail>>();
+
   const open = Boolean(anchorEl);
 
   useEffect(() => {
-    if (!emails?.length) return;
-
-    setEmail(emails[0].email);
-    setSelectedIndex(0);
-  }, [emails]);
+    setSelectedEmail(emails?.[selectedIndex ?? 0]);
+  }, [emails, selectedEmail, selectedIndex]);
 
   const sendFile = (event: any) => {
     event.preventDefault();
-    if (!email) return;
+    if (!selectedEmail) return;
 
     functions.email
-      .sendFile(fileKey, email)
+      .sendFile({ key: fileKey, to: selectedEmail.email })
       .then(() => notification.success("File sent successfully"))
       .catch(notification.error);
   };
@@ -70,15 +70,15 @@ export function SendFileViaEmail(props: Props) {
           >
             <ListItem onClick={handleClickListItem}>
               <ListItemIcon>
-                {emails?.[selectedIndex]?.default ? (
+                {selectedEmail?.default ? (
                   <Star fontSize="small" color="warning" />
                 ) : (
                   <Mail fontSize="small" />
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={emails?.[selectedIndex]?.description}
-                secondary={emails?.[selectedIndex]?.email}
+                primary={selectedEmail?.description}
+                secondary={selectedEmail?.email}
               />
             </ListItem>
           </List>
