@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
 import { Nullable } from "../src/types/generic";
 import { purgeName } from "../src/utils/purgeName";
-import { file } from "../src/services/file.service";
 import { functions } from "../src/instances/functions";
 import { device } from "../src/services/device.service";
 import { VolumeInfo } from "../src/types/content.types";
@@ -37,7 +36,7 @@ export default function Upload() {
   const uploadFile = () => {
     if (!selectedFile) return;
 
-    file
+    functions.s3
       .uploadFile({
         name: fileTitle,
         file: selectedFile,
