@@ -3,12 +3,13 @@ import { byValue, byString } from "sort-es";
 import { useEffect, useState } from "react";
 import { S3Folder } from "../../classes/S3Folder";
 import { formatter } from "../../formatters/formatter";
-import { Folder as FolderIcon, Search } from "@mui/icons-material";
+import { Folder as FolderIcon, Refresh, Search } from "@mui/icons-material";
 import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
+import { LoadingButton } from "../Data/LoadingButton";
 
 const { itemsConfiguration } = sharedConfiguration;
 
@@ -17,7 +18,7 @@ type Props = {
 };
 
 export function Folders(props: Props) {
-  const { folders } = useS3Folders();
+  const { folders, refreshFolders } = useS3Folders();
 
   const [search, setSearch] = useState("");
   const [hoveredItem, setHoveredItem] = useState(0);
@@ -40,7 +41,6 @@ export function Folders(props: Props) {
   return (
     <>
       <h1>Authors</h1>
-
       <TextField
         type="search"
         value={search}
@@ -59,6 +59,12 @@ export function Folders(props: Props) {
           ),
         }}
       />
+      <LoadingButton
+        type={"icon"}
+        clickAction={refreshFolders}
+        icon={<Refresh />}
+      />
+
       <List
         sx={{
           width: { xs: "100%", sm: "90%" },

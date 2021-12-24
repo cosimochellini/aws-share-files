@@ -9,12 +9,12 @@ export const useS3Folders = () => {
   const { folders, setFolders } = useCurrentContext();
 
   const loadFolders = useCallback(
-    (force: boolean = false) => {
+    async (force: boolean = false) => {
       if (loading || (folders && !force)) return;
 
       loading = true;
 
-      functions.s3
+      await functions.s3
         .files()
         .then((folders) => setFolders(folders))
         .catch(notification.error)
@@ -28,7 +28,9 @@ export const useS3Folders = () => {
   }, [folders, loadFolders]);
 
   const refreshFolders = () => {
-    loadFolders(true);
+    setFolders(undefined);
+
+    return loadFolders(true);
   };
 
   return { folders, refreshFolders };

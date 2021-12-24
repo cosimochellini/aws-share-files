@@ -115,9 +115,13 @@ export function SendFileViaEmail(props: Props) {
           </Menu>
         </Grid>
         <Grid item xs={12} md={3}>
-          <Button color="primary" onClick={sendFile} variant="outlined">
+          <Button
+            color="primary"
+            onClick={sendFile}
+            variant="outlined"
+            endIcon={<Send />}
+          >
             Send
-            <Send sx={{ marginX: 1, margin: "auto" }} />
           </Button>
         </Grid>
       </Grid>

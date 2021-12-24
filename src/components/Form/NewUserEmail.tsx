@@ -59,9 +59,12 @@ export function NewUserEmail() {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button variant="outlined" onClick={onSubmit}>
+                  <Button
+                    variant="outlined"
+                    onClick={onSubmit}
+                    endIcon={<Save />}
+                  >
                     Save
-                    <Save />
                   </Button>
                 </Grid>
               </Grid>

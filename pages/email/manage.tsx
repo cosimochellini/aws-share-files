@@ -1,10 +1,9 @@
 import List from "@mui/material/List";
 import Grid from "@mui/material/Grid";
 import Avatar from "@mui/material/Avatar";
-import { useCallback, useEffect, useState } from "react";
-import { byBoolean, byValue } from "sort-es";
+import {  useState } from "react";
 import ListItem from "@mui/material/ListItem";
-import { Button, Divider } from "@mui/material";
+import { Button, Divider, IconButton } from "@mui/material";
 import { Email, Star } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -47,14 +46,13 @@ export default function Manage() {
                     selected={indexActive === i}
                     onMouseEnter={() => setIndexActive(i)}
                     secondaryAction={
-                      <Button
+                      <IconButton
                         color="error"
-                        variant="outlined"
-                        sx={{ borderRadius: 99 }}
+                        sx={{ borderRadius: 2, border: 1 }}
                         onClick={() => deleteEmail(email)}
                       >
                         <DeleteIcon />
-                      </Button>
+                      </IconButton>
                     }
                   >
                     <ListItemAvatar>

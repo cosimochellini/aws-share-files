@@ -157,14 +157,17 @@ export default function Upload() {
                   </>
                 )}
                 <Grid item>
-                  <Button variant="contained" component="label">
+                  <Button
+                    variant="contained"
+                    component="label"
+                    endIcon={<UploadFile />}
+                  >
                     {selectedFile ? "Change file" : "Select file"}
                     <input
                       hidden
                       type="file"
                       onChange={(e) => changeHandler(e.target)}
                     />
-                    <UploadFile sx={{ marginX: 2 }} />
                   </Button>
                   {selectedFile && fileAuthor && fileTitle ? (
                     <Button
@@ -172,8 +175,9 @@ export default function Upload() {
                       color="success"
                       onClick={uploadFile}
                       sx={{ marginLeft: 2 }}
+                      endIcon={<FileUpload />}
                     >
-                      Upload <FileUpload />
+                      Upload
                     </Button>
                   ) : null}
                 </Grid>
