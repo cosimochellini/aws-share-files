@@ -1,13 +1,5 @@
-import { env } from "../instances/env";
-
-const { invalidWords } = env.content;
-
 export const purgeName = (name: string = ""): string => {
-  let plainName = removeExtension(name);
-
-  for (const word of invalidWords) {
-    plainName = plainName.replace(new RegExp(word, "gi"), "");
-  }
+  const plainName = removeExtension(name);
 
   return plainName
     .replaceAll("_", " ")
