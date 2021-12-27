@@ -7,6 +7,7 @@ import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
 import { Menu, MenuItem, Typography, ListItemIcon } from "@mui/material";
 import { UserEmail } from "../../types/dynamo.types";
 import { Nullable } from "../../types/generic";
+import { LoadingButton } from "../Data/LoadingButton";
 
 type Props = {
   fileKey: string;
@@ -26,11 +27,11 @@ export function SendFileViaEmail(props: Props) {
     setSelectedEmail(emails?.[selectedIndex ?? 0]);
   }, [emails, selectedEmail, selectedIndex]);
 
-  const sendFile = (event: any) => {
+  const sendFile = async (event: any) => {
     event.preventDefault();
     if (!selectedEmail) return;
 
-    functions.email
+    await functions.email
       .sendFile({ key: fileKey, to: selectedEmail.email })
       .then(() => notification.success("File sent successfully"))
       .catch(notification.error);
@@ -102,11 +103,14 @@ export function SendFileViaEmail(props: Props) {
                     <Mail fontSize="small" />
                   )}
                 </ListItemIcon>
-                <ListItemText>{email.description}</ListItemText>
+                <ListItemText sx={{ margin: 1 }}>
+                  {email.description}
+                </ListItemText>
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
                   fontSize={"small"}
+                  sx={{ margin: 1 }}
                 >
                   {`(${email.email})`}
                 </Typography>
@@ -115,14 +119,15 @@ export function SendFileViaEmail(props: Props) {
           </Menu>
         </Grid>
         <Grid item xs={12} md={3}>
-          <Button
-            color="primary"
-            onClick={sendFile}
-            variant="outlined"
-            endIcon={<Send />}
-          >
-            Send
-          </Button>
+          <LoadingButton
+            clickAction={sendFile}
+            icon={<Send />}
+            text="Send"
+            buttonProps={{
+              color: "primary",
+              variant: "outlined",
+            }}
+          />
         </Grid>
       </Grid>
     </>

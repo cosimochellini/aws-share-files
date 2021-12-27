@@ -10,12 +10,12 @@ export const useUserEmail = () => {
   const { emails, setEmails } = useCurrentContext();
 
   const loadEmails = useCallback(
-    (force: boolean = false) => {
+    async (force: boolean = false) => {
       if (loading || (emails && !force)) return;
 
       loading = true;
 
-      functions.email
+      await functions.email
         .getEmails("cosimo.chellini@gmail.com")
         .then((emails) =>
           setEmails(emails.sort(byValue((x) => x.default, byBoolean())))
@@ -31,7 +31,7 @@ export const useUserEmail = () => {
   }, [emails, loadEmails]);
 
   const refreshEmails = () => {
-    loadEmails(true);
+    return loadEmails(true);
   };
 
   return { emails, refreshEmails };

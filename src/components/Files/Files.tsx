@@ -5,12 +5,13 @@ import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
 import { S3FileGroup } from "../../classes/S3FileGroup";
-import { AutoStories, Search } from "@mui/icons-material";
+import { AutoStories, Refresh, Search } from "@mui/icons-material";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { useS3Folders } from "../../hooks/state/useS3Folders.state";
+import { LoadingButton } from "../Data/LoadingButton";
 
 export type Props = {
   currentFolder: Nullable<S3Folder>;
@@ -22,7 +23,7 @@ const { itemsConfiguration } = sharedConfiguration;
 
 export function Files(props: Props) {
   const { currentFolder } = props;
-  const { folders } = useS3Folders();
+  const { folders, refreshFolders } = useS3Folders();
 
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -35,7 +36,7 @@ export function Files(props: Props) {
   useEffect(() => {
     setSelectedIndex(0);
 
-    let items = folders ?? [];
+    let items = (folders ?? []).flatMap((item) => item.Files);
 
     if (search) {
       const searchLower = search.trim().toLowerCase();
@@ -43,7 +44,9 @@ export function Files(props: Props) {
       items = items.filter(
         (i) =>
           i.Hierarchy.some((h) => h.toLowerCase().includes(searchLower)) ||
-          i.Files.some((f) => f.FileName.toLowerCase().includes(searchLower))
+          i.Files.some((f) =>
+            f.file.FileName.toLowerCase().includes(searchLower)
+          )
       );
     }
 
@@ -51,11 +54,7 @@ export function Files(props: Props) {
       items = items.filter((i) => i.Key?.includes(currentFolder.Key!));
     }
 
-    setDisplayedItems(
-      items
-        .flatMap((item) => item.Files)
-        .sort(byValue((x) => x.FileName, byString()))
-    );
+    setDisplayedItems(items.sort(byValue((x) => x.FileName, byString())));
   }, [search, folders, currentFolder]);
 
   return (
@@ -74,14 +73,19 @@ export function Files(props: Props) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton edge="end">
-                <Search />
+                <LoadingButton
+                  type={"icon"}
+                  clickAction={refreshFolders}
+                  icon={<Refresh />}
+                />
               </IconButton>
             </InputAdornment>
           ),
+
           startAdornment: currentFolder ? (
             <Chip
-              label={"Author: " + currentFolder.FolderName}
               variant="outlined"
+              label={"Author: " + currentFolder.FolderName}
               onDelete={handleDeleteAuthor}
               sx={{ marginRight: "5px" }}
             />

@@ -53,16 +53,15 @@ export function Folders(props: Props) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton edge="end">
-                <Search />
+                <LoadingButton
+                  type={"icon"}
+                  clickAction={refreshFolders}
+                  icon={<Refresh />}
+                />
               </IconButton>
             </InputAdornment>
           ),
         }}
-      />
-      <LoadingButton
-        type={"icon"}
-        clickAction={refreshFolders}
-        icon={<Refresh />}
       />
 
       <List

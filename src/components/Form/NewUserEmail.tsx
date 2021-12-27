@@ -6,13 +6,14 @@ import { notification } from "../../instances/notification";
 import { FormControlLabel, Grid, TextField } from "@mui/material";
 import { Button, Card, CardContent, Checkbox } from "@mui/material";
 import { useUserEmail } from "../../hooks/state/useUserEmail.state";
+import { LoadingButton } from "../Data/LoadingButton";
 
 export function NewUserEmail() {
-  const { register, handleSubmit, reset } = useForm<UserEmail>();
   const { refreshEmails } = useUserEmail();
+  const { register, handleSubmit, reset } = useForm<UserEmail>();
 
   const onSubmit = handleSubmit((data: UserEmail) => {
-    functions.email
+    return functions.email
       .addEmail(data)
       .then(() => {
         reset();
@@ -59,13 +60,12 @@ export function NewUserEmail() {
                   />
                 </Grid>
                 <Grid item xs={6}>
-                  <Button
-                    variant="outlined"
-                    onClick={onSubmit}
-                    endIcon={<Save />}
-                  >
-                    Save
-                  </Button>
+                  <LoadingButton
+                    text="save"
+                    icon={<Save />}
+                    buttonProps={{ variant: "outlined" }}
+                    clickAction={onSubmit}
+                  />
                 </Grid>
               </Grid>
             </form>

@@ -9,6 +9,7 @@ import { truncateString } from "../src/utils/truncateString";
 import { InputLabel, Grid, Typography } from "@mui/material";
 import { useCurrentContext } from "../src/hooks/context.hook";
 import { Button, CardContent, FormControl } from "@mui/material";
+import { LoadingButton } from "../src/components/Data/LoadingButton";
 import { Book, FileUpload, Person, UploadFile } from "@mui/icons-material";
 import { CardHeader, TextField, MenuItem, Select, Card } from "@mui/material";
 
@@ -33,10 +34,10 @@ export default function Upload() {
     setSelectedFile(file);
   };
 
-  const uploadFile = () => {
+  const uploadFile = async () => {
     if (!selectedFile) return;
 
-    functions.s3
+    await functions.s3
       .uploadFile({
         name: fileTitle,
         file: selectedFile,
@@ -170,15 +171,16 @@ export default function Upload() {
                     />
                   </Button>
                   {selectedFile && fileAuthor && fileTitle ? (
-                    <Button
-                      variant="contained"
-                      color="success"
-                      onClick={uploadFile}
-                      sx={{ marginLeft: 2 }}
-                      endIcon={<FileUpload />}
-                    >
-                      Upload
-                    </Button>
+                    <LoadingButton
+                      text="Upload"
+                      icon={<FileUpload />}
+                      clickAction={uploadFile}
+                      buttonProps={{
+                        variant: "contained",
+                        color: "success",
+                        sx: { marginLeft: 2 },
+                      }}
+                    />
                   ) : null}
                 </Grid>
               </Grid>

@@ -5,14 +5,14 @@ import {
   IconButton,
   IconButtonProps,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Error, Refresh } from "@mui/icons-material";
 
 type Props = {
   type?: Nullable<"button" | "icon">;
   text?: Nullable<string>;
   icon: Nullable<JSX.Element>;
-  clickAction: () => Promise<unknown>;
+  clickAction: (event: any) => Promise<unknown>;
   buttonProps?: Nullable<ButtonProps>;
   iconProps?: Nullable<IconButtonProps>;
 };
@@ -25,26 +25,35 @@ export function LoadingButton(props: Props) {
   const [color, setColor] = useState(
     props.buttonProps?.color ?? props.iconProps?.color ?? "primary"
   );
+  const [disabled, setDisabled] = useState(false);
+  const [currentIcon, setCurrentIcon] = useState(icon);
 
-  const getCurrentColor = () => {
-    if (loading) return "secondary";
-    if (error) return "error";
-    return color;
-  };
+  useEffect(() => {
+    if (error) {
+      setColor("error");
+      setCurrentIcon(<Error />);
+      setDisabled(false);
+      return;
+    }
 
-  const getCurrentIcon = () => {
-    if (loading) return <Refresh className={loading ? "spin" : ""} />;
-    if (error) return <Error />;
-    return icon;
-  };
+    if (loading) {
+      setColor("info");
+      setCurrentIcon(<Refresh className="spin" />);
+      setDisabled(true);
+      return;
+    }
 
-  const handleClick = async () => {
+    setColor("primary");
+    setCurrentIcon(icon);
+    setDisabled(false);
+  }, [error, icon, loading]);
+
+  const handleClick = async (e: any) => {
     if (loading) return;
 
     setLoading(true);
 
-    clickAction()
-      .then(() => {})
+    await clickAction(e)
       .catch((e) => setError(e))
       .finally(() => setLoading(false));
   };
@@ -53,24 +62,21 @@ export function LoadingButton(props: Props) {
     <>
       {type === "button" ? (
         <Button
-          {...{
-            ...props.buttonProps,
-            endIcon: getCurrentIcon(),
-          }}
-          disabled={loading}
           endIcon={icon}
+          disabled={disabled}
           onClick={handleClick}
+          {...(props.buttonProps ?? {})}
         >
           {text}
         </Button>
       ) : (
         <IconButton
-          {...(props.iconProps ?? {})}
+          color={color}
+          disabled={disabled}
           onClick={handleClick}
-          disabled={loading}
-          color={getCurrentColor()}
+          {...(props.iconProps ?? {})}
         >
-          {getCurrentIcon()}
+          {currentIcon}
         </IconButton>
       )}
     </>

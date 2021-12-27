@@ -1,9 +1,9 @@
+import { useState } from "react";
 import List from "@mui/material/List";
 import Grid from "@mui/material/Grid";
+import { Divider } from "@mui/material";
 import Avatar from "@mui/material/Avatar";
-import {  useState } from "react";
 import ListItem from "@mui/material/ListItem";
-import { Button, Divider, IconButton } from "@mui/material";
 import { Email, Star } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -14,18 +14,18 @@ import ListItemAvatar from "@mui/material/ListItemAvatar";
 import { notification } from "../../src/instances/notification";
 import { NewUserEmail } from "../../src/components/Form/NewUserEmail";
 import { useUserEmail } from "../../src/hooks/state/useUserEmail.state";
+import { LoadingButton } from "../../src/components/Data/LoadingButton";
 import { FilesPlaceholders } from "../../src/components/Placeholders/FilesPlaceholders";
 
 export default function Manage() {
   const { emails, refreshEmails } = useUserEmail();
   const [indexActive, setIndexActive] = useState(-1);
 
-  const deleteEmail = (email: UserEmail) => {
+  const deleteEmail = (email: UserEmail) =>
     functions.email
       .deleteEmail(email)
       .then(() => refreshEmails())
       .catch(notification.error);
-  };
 
   return (
     <>
@@ -46,13 +46,15 @@ export default function Manage() {
                     selected={indexActive === i}
                     onMouseEnter={() => setIndexActive(i)}
                     secondaryAction={
-                      <IconButton
-                        color="error"
-                        sx={{ borderRadius: 2, border: 1 }}
-                        onClick={() => deleteEmail(email)}
-                      >
-                        <DeleteIcon />
-                      </IconButton>
+                      <LoadingButton
+                        type={"icon"}
+                        icon={<DeleteIcon />}
+                        clickAction={() => deleteEmail(email)}
+                        iconProps={{
+                          color: "error",
+                          sx: { borderRadius: 2, border: 1 },
+                        }}
+                      />
                     }
                   >
                     <ListItemAvatar>
@@ -61,8 +63,8 @@ export default function Manage() {
                       </Avatar>
                     </ListItemAvatar>
                     <ListItemText
-                      primary={email.description}
                       secondary={email.email}
+                      primary={email.description}
                     />
                   </ListItem>
                   <Divider />

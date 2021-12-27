@@ -11,11 +11,13 @@ export const env = {
     return {
       appTitle: process.env.APP_TITLE as string,
       appLogoUrl: process.env.APP_LOGO_URL as string,
+      appIconUrl: process.env.APP_ICON_URL as string,
     };
   },
   get content() {
     return {
       baseUrl: process.env.CONTENT_API_URL as string,
+      invalidWords: (process.env.CONTENT_INVALID_WORDS as string).split(","),
     };
   },
   get email() {
