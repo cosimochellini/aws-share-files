@@ -7,6 +7,7 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { Error, Refresh } from "@mui/icons-material";
+import { notification } from "../../instances/notification";
 
 type Props = {
   type?: Nullable<"button" | "icon">;
@@ -18,15 +19,15 @@ type Props = {
 };
 
 export function LoadingButton(props: Props) {
-  const { type = "button", text, icon, clickAction } = props;
+  const { type = "button" } = props;
 
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState<any>();
   const [color, setColor] = useState(
     props.buttonProps?.color ?? props.iconProps?.color ?? "primary"
   );
   const [disabled, setDisabled] = useState(false);
-  const [currentIcon, setCurrentIcon] = useState(icon);
+  const [currentIcon, setCurrentIcon] = useState(props.icon);
 
   useEffect(() => {
     if (error) {
@@ -44,17 +45,21 @@ export function LoadingButton(props: Props) {
     }
 
     setColor("primary");
-    setCurrentIcon(icon);
+    setCurrentIcon(props.icon);
     setDisabled(false);
-  }, [error, icon, loading]);
+  }, [error, loading, props.icon]);
 
   const handleClick = async (e: any) => {
     if (loading) return;
 
     setLoading(true);
 
-    await clickAction(e)
-      .catch((e) => setError(e))
+    await props
+      .clickAction(e)
+      .catch((e) => {
+        notification.error(e);
+        setError(e);
+      })
       .finally(() => setLoading(false));
   };
 
@@ -62,12 +67,12 @@ export function LoadingButton(props: Props) {
     <>
       {type === "button" ? (
         <Button
-          endIcon={icon}
+          endIcon={currentIcon}
           disabled={disabled}
           onClick={handleClick}
           {...(props.buttonProps ?? {})}
         >
-          {text}
+          {props.text}
         </Button>
       ) : (
         <IconButton
