@@ -7,6 +7,7 @@ export const env = {
       secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
     };
   },
+
   get info() {
     return {
       appTitle: process.env.APP_TITLE as string,
@@ -14,12 +15,14 @@ export const env = {
       appIconUrl: process.env.APP_ICON_URL as string,
     };
   },
+
   get content() {
     return {
       baseUrl: process.env.CONTENT_API_URL as string,
       invalidWords: (process.env.CONTENT_INVALID_WORDS as string).split(","),
     };
   },
+
   get email() {
     return {
       signature: process.env.EMAIL_SIGNATURE as string,
@@ -29,6 +32,14 @@ export const env = {
         user: process.env.EMAIL_USER as string,
         pass: process.env.EMAIL_PASSWORD as string,
       },
+    };
+  },
+
+  get converter() {
+    return {
+      baseUrl: process.env.CONVERTER_API_URL as string,
+      header: process.env.CONVERTER_API_HEADER as string,
+      apiKey: process.env.CONVERTER_API_KEY as string,
     };
   },
 

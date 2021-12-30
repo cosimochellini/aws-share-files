@@ -21,7 +21,7 @@ type Props = {
 export function LoadingButton(props: Props) {
   const { type = "button" } = props;
 
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<any>();
   const [color, setColor] = useState(
     props.buttonProps?.color ?? props.iconProps?.color ?? "primary"
