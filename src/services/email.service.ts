@@ -1,11 +1,11 @@
 import { env } from "../instances/env";
 import { bucket } from "./bucket.service";
 import { FileInfo } from "../classes/FileInfo";
-import { ServiceMapper } from "../types/generic";
 import { transporter } from "../instances/transporter";
+import { ServiceArguments, ServiceMapper } from "../types/generic";
 
 export const email = {
-  async sendFile(to: string, fileKey: string) {
+  async sendFile({ to, fileKey }: { to: string; fileKey: string }) {
     const content = (await bucket.downloadFile(fileKey)).stream();
 
     const fileInfo = new FileInfo(fileKey);
@@ -29,3 +29,5 @@ export const email = {
 };
 
 export type emailTypes = ServiceMapper<typeof email>;
+
+export type emailArguments = ServiceArguments<typeof email>;

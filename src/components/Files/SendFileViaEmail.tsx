@@ -32,7 +32,7 @@ export function SendFileViaEmail(props: Props) {
     if (!selectedEmail) return;
 
     await functions.email
-      .sendFile({ key: fileKey, to: selectedEmail.email })
+      .sendFile({ fileKey, to: selectedEmail.email })
       .then(() => notification.success("File sent successfully"))
       .catch(notification.error);
   };

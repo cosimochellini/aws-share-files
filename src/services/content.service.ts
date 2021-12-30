@@ -1,5 +1,5 @@
 import { env } from "../instances/env";
-import { ServiceMapper } from "../types/generic";
+import { ServiceArguments, ServiceMapper } from "../types/generic";
 import { notification } from "../instances/notification";
 import { ContentResponse } from "../types/content.types";
 
@@ -25,3 +25,5 @@ export const content = {
 };
 
 export type contentTypes = ServiceMapper<typeof content>;
+
+export type contentArgs = ServiceArguments<typeof content>;

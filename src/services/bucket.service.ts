@@ -2,7 +2,7 @@ import { s3 } from "../instances/aws";
 import { env } from "../instances/env";
 import { byValue, byString } from "sort-es";
 import { S3Folder } from "../classes/S3Folder";
-import { ServiceMapper } from "../types/generic";
+import { ServiceArguments, ServiceMapper } from "../types/generic";
 
 export type uploadPayload = {
   file: File | Buffer;
@@ -77,3 +77,5 @@ export const bucket = {
 };
 
 export type bucketTypes = ServiceMapper<typeof bucket>;
+
+export type bucketArgs = ServiceArguments<typeof bucket>;

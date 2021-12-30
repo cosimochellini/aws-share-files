@@ -1,5 +1,5 @@
 import { env } from "../instances/env";
-import { ServiceMapper } from "../types/generic";
+import { ServiceArguments, ServiceMapper } from "../types/generic";
 import { notification } from "../instances/notification";
 import { ConversionRequest, ConverterResponse } from "../types/converter.types";
 
@@ -35,13 +35,13 @@ converterApiCaller.post = <T>(section: string, body: {} = {}) => {
     .catch(notification.error) as Promise<T>;
 };
 
-export type fileConversion = {
+export type fileConverter = {
   file: string;
   target: string;
 };
 
 export const converter = {
-  convertFile({ file, target }: fileConversion) {
+  convertFile({ file, target }: fileConverter) {
     const body: ConversionRequest = {
       input: [
         {
@@ -77,4 +77,6 @@ export const converter = {
   },
 };
 
-export type contentTypes = ServiceMapper<typeof converter>;
+export type converterTypes = ServiceMapper<typeof converter>;
+
+export type converterArgs = ServiceArguments<typeof converter>;

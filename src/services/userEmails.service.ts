@@ -1,5 +1,5 @@
 import { randomId } from "../utils/random";
-import { ServiceMapper } from "../types/generic";
+import { ServiceArguments, ServiceMapper } from "../types/generic";
 import { documentClient } from "../instances/aws";
 import { UserEmail } from "../types/dynamo.types";
 
@@ -35,3 +35,5 @@ export const userEmails = {
 };
 
 export type userEmailsType = ServiceMapper<typeof userEmails>;
+
+export type userEmailsArgs = ServiceArguments<typeof userEmails>;
