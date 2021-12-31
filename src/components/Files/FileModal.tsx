@@ -11,6 +11,7 @@ import { VolumeChipArray } from "../Data/VolumeChipArray";
 import { Divider, Modal, Typography } from "@mui/material";
 import { notification } from "../../instances/notification";
 import { CardHeader, Rating, Skeleton } from "@mui/material";
+import { FileConversion } from "./FileConversion";
 
 type Props = {
   file: Nullable<S3FileGroup>;
@@ -100,6 +101,7 @@ function FileModal(props: Props) {
               )}
 
               <FilesAccordion currentFile={file} />
+              <FileConversion currentFile={file} />
             </CardContent>
           </Card>
         </Modal>
