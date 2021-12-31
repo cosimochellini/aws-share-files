@@ -66,7 +66,7 @@ export const functions = {
   convert: {
     getConversionStatus(id: converterArgs["getConversionStatus"]) {
       return caller<converterTypes["getConversionStatus"]>(
-        "converter/getConversionStatus.function",
+        "converter/getConversion.function",
         { id }
       );
     },

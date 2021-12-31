@@ -6,6 +6,7 @@ import { functions } from "../../instances/functions";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { Card, CardContent, CardHeader } from "@mui/material";
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { useConversions } from "../../hooks/conversions.hook";
 
 type Props = {
   currentFile: S3FileGroup;
@@ -15,6 +16,8 @@ const { extensions } = env.converter;
 
 export function FileConversion(props: Props) {
   const { currentFile } = props;
+
+  const { addConversion } = useConversions();
 
   const fileExtensions = currentFile.Files.map((f) => f.extension);
 
@@ -28,10 +31,12 @@ export function FileConversion(props: Props) {
   const convertFile = async () => {
     const f = currentFile.Files.find((f) => f.extension === file)!;
 
-    await functions.convert.convert({
-      file: f.file.FileInfo.CompleteName,
-      target,
-    });
+    await functions.convert
+      .convert({
+        file: f.file.FileInfo.CompleteName,
+        target,
+      })
+      .then((job) => addConversion(job.id));
   };
 
   if (!availableExtensions.length) return null;

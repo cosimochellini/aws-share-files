@@ -43,6 +43,16 @@ export const formatter = {
     }
     return "";
   },
+  timeFormatter(date: datable): string {
+    const time = parse(date);
+    const hours = time.getHours();
+    const minutes = time.getMinutes();
+
+    return `${hours < 10 ? "0" : ""}${hours}:${
+      minutes < 10 ? "0" : ""
+    }${minutes}`;
+  },
+
   fileFormatter(bytes: number): string {
     if (bytes == 0) return "0 Byte";
 

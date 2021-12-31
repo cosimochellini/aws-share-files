@@ -2,6 +2,7 @@ import { ReadMore } from "../Text/ReadMore";
 import { useEffect, useState } from "react";
 import { Nullable } from "../../types/generic";
 import { FilesAccordion } from "./FilesAccordion";
+import { FileConversion } from "./FileConversion";
 import { Card, CardContent } from "@mui/material";
 import { useDevice } from "../../hooks/device.hook";
 import { functions } from "../../instances/functions";
@@ -11,7 +12,6 @@ import { VolumeChipArray } from "../Data/VolumeChipArray";
 import { Divider, Modal, Typography } from "@mui/material";
 import { notification } from "../../instances/notification";
 import { CardHeader, Rating, Skeleton } from "@mui/material";
-import { FileConversion } from "./FileConversion";
 
 type Props = {
   file: Nullable<S3FileGroup>;

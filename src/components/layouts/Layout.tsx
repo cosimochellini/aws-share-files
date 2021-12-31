@@ -11,6 +11,7 @@ import { Typography, List, IconButton } from "@mui/material";
 import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
 import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
+import { Conversions } from "./Conversions";
 
 const drawerWidth = 240;
 
@@ -90,9 +91,10 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
               <Menu />
             </IconButton>
           )}
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" style={{ flex: 1 }}>
             {env.info.appTitle}
           </Typography>
+          <Conversions />
         </Toolbar>
       </MyAppBar>
       <Drawer
