@@ -1,24 +1,44 @@
-# This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# AWS shareable files
 
-## Getting Started
+## Project purpose
 
-First, run the development server:
+- This project allows you to upload new files to s3
+- This project allows you to add/edit/remove emails stored in a Dynamo DB instance
+- This project allows you to send the files stored in s3 to the recipients on the Dynamo DB
+- This project allows you to convert files on s3 into other formats, such as .docx to .pdf
+
+## Project technologies
+
+- [Next.js](https://nextjs.org/) + [React](https://reactjs.org/) + [Typescript](https://www.typescriptlang.org/) for the UI
+- [Next.js API Routes](https://nextjs.org/docs/api-routes/introduction) for the serverless api
+- [Material UI](https://mui.com/) for the graphic component library
+- AWS ([DynamoDB](https://aws.amazon.com/dynamodb/), [S3](https://aws.amazon.com/s3/), [Lambda](https://aws.amazon.com/lambda/), [SES](https://aws.amazon.com/ses/)) for the cloud infrastructure
+
+## Project setup
 
 ```bash
 yarn
-# then
+```
+
+### Compiles and hot-reloads for development
+
+```bash
 yarn dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Compiles and minifies for production
 
-You can start editing the page by modifying `pages/index.tsx`. The page auto-updates as you edit the file.
+```bash
+yarn build
+```
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.ts`.
+### Lints and fixes files
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```bash
+yarn lint
+```
 
-## Learn More
+## Learn More about Next.js
 
 To learn more about Next.js, take a look at the following resources:
 
