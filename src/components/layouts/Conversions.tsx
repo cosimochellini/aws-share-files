@@ -1,30 +1,17 @@
 import { MouseEvent, useState } from "react";
+import { Button, Menu } from "@mui/material";
 import { Nullable } from "../../types/generic";
-import {
-  Button,
-  Menu,
-  MenuItem,
-  Badge,
-  Typography,
-  IconButton,
-  Chip,
-} from "@mui/material";
-import {
-  ChangeCircleRounded,
-  Dangerous,
-  Delete,
-  LocalDining,
-  Done,
-  DoneOutlined,
-  CheckCircle,
-  Warning,
-} from "@mui/icons-material";
-import { useConversions } from "../../hooks/conversions.hook";
 import { formatter } from "../../formatters/formatter";
 import { StatusCode } from "../../types/converter.types";
+import { useJobs } from "../../hooks/state/useJobs.state";
+import { ChangeCircleRounded, Delete } from "@mui/icons-material";
+import { CheckCircle, Warning, Refresh } from "@mui/icons-material";
+import { useConversions } from "../../hooks/state/useConversions.state";
+import { MenuItem, Badge, Typography, IconButton, Chip } from "@mui/material";
+import { unresolvedPromise } from "../../utils/promise";
+import { LoadingButton } from "../Data/LoadingButton";
 
 function getColor(code: StatusCode) {
-  console.log(code);
   switch (code) {
     case StatusCode.completed:
     case StatusCode.converting:
@@ -39,7 +26,8 @@ function getColor(code: StatusCode) {
 }
 
 export function Conversions() {
-  const { jobs, removeConversion } = useConversions();
+  const { jobs } = useJobs();
+  const { removeConversion } = useConversions();
 
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>();
   const open = Boolean(anchorEl);
@@ -99,7 +87,9 @@ export function Conversions() {
                   color={getColor(job.status?.code)}
                   style={{ flex: 1 }}
                 >
-                  {job.input[0]?.parameters?.file.split("/").at(-1)}
+                  {job.conversion?.[0]?.output_target?.[0]?.parameters?.file
+                    ?.split("/")
+                    .at(-1) ?? "Unknown"}
                 </Typography>
                 <IconButton>
                   {job.status?.code === StatusCode.failed ? (
@@ -107,16 +97,17 @@ export function Conversions() {
                   ) : job.status?.code === StatusCode.completed ? (
                     <CheckCircle color="success" />
                   ) : (
-                    <LocalDining color="secondary" className="spin" />
+                    <Refresh color="secondary" className="spin" />
                   )}
                 </IconButton>
-                <IconButton
-                  color="error"
-                  sx={{}}
-                  onClick={() => removeConversion(job.id)}
-                >
-                  <Delete />
-                </IconButton>
+                <LoadingButton
+                  type="icon"
+                  icon={<Delete />}
+                  iconProps={{ color: "error" }}
+                  clickAction={() =>
+                    unresolvedPromise(() => removeConversion(job.id))
+                  }
+                ></LoadingButton>
               </MenuItem>
             ))
           : empty}

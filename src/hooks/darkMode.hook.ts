@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
 import { useDevice } from "./device.hook";
+import { useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/localStorage.hook";
 
 export const useDarkMode = () => {

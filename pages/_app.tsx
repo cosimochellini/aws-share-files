@@ -10,6 +10,7 @@ import { useDevice } from "../src/hooks/device.hook";
 import Layout from "../src/components/layouts/Layout";
 import { useDarkMode } from "../src/hooks/darkMode.hook";
 import { lazy, Suspense, useEffect, useState } from "react";
+import { conversionStore } from "../src/instances/conversionsStore";
 import { Context, defaultContext } from "../src/hooks/context.hook";
 import { NotificationHandler } from "../src/components/Global/NotificationHandler";
 
@@ -24,20 +25,34 @@ const AppGrid = (props: AppProps) => {
   } = props;
 
   const { isMobile } = useDevice();
+  const [isDarkMode] = useDarkMode();
 
+  const [jobs, setJobs] = useState(defaultContext.jobs);
   const [theme, setTheme] = useState(defaultContext.theme);
   const [emails, setEmails] = useState(defaultContext.emails);
   const [folders, setFolders] = useState(defaultContext.folders);
-  const [isDarkMode] = useDarkMode();
+  const [conversions, setConversions] = useState(defaultContext.conversions);
 
-  const data = {
+  const providedData = {
+    jobs,
     theme,
     emails,
     folders,
+    conversions,
+    setJobs,
     setTheme,
     setEmails,
     setFolders,
+    setConversions,
   };
+
+  useEffect(() => {
+    setConversions(conversionStore.value);
+  }, []);
+
+  useEffect(() => {
+    conversionStore.set(conversions);
+  }, [conversions]);
 
   useEffect(() => {
     setTheme(isDarkMode ? GlobalThemes.dark : GlobalThemes.light);
@@ -49,7 +64,7 @@ const AppGrid = (props: AppProps) => {
         <title>{env.info.appTitle}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <Context.Provider value={data}>
+      <Context.Provider value={providedData}>
         <SessionProvider session={session}>
           <ThemeProvider theme={theme}>
             <CssBaseline />

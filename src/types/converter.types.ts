@@ -29,6 +29,7 @@ export interface ConversionResponse {
   id: string;
   target: string;
   category: string;
+  output_target: OutputTargetResponse[];
 }
 
 export interface InputResponse {
