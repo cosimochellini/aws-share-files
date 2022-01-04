@@ -4,14 +4,14 @@ import { useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
+import { LoadingButton } from "../Data/LoadingButton";
 import { S3FileGroup } from "../../classes/S3FileGroup";
-import { AutoStories, Refresh, Search } from "@mui/icons-material";
+import { AutoStories, Refresh } from "@mui/icons-material";
+import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
+import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
-import { sharedConfiguration } from "../../instances/sharedConfiguration";
-import { useS3Folders } from "../../hooks/state/useS3Folders.state";
-import { LoadingButton } from "../Data/LoadingButton";
 
 export type Props = {
   currentFolder: Nullable<S3Folder>;
@@ -65,7 +65,7 @@ export function Files(props: Props) {
         label="Search for a file"
         type="search"
         sx={{
-          width: { xs: "100%", sm: "90%" },
+          width: { xs: "100%", md: "90%" },
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -94,7 +94,7 @@ export function Files(props: Props) {
       />
       <List
         sx={{
-          width: { xs: "100%", sm: "90%" },
+          width: { xs: "100%", md: "90%" },
         }}
       >
         {!folders ? (

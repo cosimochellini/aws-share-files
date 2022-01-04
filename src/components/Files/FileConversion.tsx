@@ -4,9 +4,10 @@ import { ChangeCircle } from "@mui/icons-material";
 import { LoadingButton } from "../Data/LoadingButton";
 import { functions } from "../../instances/functions";
 import { S3FileGroup } from "../../classes/S3FileGroup";
+import { notification } from "../../instances/notification";
 import { Card, CardContent, CardHeader } from "@mui/material";
+import { useConversions } from "../../hooks/state/useConversions.state";
 import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
-import { useConversions } from "../../hooks/conversions.hook";
 
 type Props = {
   currentFile: S3FileGroup;
@@ -33,10 +34,13 @@ export function FileConversion(props: Props) {
 
     await functions.convert
       .convert({
-        file: f.file.FileInfo.CompleteName,
         target,
+        file: f.file.Object.Key!,
       })
-      .then((job) => addConversion(job.id));
+      .then((job) => addConversion(job.id))
+      .then(() => {
+        notification.success("Conversion started");
+      });
   };
 
   if (!availableExtensions.length) return null;

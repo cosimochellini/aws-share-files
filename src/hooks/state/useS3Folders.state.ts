@@ -27,8 +27,8 @@ export const useS3Folders = () => {
     loadFolders();
   }, [folders, loadFolders]);
 
-  const refreshFolders = () => {
-    setFolders(undefined);
+  const refreshFolders = (reset = false) => {
+    if (reset) setFolders(undefined);
 
     return loadFolders(true);
   };
