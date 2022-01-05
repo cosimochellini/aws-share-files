@@ -55,8 +55,8 @@ export function Folders(props: Props) {
               <IconButton edge="end">
                 <LoadingButton
                   type={"icon"}
-                  clickAction={refreshFolders}
                   icon={<Refresh />}
+                  clickAction={() => refreshFolders(true)}
                 />
               </IconButton>
             </InputAdornment>

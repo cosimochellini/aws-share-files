@@ -28,11 +28,11 @@ export default function FilesPage() {
         alignItems="center"
         justifyItems={"center"}
       >
-        {hasWidth(900) ? (
+        {hasWidth(900) && (
           <Grid {...gridProps}>
             <Folders onSearch={setSelectedFolder} />
           </Grid>
-        ) : null}
+        )}
         <Grid {...gridProps}>
           <Files
             onSearch={setSelectedFileGroup}

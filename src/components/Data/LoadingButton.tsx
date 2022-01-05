@@ -13,7 +13,7 @@ type Props = {
   type?: Nullable<"button" | "icon">;
   text?: Nullable<string>;
   icon: Nullable<JSX.Element>;
-  clickAction: (event: any) => Promise<unknown>;
+  clickAction: (event: unknown) => Promise<unknown>;
   buttonProps?: Nullable<ButtonProps>;
   iconProps?: Nullable<IconButtonProps>;
 };
@@ -22,7 +22,7 @@ export function LoadingButton(props: Props) {
   const { type = "button" } = props;
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>();
+  const [error, setError] = useState<unknown>();
   const [color, setColor] = useState(
     props.buttonProps?.color ?? props.iconProps?.color ?? "primary"
   );
@@ -49,7 +49,7 @@ export function LoadingButton(props: Props) {
     setDisabled(false);
   }, [error, loading, props.icon]);
 
-  const handleClick = async (e: any) => {
+  const handleClick = async (e: unknown) => {
     if (loading) return;
 
     setLoading(true);

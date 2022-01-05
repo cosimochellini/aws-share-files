@@ -19,7 +19,7 @@ export interface ParametersResponse {
 export interface OutputTargetResponse {
   type: string;
   parameters: ParametersResponse;
-  credentials: any[];
+  //   credentials: [];
   status: string;
   modified_at: Date;
   created_at: Date;
@@ -38,7 +38,7 @@ export interface InputResponse {
   status: string;
   source: string;
   engine: string;
-  options: any[];
+  //   options: [];
   filename: string;
   size: number;
   hash: string;
@@ -54,15 +54,15 @@ export interface ConverterResponse {
   token: string;
   type: string;
   status: StatusResponse;
-  errors: any[];
-  warnings: any[];
+  //   errors: [];
+  //   warnings: [];
   process: boolean;
   fail_on_input_error: boolean;
   fail_on_conversion_error: boolean;
   conversion: ConversionResponse[];
-  limits: any[];
+  //   limits: [];
   input: InputResponse[];
-  output: any[];
+  //   output: [];
   callback: string;
   notify_status: boolean;
   server: string;

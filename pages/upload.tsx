@@ -29,7 +29,7 @@ export default function Upload() {
   const [fileAuthor, setFileAuthor] = useState("");
 
   const changeHandler = (event: Nullable<HTMLInputElement>) => {
-    const file = event?.files?.[0] ?? null;
+    const file = event?.files?.[0];
 
     setSelectedFile(file);
   };
@@ -97,7 +97,7 @@ export default function Upload() {
                         value={selectedFile?.name}
                       />
                     </Grid>
-                    {suggestedVolumes.length ? (
+                    {suggestedVolumes.length > 0 && (
                       <Grid item sx={fullWidth}>
                         <FormControl fullWidth>
                           <InputLabel id="suggestions">
@@ -132,7 +132,7 @@ export default function Upload() {
                           </Select>
                         </FormControl>
                       </Grid>
-                    ) : null}
+                    )}
                     <Grid item sx={fullWidth}>
                       <TextField
                         fullWidth

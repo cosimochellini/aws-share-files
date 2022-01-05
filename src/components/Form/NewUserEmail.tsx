@@ -1,12 +1,12 @@
 import { Save } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { UserEmail } from "../../types/dynamo.types";
+import { LoadingButton } from "../Data/LoadingButton";
 import { functions } from "../../instances/functions";
 import { notification } from "../../instances/notification";
 import { FormControlLabel, Grid, TextField } from "@mui/material";
-import { Button, Card, CardContent, Checkbox } from "@mui/material";
+import { Card, CardContent, Checkbox } from "@mui/material";
 import { useUserEmail } from "../../hooks/state/useUserEmail.state";
-import { LoadingButton } from "../Data/LoadingButton";
 
 export function NewUserEmail() {
   const { refreshEmails } = useUserEmail();
@@ -64,7 +64,7 @@ export function NewUserEmail() {
                     text="save"
                     icon={<Save />}
                     buttonProps={{ variant: "outlined" }}
-                    clickAction={onSubmit}
+                    clickAction={(e) => onSubmit(e as any)}
                   />
                 </Grid>
               </Grid>

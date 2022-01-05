@@ -75,21 +75,21 @@ export function Files(props: Props) {
               <IconButton edge="end">
                 <LoadingButton
                   type={"icon"}
-                  clickAction={refreshFolders}
+                  clickAction={() => refreshFolders(true)}
                   icon={<Refresh />}
                 />
               </IconButton>
             </InputAdornment>
           ),
 
-          startAdornment: currentFolder ? (
+          startAdornment: currentFolder && (
             <Chip
               variant="outlined"
               label={"Author: " + currentFolder.FolderName}
               onDelete={handleDeleteAuthor}
               sx={{ marginRight: "5px" }}
             />
-          ) : null,
+          ),
         }}
       />
       <List
