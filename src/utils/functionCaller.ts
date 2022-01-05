@@ -1,35 +1,34 @@
-import { notification } from "../instances/notification";
+const defaultBehavior = <T>(promise: Promise<Response>) =>
+  promise
+    .then((res) =>
+      res.ok
+        ? (res.json() as Promise<T>)
+        : res.json().then((error) => Promise.reject(error))
+    )
+    .then((res: T) => res);
 
 const caller = <T>(url: string, query = {}) =>
-  fetch("/api/" + url + "?" + new URLSearchParams(query).toString())
-    .then((res) => res.json())
-    .catch(notification.error)
-    .then((res: T) => res);
+  defaultBehavior<T>(
+    fetch("/api/" + url + "?" + new URLSearchParams(query).toString())
+  );
 
 caller.post = <T>(url: string, body = {}) =>
-  fetch("/api/" + url, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(body),
-  })
-    .then((res) => res.json())
-    .catch(notification.error)
-    .then((res: T) => res);
+  defaultBehavior<T>(
+    fetch("/api/" + url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body),
+    })
+  );
 
-caller.formData = <T>(url: string, body = {}) => {
-  const formData = new FormData();
+caller.formData = <T>(url: string, form = {}) => {
+  const body = new FormData();
 
-  for (const prop in body) {
-    formData.append(prop, (body as any)[prop]);
+  for (const prop in form) {
+    body.append(prop, (form as any)[prop]);
   }
 
-  return fetch("/api/" + url, {
-    method: "POST",
-    body: formData,
-  })
-    .then((res) => res.json())
-    .catch(notification.error)
-    .then((res: T) => res);
+  return defaultBehavior<T>(fetch("/api/" + url, { method: "POST", body }));
 };
 
 export { caller };

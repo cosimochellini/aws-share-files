@@ -39,14 +39,15 @@ export const notification = {
     notification.show(notificationType.warning, message);
   },
 
-  error: (message: string) => {
+  error: (message: any) => {
     // keeping console.error for backwards compatibility
     // and to log errors to the server
     console.error(message);
 
+    const errorMessage = message?.error ?? message ?? "Unknown error";
 
     device.runOnClient(() =>
-      notification.show(notificationType.error, message.toString())
+      notification.show(notificationType.error, errorMessage)
     );
   },
 

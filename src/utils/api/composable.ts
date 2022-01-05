@@ -14,9 +14,7 @@ export const defaultBehavior = (
     } catch (e: any) {
       const error = e.message ?? e;
 
-      res.status(500).json({ error: error.toString() });
-
-      throw e;
+      res.status(400).json({ error: error.toString() });
     }
   };
 };

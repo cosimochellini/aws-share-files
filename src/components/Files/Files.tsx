@@ -125,7 +125,7 @@ export function Files(props: Props) {
                   sx={{ marginX: "1px" }}
                   title={file.Files.map(({ extension }) => extension).join(" ")}
                   label={file.Files.map((f) =>
-                    f.extension[0].toUpperCase()
+                    f.extension[0]?.toUpperCase()
                   ).join(" ")}
                 />
               </ListItem>

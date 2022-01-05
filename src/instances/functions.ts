@@ -3,8 +3,8 @@ import { AwaitedServiceMapper, ServiceMapper } from "../types/generic";
 import { emailArguments, emailTypes } from "../services/email.service";
 import { contentArgs, contentTypes } from "../services/content.service";
 import { bucketArgs, bucketTypes } from "../../src/services/bucket.service";
-import { converterArgs, converterTypes } from "../services/converter.service";
 import { userEmailsArgs, userEmailsType } from "../services/userEmails.service";
+import { converterArgs, converterTypes } from "../services/converter.service";
 
 export const functions = {
   s3: {
