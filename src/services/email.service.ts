@@ -7,7 +7,7 @@ import { ServiceArguments, ServiceMapper } from "../types/generic";
 export const email = {
   async sendFile({ to, fileKey }: { to: string; fileKey: string }) {
     // const content = (await bucket.downloadFile(fileKey)).stream();
-    const path = bucket.getShareableUrl({ key: fileKey, expires: 1 });
+    const { signedUrl } = bucket.getShareableUrl({ key: fileKey, expires: 1 });
 
     const fileInfo = new FileInfo(fileKey);
 
@@ -18,7 +18,7 @@ export const email = {
       html: `<b> You've received a new file from ${env.info.appTitle}, enjoy! </b>`, // html body
       attachments: [
         {
-          path,
+          path: signedUrl,
           filename: fileInfo.CompleteName,
           contentType: `application/${fileInfo.Extension}`,
         },
