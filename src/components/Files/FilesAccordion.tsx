@@ -1,21 +1,32 @@
 import { useState } from "react";
+import { Typography } from "@mui/material";
 import type { S3File } from "../../classes/S3File";
 import { useDevice } from "../../hooks/device.hook";
+import { functions } from "../../instances/functions";
+import { LoadingButton } from "../Data/LoadingButton";
 import { SendFileViaEmail } from "./SendFileViaEmail";
-import { IconButton, Typography } from "@mui/material";
 import { formatter } from "../../formatters/formatter";
 import { S3FileGroup } from "../../classes/S3FileGroup";
+import { downloadURI } from "../../utils/downloadHelper";
 import { Delete, Download, ExpandMore } from "@mui/icons-material";
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 
 type Props = {
   currentFile: S3FileGroup;
 };
 
-const urlDownload = (key: string) => `./api/s3/download.function?key=${key}`;
+const downloadFile = async (key: string) => {
+  const { signedUrl } = await functions.s3.shareableUrl({ key });
+  const fileName = key.split("/").at(-1);
+
+  downloadURI(signedUrl, fileName!);
+};
 
 export function FilesAccordion(props: Props) {
   const { currentFile } = props;
+
+  const { refreshFolders } = useS3Folders();
 
   const { isMobile } = useDevice();
 
@@ -23,6 +34,17 @@ export function FilesAccordion(props: Props) {
 
   const handleChange = (panel: string) => (_: unknown, isExpanded: boolean) => {
     setExpanded(isExpanded ? panel : false);
+  };
+
+  const resetState = () => {
+    setExpanded(false);
+  };
+
+  const deleteFile = async (key: string) => {
+    await functions.s3.deleteFile(key);
+    await refreshFolders();
+
+    resetState();
   };
 
   const fileTitle = (file: S3File) => {
@@ -56,24 +78,23 @@ export function FilesAccordion(props: Props) {
               {fileTitle(file.file)}
             </Typography>
 
-            <IconButton
-              size="small"
-              color="error"
-              target="_blank"
-              sx={{ marginX: 1 }}
-              href={urlDownload(file.file.Key)}
-            >
-              <Delete />
-            </IconButton>
-            <IconButton
-              size="small"
-              target="_blank"
-              color="success"
-              sx={{ marginX: 1 }}
-              href={urlDownload(file.file.Key)}
-            >
-              <Download />
-            </IconButton>
+            <LoadingButton
+              type={"icon"}
+              iconProps={{ size: "small", color: "error", sx: { marginX: 1 } }}
+              icon={<Delete />}
+              clickAction={() => deleteFile(file.file.Key)}
+            />
+
+            <LoadingButton
+              type={"icon"}
+              iconProps={{
+                size: "small",
+                color: "success",
+                sx: { marginX: 1 },
+              }}
+              icon={<Download />}
+              clickAction={() => downloadFile(file.file.Key)}
+            />
           </AccordionSummary>
           <AccordionDetails>
             <SendFileViaEmail fileKey={file.file.Key} />

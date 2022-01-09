@@ -25,6 +25,18 @@ export const bucket = {
       .sort(byValue((x) => x.FolderName, byString()));
   },
 
+  getShareableUrl({ key, expires = 10 }: { key: string; expires?: number }) {
+    const url = s3.getSignedUrl("getObject", {
+      Key: key,
+      Expires: expires,
+      Bucket: env.aws.bucket,
+    });
+
+    return {
+      signedUrl: url,
+    };
+  },
+
   async downloadFile(key: string) {
     const s3Object = s3.getObject({
       Bucket: env.aws.bucket,
@@ -73,6 +85,15 @@ export const bucket = {
       .promise();
 
     return !!s3response.Contents?.length;
+  },
+
+  deleteFile(key: string) {
+    const s3Object = s3.deleteObject({
+      Bucket: env.aws.bucket,
+      Key: key,
+    });
+
+    return s3Object.promise();
   },
 };
 

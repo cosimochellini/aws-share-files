@@ -3,8 +3,8 @@ import { AwaitedServiceMapper, ServiceMapper } from "../types/generic";
 import { emailArguments, emailTypes } from "../services/email.service";
 import { contentArgs, contentTypes } from "../services/content.service";
 import { bucketArgs, bucketTypes } from "../../src/services/bucket.service";
-import { userEmailsArgs, userEmailsType } from "../services/userEmails.service";
 import { converterArgs, converterTypes } from "../services/converter.service";
+import { userEmailsArgs, userEmailsType } from "../services/userEmails.service";
 
 export const functions = {
   s3: {
@@ -21,6 +21,17 @@ export const functions = {
         "s3/uploadFile.function",
         payload
       );
+    },
+    shareableUrl({ key, expires }: bucketArgs["getShareableUrl"]) {
+      return caller<bucketTypes["getShareableUrl"]>(
+        "s3/shareableUrl.function",
+        { key, expires }
+      );
+    },
+    deleteFile(key: bucketArgs["deleteFile"]) {
+      return caller<bucketTypes["deleteFile"]>("s3/deleteFile.function", {
+        key,
+      });
     },
   },
 
