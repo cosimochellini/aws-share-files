@@ -39,3 +39,6 @@ yarn-error.log*
 public/sw*
 public/workbox*
 public/manifest.json
+public/favicon.ico
+public/favicon.svg
+public/icon.png
