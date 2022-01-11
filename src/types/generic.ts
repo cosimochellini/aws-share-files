@@ -1,6 +1,8 @@
 import { NextApiResponse } from "next";
 
-export type Dictionary<T> = { [key: string]: T };
+export type Dictionary<T = string, TKey extends string = string> = {
+  [key in TKey]: T;
+};
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
@@ -27,7 +29,7 @@ export type AwaitedServiceMapper<
       AwaitedServiceMapper<T[key]>;
 };
 
-export type BaseResponse<T = any> = NextApiResponse<T | { error: string }>;
+export type BaseResponse<T = unknown> = NextApiResponse<T | { error: string }>;
 
 export type Nullable<T> = T | null | undefined;
 

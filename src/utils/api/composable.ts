@@ -1,4 +1,5 @@
 import { NextApiRequest } from "next";
+import { retrieveError } from "../retrieveError";
 import type { BaseResponse } from "../../types/generic";
 
 export const defaultBehavior = (
@@ -11,10 +12,8 @@ export const defaultBehavior = (
       const data = ret instanceof Promise ? await ret : ret;
 
       res.status(200).json(data);
-    } catch (e: any) {
-      const error = e.message ?? e;
-
-      res.status(400).json({ error: error.toString() });
+    } catch (e) {
+      res.status(400).json({ error: retrieveError(e) });
     }
   };
 };

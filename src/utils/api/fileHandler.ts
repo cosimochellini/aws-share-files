@@ -13,7 +13,7 @@ export async function fileHandler<T>(req: NextApiRequest) {
 
   return {
     form,
-    body: form.fields as any as T,
+    body: form.fields as unknown as T,
     async getFile() {
       const file = form.files.file;
 

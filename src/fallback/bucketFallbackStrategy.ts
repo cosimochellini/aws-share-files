@@ -1,3 +1,5 @@
+import { retrieveError } from "../utils/retrieveError";
+
 type dependencyType = typeof import("../services/bucket.service");
 
 export const bucketFallbackStrategy = async (
@@ -7,9 +9,9 @@ export const bucketFallbackStrategy = async (
     const dependency = await import("../services/bucket.service");
 
     return await actions(dependency);
-  } catch (e: any) {
+  } catch (e) {
     return {
-      error: e.message,
+      error: retrieveError(e),
     };
   }
 };

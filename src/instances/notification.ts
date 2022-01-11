@@ -1,5 +1,6 @@
 import mitt from "mitt";
 import { device } from "../services/device.service";
+import { retrieveError } from "../utils/retrieveError";
 
 const dialogEmitter = mitt();
 
@@ -39,12 +40,12 @@ export const notification = {
     notification.show(notificationType.warning, message);
   },
 
-  error: (message: any) => {
+  error: (message: unknown) => {
     // keeping console.error for backwards compatibility
     // and to log errors to the server
     console.error(message);
 
-    const errorMessage = message?.error ?? message ?? "Unknown error";
+    const errorMessage = retrieveError(message);
 
     device.runOnClient(() =>
       notification.show(notificationType.error, errorMessage)

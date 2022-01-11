@@ -5,7 +5,7 @@ import {
   IconButton,
   IconButtonProps,
 } from "@mui/material";
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Error, Refresh } from "@mui/icons-material";
 import { notification } from "../../instances/notification";
 
@@ -13,7 +13,7 @@ type Props = {
   type?: Nullable<"button" | "icon">;
   text?: Nullable<string>;
   icon: Nullable<JSX.Element>;
-  clickAction: (event: unknown) => Promise<unknown>;
+  clickAction: (event: React.SyntheticEvent) => Promise<unknown>;
   buttonProps?: Nullable<ButtonProps>;
   iconProps?: Nullable<IconButtonProps>;
 };
@@ -49,7 +49,7 @@ export function LoadingButton(props: Props) {
     setDisabled(false);
   }, [error, loading, props.icon]);
 
-  const handleClick = async (e: unknown) => {
+  const handleClick = async (e: React.SyntheticEvent) => {
     if (loading) return;
 
     setLoading(true);

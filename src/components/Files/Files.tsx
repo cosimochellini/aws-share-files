@@ -41,13 +41,7 @@ export function Files(props: Props) {
     if (search) {
       const searchLower = search.trim().toLowerCase();
 
-      items = items.filter(
-        (i) =>
-          i.Hierarchy.some((h) => h.toLowerCase().includes(searchLower)) ||
-          i.Files.some((f) =>
-            f.file.FileName.toLowerCase().includes(searchLower)
-          )
-      );
+      items = items.filter((i) => i.Key?.toLowerCase().includes(searchLower));
     }
 
     if (currentFolder) {

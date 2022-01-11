@@ -64,7 +64,7 @@ export function NewUserEmail() {
                     text="save"
                     icon={<Save />}
                     buttonProps={{ variant: "outlined" }}
-                    clickAction={(e) => onSubmit(e as any)}
+                    clickAction={onSubmit}
                   />
                 </Grid>
               </Grid>

@@ -1,13 +1,13 @@
-import { useEffect, useState } from "react";
+import { ReactEventHandler, useEffect, useState } from "react";
+import { Nullable } from "../../types/generic";
+import { UserEmail } from "../../types/dynamo.types";
 import { functions } from "../../instances/functions";
+import { LoadingButton } from "../Data/LoadingButton";
 import { Mail, Send, Star } from "@mui/icons-material";
 import { notification } from "../../instances/notification";
 import { useUserEmail } from "../../hooks/state/useUserEmail.state";
-import { Button, Grid, List, ListItem, ListItemText } from "@mui/material";
+import { Grid, List, ListItem, ListItemText } from "@mui/material";
 import { Menu, MenuItem, Typography, ListItemIcon } from "@mui/material";
-import { UserEmail } from "../../types/dynamo.types";
-import { Nullable } from "../../types/generic";
-import { LoadingButton } from "../Data/LoadingButton";
 
 type Props = {
   fileKey: string;
@@ -27,7 +27,7 @@ export function SendFileViaEmail(props: Props) {
     setSelectedEmail(emails?.[selectedIndex ?? 0]);
   }, [emails, selectedEmail, selectedIndex]);
 
-  const sendFile = async (event: any) => {
+  const sendFile = async (event: React.SyntheticEvent) => {
     event.preventDefault();
     if (!selectedEmail) return;
 

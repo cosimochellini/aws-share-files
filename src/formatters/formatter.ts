@@ -1,4 +1,4 @@
-import { Nullable } from "../types/generic";
+import { Dictionary, Nullable } from "../types/generic";
 
 type datable = Nullable<string | Date>;
 
@@ -18,14 +18,14 @@ const rtf = new Intl.RelativeTimeFormat(defaultLang, {
 });
 
 const ranges = {
-  years: 3600 * 24 * 365,
-  months: 3600 * 24 * 30,
-  weeks: 3600 * 24 * 7,
-  days: 3600 * 24,
-  hours: 3600,
-  minutes: 60,
   seconds: 1,
-} as any;
+  minutes: 60,
+  hours: 3600,
+  days: 3600 * 24,
+  weeks: 3600 * 24 * 7,
+  months: 3600 * 24 * 30,
+  years: 3600 * 24 * 365,
+} as Dictionary<number, Intl.RelativeTimeFormatUnit>;
 
 const parse = (date: datable): Date => new Date(date ?? "");
 
@@ -33,16 +33,22 @@ export const formatter = {
   dateFormatter(date: datable): string {
     return dateIntLn.format(parse(date));
   },
+
   relativeFormatter(date: datable): string {
     const secondsElapsed = (parse(date).getTime() - Date.now()) / 1000;
-    for (let key in ranges) {
-      if (ranges[key] < Math.abs(secondsElapsed)) {
-        const delta = secondsElapsed / ranges[key];
-        return rtf.format(Math.round(delta), key as any);
+
+    for (const key in ranges) {
+      const typedKey = key as keyof typeof ranges;
+
+      if (ranges[typedKey] < Math.abs(secondsElapsed)) {
+        const delta = secondsElapsed / ranges[typedKey];
+
+        return rtf.format(Math.round(delta), typedKey);
       }
     }
     return "";
   },
+
   timeFormatter(date: datable): string {
     const time = parse(date);
     const hours = time.getHours();

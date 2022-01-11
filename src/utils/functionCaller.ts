@@ -1,3 +1,5 @@
+import { Dictionary } from "../types/generic";
+
 const defaultBehavior = <T>(promise: Promise<Response>) =>
   promise
     .then((res) =>
@@ -21,11 +23,11 @@ caller.post = <T>(url: string, body = {}) =>
     })
   );
 
-caller.formData = <T>(url: string, form = {}) => {
+caller.formData = <T>(url: string, form: Dictionary<unknown, string> = {}) => {
   const body = new FormData();
 
   for (const prop in form) {
-    body.append(prop, (form as any)[prop]);
+    body.append(prop, form[prop] as string);
   }
 
   return defaultBehavior<T>(fetch("/api/" + url, { method: "POST", body }));
