@@ -47,14 +47,9 @@ export default function Upload() {
     };
 
     try {
-      await functions.s3
-        .uploadFile(payload)
-        .then(() => notification.success("File uploaded successfully"))
-        .catch(notification.error);
+      await functions.s3.uploadFile(payload);
     } catch (e) {
-      await bucketFallbackStrategy(({ bucket }) => bucket.uploadFile(payload))
-        .then(() => notification.success("File uploaded successfully"))
-        .catch(notification.error);
+      await bucketFallbackStrategy(({ bucket }) => bucket.uploadFile(payload));
     }
   };
 
@@ -184,7 +179,13 @@ export default function Upload() {
                     <LoadingButton
                       text="Upload"
                       icon={<FileUpload />}
-                      clickAction={uploadFile}
+                      clickAction={() =>
+                        uploadFile()
+                          .then(() =>
+                            notification.success("File uploaded successfully")
+                          )
+                          .catch(notification.error)
+                      }
                       buttonProps={{
                         variant: "contained",
                         color: "success",

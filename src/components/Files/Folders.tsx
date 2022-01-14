@@ -89,7 +89,7 @@ export function Folders(props: Props) {
                 </ListItemAvatar>
                 <ListItemText
                   primary={item.FolderName}
-                  secondary={`edited: ${formatter.relativeFormatter(
+                  secondary={`edited: ${formatter.dateFormatter(
                     item.LastModified
                   )}`}
                 />
