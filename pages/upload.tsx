@@ -9,10 +9,10 @@ import { truncateString } from "../src/utils/truncateString";
 import { InputLabel, Grid, Typography } from "@mui/material";
 import { useCurrentContext } from "../src/hooks/context.hook";
 import { Button, CardContent, FormControl } from "@mui/material";
+import { useS3Folders } from "../src/hooks/state/useS3Folders.state";
 import { LoadingButton } from "../src/components/Data/LoadingButton";
 import { Book, FileUpload, Person, UploadFile } from "@mui/icons-material";
 import { CardHeader, TextField, MenuItem, Select, Card } from "@mui/material";
-import { bucket } from "../src/services/bucket.service";
 import { bucketFallbackStrategy } from "../src/fallback/bucketFallbackStrategy";
 
 const fullWidth = { minWidth: { xs: "100%", sm: "90%", md: "70%", lg: "60%" } };
@@ -21,6 +21,7 @@ const stringLength = device.isMobile ? 20 : 40;
 
 export default function Upload() {
   const { theme } = useCurrentContext();
+  const { refreshFolders } = useS3Folders();
 
   const [selectedFile, setSelectedFile] = useState<Nullable<File>>();
 
@@ -51,6 +52,8 @@ export default function Upload() {
     } catch (e) {
       await bucketFallbackStrategy(({ bucket }) => bucket.uploadFile(payload));
     }
+
+    await refreshFolders(true);
   };
 
   useEffect(() => {
