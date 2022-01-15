@@ -1,6 +1,7 @@
 import { env } from "./env";
 import nodemailer from "nodemailer";
 import { notification } from "./notification";
+import { sesClient } from "./aws";
 
 const { email } = env;
 

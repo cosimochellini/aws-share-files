@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.7.29",
+  "version": "0.7.30",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -17,7 +17,7 @@
     "@mui/icons-material": "^5.2.5",
     "@mui/material": "^5.2.8",
     "@next-auth/dynamodb-adapter": "^1.0.2",
-    "aws-sdk": "^2.1057.0",
+    "aws-sdk": "^2.1058.0",
     "formidable": "^2.0.1",
     "mitt": "^3.0.0",
     "next": "12.0.8",
@@ -34,7 +34,7 @@
     "@types/node": "17.0.8",
     "@types/nodemailer": "^6.4.4",
     "@types/react": "17.0.38",
-    "dotenv": "^11.0.0",
+    "dotenv": "^12.0.3",
     "dotenv-webpack": "^7.0.3",
     "eslint": "^8.6.0",
     "eslint-config-next": "12.0.8",

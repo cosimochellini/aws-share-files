@@ -6,83 +6,86 @@ import { useConversions } from "./useConversions.state";
 import { StatusCode } from "../../types/converter.types";
 
 const state = {
-  insert: false,
-  inserted() {
-    this.insert = true;
-  },
+    insert: false,
+    inserted() {
+        this.insert = true;
+    },
 
-  update: false,
-  updated() {
-    this.update = true;
-  },
+    update: false,
+    updated() {
+        this.update = true;
+    },
 
-  delete: false,
-  deleted() {
-    this.delete = true;
-  },
+    delete: false,
+    deleted() {
+        this.delete = true;
+    },
 
-  clear() {
-    this.insert = false;
-    this.update = false;
-    this.delete = false;
-  },
+    clear() {
+        this.insert = false;
+        this.update = false;
+        this.delete = false;
+    },
 };
 
 let loaded = false;
 
 export const useJobs = () => {
-  const { conversions } = useConversions();
-  const { refreshFolders } = useS3Folders();
-  const { jobs, setJobs } = useCurrentContext();
+    const { conversions } = useConversions();
+    const { refreshFolders } = useS3Folders();
+    const { jobs, setJobs } = useCurrentContext();
 
-  const syncConversions = useCallback(async () => {
-    for (const job of conversions) {
-      const currentJob = jobs.find((j) => j.id === job);
-      const statusCode = currentJob?.status?.code;
+    const syncConversions = useCallback(async () => {
+        for (const job of conversions) {
+            const currentJob = jobs.find((j) => j.id === job);
+            const statusCode = currentJob?.status?.code;
 
-      switch (statusCode) {
-        case null:
-        case undefined:
-          jobs.push(await functions.convert.getConversionStatus(job));
+            switch (statusCode) {
+                case null:
+                case undefined:
+                    jobs.push(await functions.convert.getConversionStatus(job));
 
-          state.inserted();
+                    state.inserted();
 
-          break;
+                    break;
 
-        case StatusCode.completed:
-        case StatusCode.failed:
-          break;
+                case StatusCode.completed:
+                case StatusCode.failed:
+                    break;
 
-        default:
-          jobs[jobs.findIndex((j) => j.id === job)] =
-            await functions.convert.getConversionStatus(job);
+                default:
+                    jobs[jobs.findIndex((j) => j.id === job)] =
+                        await functions.convert.getConversionStatus(job);
 
-          state.updated();
+                    state.updated();
 
-          break;
-      }
-    }
+                    break;
+            }
+        }
 
-    if (jobs.some((j) => !conversions.includes(j.id))) state.deleted();
+        if (jobs.some((j) => !conversions.includes(j.id))) state.deleted();
 
-    if (state.insert || state.delete || state.update)
-      setJobs(jobs.filter((j) => conversions.includes(j.id)));
+        if (state.insert || state.delete || state.update)
+            setJobs(jobs.filter((j) => conversions.includes(j.id)));
 
-    if (state.update) refreshFolders(false);
+        if (state.update) refreshFolders(false);
 
-    state.clear();
-  }, [conversions, jobs, refreshFolders, setJobs]);
+        state.clear();
+    }, [conversions, jobs, refreshFolders, setJobs]);
 
-  useEffect(() => {
-    if (!loaded) {
-      syncConversions();
-      loaded = true;
-    }
+    useEffect(() => {
+        if (!loaded) {
+            syncConversions();
+            loaded = true;
+        }
 
-    const interval = setInterval(() => syncConversions(), 3000);
+        const interval = setInterval(function intervalScan() {
+            syncConversions()
+            return intervalScan //to call this function immediately
+        }(), 2000);
 
-    return () => clearInterval(interval);
-  }, [syncConversions]);
+        return () => clearInterval(interval);
+    }, [syncConversions]);
 
-  return { jobs };
+    return { jobs };
 };
