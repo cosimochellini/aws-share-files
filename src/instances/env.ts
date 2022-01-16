@@ -55,6 +55,7 @@ export const env = {
     get sendgrid() {
         return {
             apiKey: process.env.SEND_GRID_API_KEY as string,
+            email: process.env.SEND_GRID_EMAIL as string,
         }
     },
 
