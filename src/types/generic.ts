@@ -1,7 +1,5 @@
 import { NextApiResponse } from "next";
 
-
-
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 
 export type GenericFunction<T = unknown> = (...args: any[]) => T;
@@ -27,10 +25,6 @@ export type AwaitedServiceMapper<
         AwaitedServiceMapper<T[key]>;
     };
 
-export type BaseResponse<T = unknown> = NextApiResponse<T | { error: string }>;
-
-export type Nullable<T> = T | null | undefined;
-
 export type ServiceArguments<T extends Record<string, GenericFunction>> = {
     [key in keyof T]: T[key] extends GenericFunction
     ? Parameters<T[key]>[0]
@@ -40,9 +34,3 @@ export type ServiceArguments<T extends Record<string, GenericFunction>> = {
 export type BaseResponse<T = unknown> = NextApiResponse<T | { error: string }>;
 
 export type Nullable<T> = T | null | undefined;
-
-export type ServiceArguments<T extends Dictionary<GenericFunction>> = {
-  [key in keyof T]: T[key] extends GenericFunction
-    ? Parameters<T[key]>[0]
-    : never;
-};
