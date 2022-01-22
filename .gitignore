@@ -36,3 +36,10 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 .env
+public/sw*
+public/workbox*
+public/manifest.json
+public/favicon.ico
+public/favicon.svg
+public/icon.png
+src/components/Files/test.ts

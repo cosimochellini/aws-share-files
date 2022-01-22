@@ -6,6 +6,7 @@ export const useDevice = () => {
     isMobile: false,
     isDesktop: false,
     isClient: false,
+    isDarkMode: true,
     hasWidth: device.hasWidth,
   });
 
@@ -18,6 +19,7 @@ export const useDevice = () => {
         isMobile: device.isMobile,
         isDesktop: device.isDesktop,
         isClient: device.isClient,
+        isDarkMode: device.isDarkMode,
         hasWidth: (w) => device.hasWidth(w),
       });
     };

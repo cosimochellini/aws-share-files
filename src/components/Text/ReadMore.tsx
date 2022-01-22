@@ -1,8 +1,9 @@
 import { Link } from "@mui/material";
 import { useState } from "react";
+import { Nullable } from "../../types/generic";
 
 type Props = {
-  text?: string | null;
+  text: Nullable<string>;
   maxLength?: number;
 };
 

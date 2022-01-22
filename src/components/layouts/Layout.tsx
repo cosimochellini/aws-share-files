@@ -6,12 +6,13 @@ import { useDevice } from "../../hooks/device.hook";
 import { useState, useEffect, forwardRef } from "react";
 
 import { styled } from "@mui/material/styles";
-import { navbarItems } from "../../instances/navbar";
+import { navbarItems, Visibility } from "../../instances/navbar";
 
 import { Typography, List, IconButton } from "@mui/material";
 import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
 import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
 import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
+import { Conversions } from "./Conversions";
 
 const drawerWidth = 240;
 
@@ -92,9 +93,10 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
               <Menu />
             </IconButton>
           )}
-          <Typography variant="h6" noWrap component="div">
+          <Typography variant="h6" noWrap component="div" style={{ flex: 1 }}>
             {env.info.appTitle}
           </Typography>
+          <Conversions />
         </Toolbar>
       </MyAppBar>
       <Drawer
@@ -118,18 +120,37 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         </DrawerHeader>
         <Divider />
         <List>
-          {navbarItems.map(({ name, redirect, icon }) => (
-            <ListItem
-              key={name}
-              button
-              component={forwardRef(function Component(prop, ref) {
-                return <Link key={name} href={redirect} {...prop} />;
-              })}
-            >
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={name} />
-            </ListItem>
-          ))}
+          {navbarItems
+            .filter((x) => Visibility.All === x.visibility)
+            .map(({ name, redirect, icon }) => (
+              <ListItem
+                key={name}
+                button
+                component={forwardRef(function Component(prop, ref) {
+                  return <Link key={name} href={redirect} {...prop} />;
+                })}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            ))}
+        </List>
+        <Divider />
+        <List>
+          {navbarItems
+            .filter((x) => Visibility.Sidebar === x.visibility)
+            .map(({ name, redirect, icon }) => (
+              <ListItem
+                key={name}
+                button
+                component={forwardRef(function Component(prop, ref) {
+                  return <Link key={name} href={redirect} {...prop} />;
+                })}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+            ))}
         </List>
         <Divider />
       </Drawer>

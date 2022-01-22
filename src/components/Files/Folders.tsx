@@ -3,29 +3,29 @@ import { byValue, byString } from "sort-es";
 import { useEffect, useState } from "react";
 import { S3Folder } from "../../classes/S3Folder";
 import { formatter } from "../../formatters/formatter";
-import { Folder as FolderIcon, Search } from "@mui/icons-material";
+import { Folder as FolderIcon, Refresh, Search } from "@mui/icons-material";
+import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
-
-type Props = {
-  loading: boolean;
-  folders: S3Folder[];
-  onSearch: (query: S3Folder) => void;
-};
+import { LoadingButton } from "../Data/LoadingButton";
 
 const { itemsConfiguration } = sharedConfiguration;
 
+type Props = {
+  onSearch: (query: S3Folder) => void;
+};
+
 export function Folders(props: Props) {
-  const { loading, folders } = props;
+  const { folders, refreshFolders } = useS3Folders();
 
   const [search, setSearch] = useState("");
   const [hoveredItem, setHoveredItem] = useState(0);
-  const [displayedItems, setDisplayedItems] = useState([] as typeof folders);
+  const [displayedItems, setDisplayedItems] = useState([] as S3Folder[]);
 
   useEffect(() => {
-    let items = folders;
+    let items = folders ?? [];
 
     if (search) {
       const searchLower = search.toLowerCase();
@@ -41,7 +41,6 @@ export function Folders(props: Props) {
   return (
     <>
       <h1>Authors</h1>
-
       <TextField
         type="search"
         value={search}
@@ -54,18 +53,23 @@ export function Folders(props: Props) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton edge="end">
-                <Search />
+                <LoadingButton
+                  type={"icon"}
+                  icon={<Refresh />}
+                  clickAction={() => refreshFolders(true)}
+                />
               </IconButton>
             </InputAdornment>
           ),
         }}
       />
+
       <List
         sx={{
           width: { xs: "100%", sm: "90%" },
         }}
       >
-        {loading ? (
+        {!folders ? (
           <FilesPlaceholders count={itemsConfiguration.maxCount} />
         ) : (
           displayedItems
@@ -85,7 +89,7 @@ export function Folders(props: Props) {
                 </ListItemAvatar>
                 <ListItemText
                   primary={item.FolderName}
-                  secondary={`edited: ${formatter.relativeFormatter(
+                  secondary={`edited: ${formatter.dateFormatter(
                     item.LastModified
                   )}`}
                 />

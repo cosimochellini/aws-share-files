@@ -1,4 +1,5 @@
 import { Object, Owner } from "aws-sdk/clients/s3";
+import { Nullable } from "../types/generic";
 
 export abstract class S3BaseContent {
   public Object: Object;
@@ -6,8 +7,8 @@ export abstract class S3BaseContent {
   public Key: string;
   public Owner?: Owner;
   public Hierarchy: string[];
-  public LastModified: Date | undefined;
-  public Size: number | undefined;
+  public LastModified: Nullable<Date>;
+  public Size: Nullable<number>;
 
   constructor(object: Object) {
     this.Object = object;

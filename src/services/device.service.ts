@@ -4,7 +4,14 @@ export const device = {
   },
 
   get isMobile() {
-    return device.window?.matchMedia("(max-width: 767px)").matches ?? false;
+    return device.window?.matchMedia?.("(max-width: 767px)").matches ?? false;
+  },
+
+  get isDarkMode() {
+    return (
+      device.window?.matchMedia?.("(prefers-color-scheme: dark)").matches ??
+      true
+    );
   },
 
   get isDesktop() {

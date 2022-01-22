@@ -5,10 +5,11 @@
   "license": "MIT",
   "scripts": {
     "dev": "yarn increase && next dev",
-    "build": "next build",
+    "build": "yarn run-scripts && next build",
     "start": "next start",
     "lint": "next lint",
-    "increase": "npm --no-git-tag-version version patch"
+    "increase": "npm --no-git-tag-version version patch",
+    "run-scripts": "ts-node --skip-project ./script.runner.node.ts"
   },
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -24,6 +25,7 @@
     "next-auth": "^4.1.2",
     "next-pwa": "^5.4.4",
     "nodemailer": "^6.7.2",
+    "nodemailer-sendgrid": "^1.0.3",
     "react": "17.0.2",
     "react-dom": "17.0.2",
     "react-hook-form": "^7.25.0",

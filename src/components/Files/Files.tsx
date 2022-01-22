@@ -2,18 +2,19 @@ import { Chip } from "@mui/material";
 import { byString, byValue } from "sort-es";
 import { useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
+import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
+import { LoadingButton } from "../Data/LoadingButton";
 import { S3FileGroup } from "../../classes/S3FileGroup";
-import { AutoStories, Search } from "@mui/icons-material";
+import { AutoStories, Refresh } from "@mui/icons-material";
+import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
+import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
-import { sharedConfiguration } from "../../instances/sharedConfiguration";
 
 export type Props = {
-  loading: boolean;
-  folders: S3Folder[];
-  currentFolder: S3Folder | null;
+  currentFolder: Nullable<S3Folder>;
   onSearch?: (query: S3FileGroup) => void;
   onClearFolder?: () => void;
 };
@@ -21,7 +22,8 @@ export type Props = {
 const { itemsConfiguration } = sharedConfiguration;
 
 export function Files(props: Props) {
-  const { loading, folders, currentFolder } = props;
+  const { currentFolder } = props;
+  const { folders, refreshFolders } = useS3Folders();
 
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
@@ -34,27 +36,19 @@ export function Files(props: Props) {
   useEffect(() => {
     setSelectedIndex(0);
 
-    let items = folders;
+    let items = (folders ?? []).flatMap((item) => item.Files);
 
     if (search) {
       const searchLower = search.trim().toLowerCase();
 
-      items = items.filter(
-        (i) =>
-          i.Hierarchy.some((h) => h.toLowerCase().includes(searchLower)) ||
-          i.Files.some((f) => f.FileName.toLowerCase().includes(searchLower))
-      );
+      items = items.filter((i) => i.Key?.toLowerCase().includes(searchLower));
     }
 
     if (currentFolder) {
       items = items.filter((i) => i.Key?.includes(currentFolder.Key!));
     }
 
-    setDisplayedItems(
-      items
-        .flatMap((item) => item.Files)
-        .sort(byValue((x) => x.FileName, byString()))
-    );
+    setDisplayedItems(items.sort(byValue((x) => x.FileName, byString())));
   }, [search, folders, currentFolder]);
 
   return (
@@ -65,7 +59,7 @@ export function Files(props: Props) {
         label="Search for a file"
         type="search"
         sx={{
-          width: { xs: "100%", sm: "90%" },
+          width: { xs: "100%", md: "90%" },
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -73,26 +67,31 @@ export function Files(props: Props) {
           endAdornment: (
             <InputAdornment position="end">
               <IconButton edge="end">
-                <Search />
+                <LoadingButton
+                  type={"icon"}
+                  clickAction={() => refreshFolders(true)}
+                  icon={<Refresh />}
+                />
               </IconButton>
             </InputAdornment>
           ),
-          startAdornment: currentFolder ? (
+
+          startAdornment: currentFolder && (
             <Chip
-              label={"Author: " + currentFolder.FolderName}
               variant="outlined"
+              label={"Author: " + currentFolder.FolderName}
               onDelete={handleDeleteAuthor}
               sx={{ marginRight: "5px" }}
             />
-          ) : null,
+          ),
         }}
       />
       <List
         sx={{
-          width: { xs: "100%", sm: "90%" },
+          width: { xs: "100%", md: "90%" },
         }}
       >
-        {loading ? (
+        {!folders ? (
           <FilesPlaceholders count={itemsConfiguration.maxCount} />
         ) : (
           displayedItems
@@ -120,7 +119,7 @@ export function Files(props: Props) {
                   sx={{ marginX: "1px" }}
                   title={file.Files.map(({ extension }) => extension).join(" ")}
                   label={file.Files.map((f) =>
-                    f.extension[0].toUpperCase()
+                    f.extension[0]?.toUpperCase()
                   ).join(" ")}
                 />
               </ListItem>

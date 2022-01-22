@@ -32,6 +32,7 @@ const AppGrid = (props: AppProps) => {
   const [emails, setEmails] = useState(defaultContext.emails);
   const [folders, setFolders] = useState(defaultContext.folders);
   const [conversions, setConversions] = useState(defaultContext.conversions);
+
   const providedData = {
     jobs,
     theme,

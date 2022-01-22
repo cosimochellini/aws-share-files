@@ -36,3 +36,13 @@ export type ServiceArguments<T extends Record<string, GenericFunction>> = {
     ? Parameters<T[key]>[0]
     : never;
 };
+
+export type BaseResponse<T = unknown> = NextApiResponse<T | { error: string }>;
+
+export type Nullable<T> = T | null | undefined;
+
+export type ServiceArguments<T extends Dictionary<GenericFunction>> = {
+  [key in keyof T]: T[key] extends GenericFunction
+    ? Parameters<T[key]>[0]
+    : never;
+};
