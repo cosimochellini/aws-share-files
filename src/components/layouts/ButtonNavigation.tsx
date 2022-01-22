@@ -1,8 +1,8 @@
 import Link from "../Link";
 import { styled } from "@mui/system";
 import { useRouter } from "next/router";
-import { navbarItems } from "../../instances/navbar";
 import { forwardRef, useEffect, useState } from "react";
+import { navbarItems, Visibility } from "../../instances/navbar";
 import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
 
 export default function ButtonNavigation() {
@@ -35,12 +35,19 @@ export default function ButtonNavigation() {
           onChange={(_, newValue) => setValue(newValue)}
         >
           {navbarItems
-            .filter((x) => x.bottomNav)
+            .filter((x) =>
+              [Visibility.All, Visibility.BottomBar].includes(x.visibility)
+            )
             .map((item, index) => (
               <BottomNavigationAction
-                component={forwardRef(function Item(prop, _) {
+                component={forwardRef(function Item(prop, ref) {
                   return (
-                    <Link {...prop} key={item.name} href={item.redirect} />
+                    <Link
+                      {...prop}
+                      ref={ref as any}
+                      key={item.name}
+                      href={item.redirect}
+                    />
                   );
                 })}
                 key={index}

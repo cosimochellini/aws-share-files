@@ -1,6 +1,7 @@
 import Link from "../Link";
 import { AppProps } from "next/app";
 import { env } from "../../instances/env";
+import { useAuth } from "../../hooks/auth.hook";
 import { useDevice } from "../../hooks/device.hook";
 import { useState, useEffect, forwardRef } from "react";
 
@@ -62,6 +63,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
+  const {} = useAuth();
   const [open, setOpen] = useState(false);
   const { isMobile, hasWidth } = useDevice();
 

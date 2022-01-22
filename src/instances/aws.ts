@@ -1,7 +1,8 @@
 import { env } from "./env";
 import AWS from "aws-sdk/global";
 import S3 from "aws-sdk/clients/s3";
-import { Credentials, DynamoDB } from "aws-sdk";
+import { GenericFunction } from "../types/generic";
+import { Credentials, DynamoDB, SES } from "aws-sdk";
 
 const { region, accessKeyId, secretAccessKey } = env.aws;
 
@@ -12,16 +13,20 @@ AWS.config.credentials = credentials;
 
 export const s3 = new S3({});
 
-export const DocumentClient = new DynamoDB.DocumentClient({
-  region,
-  credentials,
-  convertEmptyValues: true,
-  convertResponseTypes: true,
+export const documentClient = new DynamoDB.DocumentClient({
+    convertEmptyValues: true,
+    convertResponseTypes: true,
 });
 
-const tryy = async () => {
-  const r = await DocumentClient.scan({ TableName: "users" }).promise();
-  console.log(r);
-};
+export const proxyDocument = {
+    get: (params: Param<typeof documentClient.get>) => documentClient.get(params).promise(),
+    put: (params: Param<typeof documentClient.put>) => documentClient.put(params).promise(),
+    delete: (params: Param<typeof documentClient.delete>) => documentClient.delete(params).promise(),
+    query: (params: Param<typeof documentClient.query>) => documentClient.query(params).promise(),
+    scan: (params: Param<typeof documentClient.scan>) => documentClient.scan(params).promise(),
+    update: (params: Param<typeof documentClient.update>) => documentClient.update(params).promise(),
+}
 
-tryy().then(console.log).catch(console.error);
+type Param<T extends GenericFunction> = Parameters<T>[0];
+
+export const sesClient = new SES({});

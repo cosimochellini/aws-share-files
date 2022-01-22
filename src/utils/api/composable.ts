@@ -1,18 +1,30 @@
-import type { NextApiResponse } from "next";
+import { NextApiRequest } from "next";
+import { env } from "../../instances/env";
+import { getSession } from "next-auth/react"
+import { retrieveError } from "../retrieveError";
+import type { BaseResponse } from "../../types/generic";
 
-export const handleError = async <T>(
-  res: NextApiResponse<unknown>,
-  apiFn: () => T | Promise<T>
+export const defaultBehavior = (
+    apiFn: (req: NextApiRequest, res: BaseResponse) => unknown | Promise<unknown>,
+    options = { shouldAuthenticate: false },
 ) => {
-  try {
-    const ret = apiFn();
+    return async (req: NextApiRequest, res: BaseResponse) => {
+        try {
+            if (options?.shouldAuthenticate) {
+                const session = await getSession({ req })
 
-    if (!(ret instanceof Promise)) return ret;
+                if (!session) return res.status(401).json({ error: "You must be logged in to access this page." })
 
-    return await ret;
-  } catch (e: any) {
-    res.status(500).json({ error: e.message ?? e });
+                if (!env.auth.emails.includes(session.user?.email ?? ""))
+                    return res.status(403).json({ error: "You are not authorized to access this page." })
+            }
+            const ret = apiFn(req, res);
 
-    throw e;
-  }
+            const data = ret instanceof Promise ? await ret : ret;
+
+            res.status(200).json(data);
+        } catch (e) {
+            res.status(400).json({ error: retrieveError(e) });
+        }
+    };
 };
