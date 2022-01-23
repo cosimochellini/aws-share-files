@@ -7,32 +7,33 @@ import { notification } from "../../instances/notification";
 let loading = false;
 
 export const useUserEmail = () => {
-  const { emails, setEmails } = useCurrentContext();
 
-  const loadEmails = useCallback(
-    async (force: boolean = false) => {
-      if (loading || (emails && !force)) return;
+    const { emails, setEmails } = useCurrentContext();
 
-      loading = true;
+    const loadEmails = useCallback(
+        async (options = { force: false }) => {
+            if (loading || (emails && !options?.force)) return;
 
-      await functions.email
-        .getEmails("cosimo.chellini@gmail.com")
-        .then((emails) =>
-          setEmails(emails.sort(byValue((x) => x.default, byBoolean())))
-        )
-        .catch(notification.error)
-        .finally(() => (loading = false));
-    },
-    [emails, setEmails]
-  );
+            loading = true;
 
-  useEffect(() => {
-    loadEmails();
-  }, [emails, loadEmails]);
+            await functions.email
+                .getEmails()
+                .then((emails) =>
+                    setEmails(emails.sort(byValue((x) => x.default, byBoolean())))
+                )
+                .catch(notification.error)
+                .finally(() => (loading = false));
+        },
+        [emails, setEmails]
+    );
 
-  const refreshEmails = () => {
-    return loadEmails(true);
-  };
+    useEffect(() => {
+        loadEmails();
+    }, [emails, loadEmails]);
 
-  return { emails, refreshEmails };
+    const refreshEmails = () => {
+        return loadEmails({ force: true });
+    };
+
+    return { emails, refreshEmails };
 };

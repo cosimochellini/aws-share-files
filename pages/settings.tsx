@@ -10,8 +10,11 @@ import { useCurrentContext } from "../src/hooks/context.hook";
 import { navbarItems, Visibility } from "../src/instances/navbar";
 import { Checkbox, FormControlLabel, Grid, ListItem } from "@mui/material";
 import { useDarkMode } from "../src/hooks/darkMode.hook";
+import { useAuth } from "../src/hooks/auth.hook";
+import { formatter } from "../src/formatters/formatter";
 
 export default function Settings() {
+  const { session } = useAuth();
   const context = useCurrentContext();
   const [darkMode, setDarkMode] = useDarkMode();
 
@@ -30,7 +33,7 @@ export default function Settings() {
         <List>
           <Divider />
           {navbarItems
-            .filter((x) => Visibility.Sidebar === x.visibility)
+            .filter(({ visibility }) => Visibility.Sidebar === visibility)
             .map(({ name, redirect, icon }) => (
               <div key={name}>
                 <ListItem
@@ -66,6 +69,8 @@ export default function Settings() {
       >
         <Grid item xs={12}>
           <p>version: {settings.version}</p>
+          <p>email: {session?.user?.email}</p>
+          <p> expire: {formatter.dateFormatter(session?.expires)} </p>
         </Grid>
       </Grid>
     </>

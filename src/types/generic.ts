@@ -1,4 +1,5 @@
-import { NextApiResponse } from "next";
+import type { Session } from "next-auth";
+import type { NextApiResponse } from "next";
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 

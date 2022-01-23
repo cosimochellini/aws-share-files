@@ -2,7 +2,7 @@ import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 import { useCallback, useEffect, useState } from "react";
 
-const loginPath = "/api/auth/signin";
+export const loginPath = "/api/auth/signin";
 
 export const useAuth = () => {
     const router = useRouter()
@@ -30,5 +30,5 @@ export const useAuth = () => {
 
     }, [onUnauthenticated, session?.user?.email, status])
 
-    return { authenticated, session }
+    return { authenticated, session, onUnauthenticated }
 }

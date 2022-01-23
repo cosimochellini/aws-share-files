@@ -20,6 +20,7 @@ export const userEmails = {
     async addEmail(item: Partial<UserEmail>) {
         item.pk = randomId();
         item.sk = item.user;
+
         return await documentClient.put({ TableName, Item: item });
     },
 

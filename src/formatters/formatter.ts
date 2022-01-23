@@ -27,7 +27,7 @@ const ranges = {
     years: 3600 * 24 * 365,
 } as Record<Intl.RelativeTimeFormatUnit, number>;
 
-const parse = (date: datable): Date => new Date(date ?? "");
+const parse = (date: datable): Date => date ? new Date(date) : new Date();
 
 export const formatter = {
     dateFormatter(date: datable): string {
