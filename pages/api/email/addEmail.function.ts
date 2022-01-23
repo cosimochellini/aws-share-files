@@ -10,8 +10,8 @@ export default defaultBehavior(async function (req, res, session) {
 
     const userEmail = { ...item, user } as UserEmail;
 
-    const _ = await userEmails.addEmail(userEmail);
+    const data = await userEmails.addEmail(userEmail);
 
-    return userEmail;
+    return data;
 
 }, { shouldAuthenticate: true });

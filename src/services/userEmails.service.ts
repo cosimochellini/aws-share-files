@@ -17,11 +17,11 @@ export const userEmails = {
             .then((x) => x.Items as UserEmail[]);
     },
 
-    async addEmail(item: Partial<UserEmail>) {
+    addEmail(item: Partial<UserEmail>) {
         item.pk = randomId();
         item.sk = item.user;
 
-        return await documentClient.put({ TableName, Item: item });
+        return documentClient.put({ TableName, Item: item }).promise();
     },
 
     deleteEmail(item: Partial<UserEmail>) {
