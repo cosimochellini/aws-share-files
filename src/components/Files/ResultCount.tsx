@@ -5,6 +5,7 @@ type Props = {
   displayedItems: number;
   totalItems: number;
   displayName: string;
+  onClick?: () => void;
 };
 
 export function ResultCount(props: Props) {
@@ -18,7 +19,7 @@ export function ResultCount(props: Props) {
   }, [displayedItems, totalItems]);
 
   return shouldDisplayItems ? (
-    <Grid item xs={12} style={{ textAlign: "center" }}>
+    <Grid item xs={12} style={{ textAlign: "center" }} onClick={props.onClick}>
       <Chip
         label={`${remainingItems} ${props.displayName} remaining...`}
         variant="outlined"

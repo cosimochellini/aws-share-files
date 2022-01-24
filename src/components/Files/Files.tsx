@@ -1,5 +1,5 @@
-import { Chip } from "@mui/material";
-import { byString, byValue } from "sort-es";
+import { Chip, Paper } from "@mui/material";
+import { byAny, byString, byValue } from "sort-es";
 import { useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
@@ -12,6 +12,10 @@ import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
+import {
+  FileListConfiguration,
+  PagingConfiguration,
+} from "../Configurations/FileListConfiguration";
 
 export type Props = {
   currentFolder: Nullable<S3Folder>;
@@ -19,7 +23,11 @@ export type Props = {
   onClearFolder?: () => void;
 };
 
-const { itemsConfiguration } = sharedConfiguration;
+const defaultConfiguration = {
+  size: sharedConfiguration.itemsConfiguration.maxCount,
+  orderBy: "Key",
+  orderDesc: false,
+} as PagingConfiguration<S3FileGroup>;
 
 export function Files(props: Props) {
   const { currentFolder } = props;
@@ -27,6 +35,7 @@ export function Files(props: Props) {
 
   const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [configuration, setConfiguration] = useState(defaultConfiguration);
   const [displayedItems, setDisplayedItems] = useState([] as S3FileGroup[]);
 
   const handleDeleteAuthor = () => {
@@ -48,8 +57,10 @@ export function Files(props: Props) {
       items = items.filter((i) => i.Key?.includes(currentFolder.Key!));
     }
 
-    setDisplayedItems(items.sort(byValue((x) => x.FileName, byString())));
-  }, [search, folders, currentFolder]);
+    const { orderBy, orderDesc: desc } = configuration;
+
+    setDisplayedItems(items.sort(byValue(orderBy as any, byAny({ desc }))));
+  }, [search, folders, currentFolder, configuration]);
 
   return (
     <>
@@ -59,7 +70,7 @@ export function Files(props: Props) {
         label="Search for a file"
         type="search"
         sx={{
-          width: { xs: "100%", md: "90%" },
+          width: { xs: "88%", md: "88%" },
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -69,8 +80,8 @@ export function Files(props: Props) {
               <IconButton edge="end">
                 <LoadingButton
                   type={"icon"}
-                  clickAction={() => refreshFolders(true)}
                   icon={<Refresh />}
+                  clickAction={() => refreshFolders(true)}
                 />
               </IconButton>
             </InputAdornment>
@@ -79,24 +90,39 @@ export function Files(props: Props) {
           startAdornment: currentFolder && (
             <Chip
               variant="outlined"
-              label={"Author: " + currentFolder.FolderName}
-              onDelete={handleDeleteAuthor}
               sx={{ marginRight: "5px" }}
+              onDelete={handleDeleteAuthor}
+              label={"Author: " + currentFolder.FolderName}
             />
           ),
         }}
       />
-      <List
-        sx={{
-          width: { xs: "100%", md: "90%" },
+      <FileListConfiguration
+        title="Search files options"
+        configuration={configuration}
+        onUpdateConfiguration={setConfiguration}
+        availableKeys={[
+          ["Last update", "LastModified"],
+          ["Size", "Size"],
+          ["Title", "Key"],
+        ]}
+      />
+      <Paper
+        style={{
+          maxHeight: 750,
+          overflowY: "scroll",
+          background: "transparent",
         }}
       >
-        {!folders ? (
-          <FilesPlaceholders count={itemsConfiguration.maxCount} />
-        ) : (
-          displayedItems
-            .slice(0, itemsConfiguration.maxCount)
-            .map((file, i) => (
+        <List
+          sx={{
+            width: { xs: "100%", md: "90%" },
+          }}
+        >
+          {!folders ? (
+            <FilesPlaceholders count={configuration.size} />
+          ) : (
+            displayedItems.slice(0, configuration.size).map((file, i) => (
               <ListItem
                 key={file.Key}
                 sx={{ borderRadius: 6 }}
@@ -124,13 +150,20 @@ export function Files(props: Props) {
                 />
               </ListItem>
             ))
-        )}
-      </List>
-      <ResultCount
-        displayName="files"
-        totalItems={displayedItems.length}
-        displayedItems={itemsConfiguration.maxCount}
-      />
+          )}
+        </List>
+        <ResultCount
+          displayName="files"
+          totalItems={displayedItems.length}
+          displayedItems={configuration.size}
+          onClick={() =>
+            setConfiguration({
+              ...configuration,
+              size: configuration.size + 10,
+            })
+          }
+        />
+      </Paper>
     </>
   );
 }

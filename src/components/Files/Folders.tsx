@@ -1,17 +1,26 @@
-import { ResultCount } from "./ResultCount";
-import { byValue, byString } from "sort-es";
+import { Paper } from "@mui/material";
+import { byValue, byAny } from "sort-es";
 import { useEffect, useState } from "react";
+import { ResultCount } from "./ResultCount";
 import { S3Folder } from "../../classes/S3Folder";
+import { LoadingButton } from "../Data/LoadingButton";
 import { formatter } from "../../formatters/formatter";
-import { Folder as FolderIcon, Refresh, Search } from "@mui/icons-material";
+import { Folder as FolderIcon, Refresh } from "@mui/icons-material";
 import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
 import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
 import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
-import { LoadingButton } from "../Data/LoadingButton";
+import {
+  FileListConfiguration,
+  PagingConfiguration,
+} from "../Configurations/FileListConfiguration";
 
-const { itemsConfiguration } = sharedConfiguration;
+const defaultConfiguration = {
+  size: sharedConfiguration.itemsConfiguration.maxCount,
+  orderBy: "Key",
+  orderDesc: false,
+} as PagingConfiguration<S3Folder>;
 
 type Props = {
   onSearch: (query: S3Folder) => void;
@@ -23,9 +32,10 @@ export function Folders(props: Props) {
   const [search, setSearch] = useState("");
   const [hoveredItem, setHoveredItem] = useState(0);
   const [displayedItems, setDisplayedItems] = useState([] as S3Folder[]);
+  const [configuration, setConfiguration] = useState(defaultConfiguration);
 
   useEffect(() => {
-    let items = folders ?? [];
+    let items = [...(folders ?? [])];
 
     if (search) {
       const searchLower = search.toLowerCase();
@@ -34,9 +44,10 @@ export function Folders(props: Props) {
         i.Key?.toLocaleLowerCase().includes(searchLower)
       );
     }
+    const { orderBy, orderDesc: desc } = configuration;
 
-    setDisplayedItems(items.sort(byValue((x) => x.FolderName, byString())));
-  }, [search, folders]);
+    setDisplayedItems(items.sort(byValue(orderBy as any, byAny({ desc }))));
+  }, [search, folders, configuration]);
 
   return (
     <>
@@ -46,7 +57,7 @@ export function Folders(props: Props) {
         value={search}
         label="Search for author"
         sx={{
-          width: { xs: "100%", sm: "90%" },
+          width: { xs: "88%", md: "88%" },
         }}
         onChange={(e) => setSearch(e.target.value)}
         InputProps={{
@@ -63,18 +74,32 @@ export function Folders(props: Props) {
           ),
         }}
       />
-
-      <List
-        sx={{
-          width: { xs: "100%", sm: "90%" },
+      <FileListConfiguration
+        title="Search folders options"
+        configuration={configuration}
+        onUpdateConfiguration={setConfiguration}
+        availableKeys={[
+          ["Last update", "LastModified"],
+          ["Size", "Size"],
+          ["Title", "Key"],
+        ]}
+      />
+      <Paper
+        style={{
+          maxHeight: 750,
+          overflowY: "scroll",
+          background: "transparent",
         }}
       >
-        {!folders ? (
-          <FilesPlaceholders count={itemsConfiguration.maxCount} />
-        ) : (
-          displayedItems
-            .slice(0, itemsConfiguration.maxCount)
-            .map((item, i) => (
+        <List
+          sx={{
+            width: { xs: "100%", sm: "90%" },
+          }}
+        >
+          {!folders ? (
+            <FilesPlaceholders count={configuration.size} />
+          ) : (
+            displayedItems.slice(0, configuration.size).map((item, i) => (
               <ListItem
                 key={item.Key}
                 sx={{ borderRadius: 6 }}
@@ -95,13 +120,20 @@ export function Folders(props: Props) {
                 />
               </ListItem>
             ))
-        )}
-      </List>
-      <ResultCount
-        displayName="authors"
-        totalItems={displayedItems.length}
-        displayedItems={itemsConfiguration.maxCount}
-      />
+          )}
+        </List>
+        <ResultCount
+          displayName="authors"
+          totalItems={displayedItems.length}
+          displayedItems={configuration.size}
+          onClick={() =>
+            setConfiguration({
+              ...configuration,
+              size: configuration.size + 10,
+            })
+          }
+        />
+      </Paper>
     </>
   );
 }

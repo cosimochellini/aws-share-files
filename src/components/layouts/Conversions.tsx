@@ -48,7 +48,6 @@ export function Conversions() {
   return (
     <div>
       <Button
-        id="conversions-menu"
         onClick={handleClick}
         sx={{ marginX: { xl: 8 } }}
         endIcon={
@@ -68,12 +67,7 @@ export function Conversions() {
       >
         Conversions
       </Button>
-      <Menu
-        open={open}
-        anchorEl={anchorEl}
-        id="conversions-menu"
-        onClose={handleClose}
-      >
+      <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
         {jobs.length
           ? jobs.map((job) => (
               <MenuItem key={job.id}>
