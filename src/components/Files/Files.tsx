@@ -102,9 +102,9 @@ export function Files(props: Props) {
         configuration={configuration}
         onUpdateConfiguration={setConfiguration}
         availableKeys={[
+          ["Title", "FileName"],
           ["Last update", "LastModified"],
           ["Size", "Size"],
-          ["Title", "Key"],
         ]}
       />
       <Paper
