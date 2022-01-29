@@ -25,8 +25,8 @@ export type Props = {
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
-  orderBy: "Key",
   orderDesc: false,
+  orderBy: "FileName",
 } as PagingConfiguration<S3FileGroup>;
 
 export function Files(props: Props) {
