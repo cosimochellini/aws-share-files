@@ -1,5 +1,3 @@
-import { Nullable } from "../types/generic";
-
 export function debounce<T>(
     func: (...args: T[]) => unknown,
     delay = 200

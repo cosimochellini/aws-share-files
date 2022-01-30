@@ -6,7 +6,7 @@ export const useDevice = () => {
     const [state, setState] = useState({ ...device });
 
     useEffect(() => {
-        const handleResize = debounce(() => {
+        const handleResize = debounce((_: unknown) => {
             const currentWindow = device.window;
             if (!currentWindow) return;
 
