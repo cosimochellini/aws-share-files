@@ -15,6 +15,8 @@ import {
   FileListConfiguration,
   PagingConfiguration,
 } from "../Configurations/FileListConfiguration";
+import { useQueryString } from "../../hooks/query.hook";
+import { Nullable } from "../../types/generic";
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
@@ -23,16 +25,26 @@ const defaultConfiguration = {
 } as PagingConfiguration<S3Folder>;
 
 type Props = {
+  folderKey: Nullable<string>;
+  setFolderKey: (folderKey: Nullable<string>) => void;
   onSearch: (query: S3Folder) => void;
 };
+
+let initialLoad = true;
 
 export function Folders(props: Props) {
   const { folders, refreshFolders } = useS3Folders();
 
-  const [search, setSearch] = useState("");
   const [hoveredItem, setHoveredItem] = useState(0);
+  const [search, setSearch] = useQueryString("folderSearch");
   const [displayedItems, setDisplayedItems] = useState([] as S3Folder[]);
   const [configuration, setConfiguration] = useState(defaultConfiguration);
+
+  const handleCLick = (index: number) => {
+    const folder = displayedItems[index];
+    props.onSearch(folder);
+    props.setFolderKey(folder?.Key ?? "");
+  };
 
   useEffect(() => {
     let items = [...(folders ?? [])];
@@ -48,6 +60,21 @@ export function Folders(props: Props) {
 
     setDisplayedItems(items.sort(byValue(orderBy as any, byAny({ desc }))));
   }, [search, folders, configuration]);
+
+  useEffect(() => {
+    console.log({ props, initialLoad });
+    if (props.folderKey && initialLoad) {
+      const index = displayedItems.findIndex((i) => i.Key === props.folderKey);
+
+      if (index < 0) return;
+
+      const folder = displayedItems[index];
+
+      props.onSearch(folder);
+
+      initialLoad = false;
+    }
+  }, [displayedItems, props]);
 
   return (
     <>
@@ -104,7 +131,7 @@ export function Folders(props: Props) {
                 key={item.Key}
                 sx={{ borderRadius: 6 }}
                 selected={hoveredItem === i}
-                onClick={() => props.onSearch(item)}
+                onClick={() => handleCLick(i)}
                 onMouseEnter={(_) => setHoveredItem(i)}
               >
                 <ListItemAvatar key={item.Key}>

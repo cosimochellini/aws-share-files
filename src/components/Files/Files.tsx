@@ -1,6 +1,6 @@
 import { Chip, Paper } from "@mui/material";
 import { byAny, byString, byValue } from "sort-es";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
@@ -16,8 +16,12 @@ import {
   FileListConfiguration,
   PagingConfiguration,
 } from "../Configurations/FileListConfiguration";
+import { useQueryString } from "../../hooks/query.hook";
 
 export type Props = {
+  fileKey: string;
+  setFileKey: (fileKey: string) => void;
+  fileGroup: Nullable<S3FileGroup>;
   currentFolder: Nullable<S3Folder>;
   onSearch?: (query: S3FileGroup) => void;
   onClearFolder?: () => void;
@@ -29,18 +33,43 @@ const defaultConfiguration = {
   orderBy: "FileName",
 } as PagingConfiguration<S3FileGroup>;
 
+let initialLoad = true;
+
 export function Files(props: Props) {
   const { currentFolder } = props;
   const { folders, refreshFolders } = useS3Folders();
 
-  const [search, setSearch] = useState("");
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const [search, setSearch] = useQueryString("fileSearch");
+
   const [configuration, setConfiguration] = useState(defaultConfiguration);
   const [displayedItems, setDisplayedItems] = useState([] as S3FileGroup[]);
 
   const handleDeleteAuthor = () => {
     props.onClearFolder?.();
   };
+
+  const handleSelectedFile = useCallback(
+    (index: number) => {
+      const file = displayedItems[index];
+
+      props.onSearch?.(file);
+
+      props.setFileKey(file?.Key ?? "");
+      setSelectedIndex(index);
+    },
+    [displayedItems, props]
+  );
+
+  useEffect(() => {
+    if (props.fileKey && initialLoad) {
+      const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
+
+      if (index < 0) return;
+      handleSelectedFile(index);
+      initialLoad = false;
+    }
+  }, [displayedItems, props, handleSelectedFile]);
 
   useEffect(() => {
     setSelectedIndex(0);
@@ -60,7 +89,7 @@ export function Files(props: Props) {
     const { orderBy, orderDesc: desc } = configuration;
 
     setDisplayedItems(items.sort(byValue(orderBy as any, byAny({ desc }))));
-  }, [search, folders, currentFolder, configuration]);
+  }, [search, folders, currentFolder, configuration, setSelectedIndex]);
 
   return (
     <>
@@ -127,7 +156,7 @@ export function Files(props: Props) {
                 key={file.Key}
                 sx={{ borderRadius: 6 }}
                 selected={selectedIndex === i}
-                onClick={() => props.onSearch?.(file)}
+                onClick={() => handleSelectedFile(i)}
                 onMouseEnter={(_) => setSelectedIndex(i)}
               >
                 <ListItemAvatar>

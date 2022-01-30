@@ -9,15 +9,15 @@ import { formatter } from "../../formatters/formatter";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { downloadURI } from "../../utils/downloadHelper";
 import { Delete, Download, ExpandMore } from "@mui/icons-material";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import { useS3Folders } from "../../hooks/state/useS3Folders.state";
+import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 
 type Props = {
   currentFile: S3FileGroup;
 };
 
 const downloadFile = async (key: string) => {
-  const { signedUrl } = await functions.s3.shareableUrl({ key });
+  const signedUrl = await functions.s3.shareableUrl({ key });
   const fileName = key.split("/").at(-1);
 
   downloadURI(signedUrl, fileName!);
