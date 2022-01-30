@@ -15,6 +15,7 @@ import { CardHeader, Rating, Skeleton } from "@mui/material";
 
 type Props = {
   file: Nullable<S3FileGroup>;
+  onClose: () => void;
 };
 
 const style = {
@@ -35,12 +36,11 @@ function FileModal(props: Props) {
 
   const { isDesktop } = useDevice();
 
-  const [open, setOpen] = useState(false);
+  const open = !!props.file;
+
   const [volume, setVolume] = useState<Nullable<VolumeInfo>>();
 
   useEffect(() => {
-    setOpen(!!file);
-
     if (!file) return;
 
     functions.content
@@ -50,9 +50,9 @@ function FileModal(props: Props) {
   }, [file]);
 
   const handleClose = () => {
-    setOpen(false);
-    setVolume(null);
+    props.onClose();
   };
+
   return (
     <>
       {file ? (

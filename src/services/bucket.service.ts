@@ -14,7 +14,7 @@ export type uploadPayload = {
 export const bucket = {
     async getAllFiles() {
         const s3response = await s3
-            .listObjects({ Bucket: env.aws.bucket })
+            .listObjectsV2({ Bucket: env.aws.bucket })
             .promise();
 
         const items = s3response.Contents ?? [];
@@ -26,15 +26,14 @@ export const bucket = {
     },
 
     getShareableUrl({ key, expires = 10 }: { key: string; expires?: number }) {
-        const url = s3.getSignedUrl("getObject", {
+        const url = s3.getSignedUrlPromise("getObject", {
             Key: key,
             Expires: expires,
             Bucket: env.aws.bucket,
         });
 
-        return {
-            signedUrl: url,
-        };
+        return url
+
     },
 
     async downloadFile(key: string) {
@@ -77,7 +76,7 @@ export const bucket = {
 
     async folderExists(folderName: string) {
         const s3response = await s3
-            .listObjects({ Bucket: env.aws.bucket, Prefix: folderName })
+            .listObjectsV2({ Bucket: env.aws.bucket, Prefix: folderName })
             .promise();
 
         return !!s3response.Contents?.length;

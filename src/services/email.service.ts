@@ -7,7 +7,7 @@ import { ServiceArguments, ServiceMapper } from "../types/generic";
 export const email = {
     async sendFile({ to, fileKey }: { to: string; fileKey: string }) {
 
-        const { signedUrl } = bucket.getShareableUrl({ key: fileKey, expires: 1 });
+        const signedUrl = await bucket.getShareableUrl({ key: fileKey, expires: 1 });
 
         const fileInfo = new FileInfo(fileKey);
 
