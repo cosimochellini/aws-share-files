@@ -1,12 +1,24 @@
 import { debounce } from "./callbacks";
 import { device } from "../services/device.service";
 
-const cache: Record<string, URLSearchParams> = {};
+const cache: Record<string, URLSearchParams> = {
+    "": new URLSearchParams("")
+};
+
+const purgeString = (str: string) => str
+    .replace(/[^=&]+=(&|$)/g, "")
+    .replace(/&$/, "")
+    .replace(/^&/, "")
 
 const getSearchParams = (search: string | undefined = "") => {
-    cache[search] ??= new URLSearchParams(search);
 
-    return cache[search];
+    if (cache[search]) return cache[search];
+
+    const currentQuery = new URLSearchParams(purgeString(search));
+
+    cache[search] = currentQuery;
+
+    return currentQuery;
 };
 
 export const setQueryStringWithoutPageReload = debounce((qsValue: string) => {
@@ -16,9 +28,9 @@ export const setQueryStringWithoutPageReload = debounce((qsValue: string) => {
 
     const { protocol, host, pathname } = window.location;
 
-    const newUrl = `${protocol}//${host}${pathname}?${qsValue}`;
+    const path = `${protocol}//${host}${pathname}?${qsValue}`;
 
-    device.window?.history.pushState({ path: newUrl }, "//", newUrl);
+    window.history.pushState({ path }, "//", path);
 });
 
 
@@ -30,7 +42,6 @@ export const setQueryStringValue = (
     const searchParams = getSearchParams(queryString);
 
     searchParams.set(key, value);
-
     setQueryStringWithoutPageReload(searchParams.toString());
 };
 

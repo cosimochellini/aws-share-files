@@ -32,7 +32,7 @@ type Props = {
 
 let initialLoad = true;
 
-export function Folders(props: Props) {
+export default function Folders(props: Props) {
   const { folders, refreshFolders } = useS3Folders();
 
   const [hoveredItem, setHoveredItem] = useState(0);
@@ -62,7 +62,6 @@ export function Folders(props: Props) {
   }, [search, folders, configuration]);
 
   useEffect(() => {
-    console.log({ props, initialLoad });
     if (props.folderKey && initialLoad) {
       const index = displayedItems.findIndex((i) => i.Key === props.folderKey);
 

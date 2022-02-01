@@ -2,12 +2,12 @@ import { useState, useCallback, useEffect } from "react";
 import { getQueryStringValue, setQueryStringValue } from "../utils/queryString";
 
 export function useQueryString(key: string, initialValue: string = '') {
-    const [value, setValue] = useState(() => getQueryStringValue(key) || initialValue);
+    const [value, setValue] = useState("");
 
-    // useEffect(() => {
-    //     setValue(() => getQueryStringValue(key) || initialValue);
-    //     // eslint-disable-next-line react-hooks/exhaustive-deps
-    // }, []);
+    useEffect(() => {
+        setValue(() => getQueryStringValue(key) ?? initialValue);
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const onSetValue = useCallback(
         newValue => {

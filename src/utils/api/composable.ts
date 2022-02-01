@@ -27,7 +27,7 @@ export const defaultBehavior = (
 
             const data = ret instanceof Promise ? await ret : ret;
 
-            res.status(200).json(data);
+            res.status(200).json(JSON.stringify(data));
         } catch (e) {
             res.status(400).json({ error: retrieveError(e) });
         }

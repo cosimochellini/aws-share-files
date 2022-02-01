@@ -1,11 +1,12 @@
+import { byAny, byValue } from "sort-es";
 import { Chip, Paper } from "@mui/material";
-import { byAny, byString, byValue } from "sort-es";
-import { useCallback, useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
 import { LoadingButton } from "../Data/LoadingButton";
+import { useQueryString } from "../../hooks/query.hook";
 import { S3FileGroup } from "../../classes/S3FileGroup";
+import { useCallback, useEffect, useState } from "react";
 import { AutoStories, Refresh } from "@mui/icons-material";
 import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
@@ -16,15 +17,14 @@ import {
   FileListConfiguration,
   PagingConfiguration,
 } from "../Configurations/FileListConfiguration";
-import { useQueryString } from "../../hooks/query.hook";
 
 export type Props = {
   fileKey: string;
-  setFileKey: (fileKey: string) => void;
   fileGroup: Nullable<S3FileGroup>;
   currentFolder: Nullable<S3Folder>;
-  onSearch?: (query: S3FileGroup) => void;
   onClearFolder?: () => void;
+  setFileKey: (fileKey: string) => void;
+  onSearch?: (query: S3FileGroup) => void;
 };
 
 const defaultConfiguration = {

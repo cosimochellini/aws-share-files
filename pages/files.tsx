@@ -6,8 +6,8 @@ import { useDevice } from "../src/hooks/device.hook";
 import { Files } from "../src/components/Files/Files";
 import { useQueryString } from "../src/hooks/query.hook";
 import { S3FileGroup } from "../src/classes/S3FileGroup";
-import { Folders } from "../src/components/Files/Folders";
 
+const FolderAsync = lazy(() => import("../src/components/Files/Folders"));
 const FileModalAsync = lazy(() => import("../src/components/Files/FileModal"));
 
 export default function FilesPage() {
@@ -19,6 +19,11 @@ export default function FilesPage() {
   const [selectedFileGroup, setSelectedFileGroup] =
     useState<Nullable<S3FileGroup>>();
 
+  const onClose = () => {
+    setFileKey("");
+    setSelectedFileGroup(null);
+  };
+
   const { hasWidth } = useDevice();
 
   const sx = { minHeight: { xs: 0, sm: 800 } };
@@ -28,17 +33,19 @@ export default function FilesPage() {
     <>
       <Grid
         container
-        spacing={{ xs: 0, sm: 3 }}
         alignItems="center"
         justifyItems={"center"}
+        spacing={{ xs: 0, sm: 3 }}
       >
         {hasWidth(900) && (
           <Grid {...gridProps}>
-            <Folders
-              folderKey={folderKey}
-              setFolderKey={setFolderKey}
-              onSearch={setSelectedFolder}
-            />
+            <Suspense fallback={null}>
+              <FolderAsync
+                folderKey={folderKey}
+                setFolderKey={setFolderKey}
+                onSearch={setSelectedFolder}
+              />
+            </Suspense>
           </Grid>
         )}
         <Grid {...gridProps}>
@@ -57,10 +64,7 @@ export default function FilesPage() {
       </Grid>
       {selectedFileGroup && (
         <Suspense fallback={null}>
-          <FileModalAsync
-            file={selectedFileGroup}
-            onClose={() => setSelectedFileGroup(null)}
-          />
+          <FileModalAsync file={selectedFileGroup} onClose={onClose} />
         </Suspense>
       )}
     </>
