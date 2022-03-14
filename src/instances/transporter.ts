@@ -9,6 +9,12 @@ const transporter = nodemailer.createTransport(sgTransport({ apiKey: env.sendgri
 
 // const transporter = nodemailer.createTransport({ SES: sesClient });
 
-transporter.verify().catch(notification.error);
+try {
+
+    transporter.verify?.()?.catch?.(console.error);
+} catch (error) {
+    console.error(error);
+
+}
 
 export { transporter };
