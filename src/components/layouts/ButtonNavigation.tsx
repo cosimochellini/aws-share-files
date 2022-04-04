@@ -1,5 +1,5 @@
 import Link from "../Link";
-import { styled } from "@mui/system";
+import { styled } from "../../barrel/mui.barrel";
 import { useRouter } from "next/router";
 import { forwardRef, useEffect, useState } from "react";
 import { navbarItems, Visibility } from "../../instances/navbar";

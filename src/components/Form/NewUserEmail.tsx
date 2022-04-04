@@ -1,6 +1,6 @@
-import { Save } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { UserEmail } from "../../types/dynamo.types";
+import { Save } from "../../barrel/mui.icons.barrel";
 import { LoadingButton } from "../Data/LoadingButton";
 import { useEmailsStore } from "../../store/emails.store";
 import { Card, CardContent, Checkbox } from "../../barrel/mui.barrel";

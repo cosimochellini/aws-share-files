@@ -1,18 +1,19 @@
 import { byAny, byValue } from "sort-es";
-import { Chip, Paper } from "../../barrel/mui.barrel";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
+import { Chip, Paper } from "../../barrel/mui.barrel";
 import { LoadingButton } from "../Data/LoadingButton";
 import { useQueryString } from "../../hooks/query.hook";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { useCallback, useEffect, useState } from "react";
 import { useFolderStore } from "../../store/files.store";
-import { AutoStories, Refresh } from "@mui/icons-material";
+import { ListItem, ListItemAvatar } from "../../barrel/mui.barrel";
+import { AutoStories, Refresh } from "../../barrel/mui.icons.barrel";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
+import { ListItemText, TextField, List } from "../../barrel/mui.barrel";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
-import { Avatar, IconButton, InputAdornment, ListItem } from "../../barrel/mui.barrel";
-import { ListItemAvatar, ListItemText, TextField, List } from "../../barrel/mui.barrel";
+import { Avatar, IconButton, InputAdornment } from "../../barrel/mui.barrel";
 import {
   FileListConfiguration,
   PagingConfiguration,

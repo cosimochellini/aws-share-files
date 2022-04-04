@@ -1,4 +1,4 @@
-import { Folder, Logout, Mail, Settings, Upload } from "@mui/icons-material";
+import { Folder, Logout, Mail, Settings, Upload } from "../barrel/mui.icons.barrel";
 
 export enum Visibility {
   All = "All",

@@ -3,7 +3,6 @@ import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
 import { CssBaseline } from "../src/barrel/mui.barrel";
-import { ThemeProvider } from "@mui/system";
 import GlobalThemes from "../src/themes/index";
 import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";

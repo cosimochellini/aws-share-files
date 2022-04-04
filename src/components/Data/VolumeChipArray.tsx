@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
-import { Chip, ChipProps, Grid } from "../../barrel/mui.barrel";
 import { formatter } from "../../formatters/formatter";
 import { VolumeInfo } from "../../types/content.types";
-import { CalendarToday, Class, MenuBook, Person } from "@mui/icons-material";
+import { Chip, ChipProps, Grid } from "../../barrel/mui.barrel";
+import { MenuBook, Person } from "../../barrel/mui.icons.barrel";
+import { CalendarToday, Class } from "../../barrel/mui.icons.barrel";
 
 type Props = {
   volume: VolumeInfo;

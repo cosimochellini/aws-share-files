@@ -8,7 +8,7 @@ import { SendFileViaEmail } from "./SendFileViaEmail";
 import { formatter } from "../../formatters/formatter";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { downloadURI } from "../../utils/downloadHelper";
-import { Delete, Download, ExpandMore } from "@mui/icons-material";
+import { Delete, Download, ExpandMore } from "../../barrel/mui.icons.barrel";
 import {
   Accordion,
   AccordionDetails,

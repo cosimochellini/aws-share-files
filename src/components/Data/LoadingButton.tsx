@@ -1,14 +1,9 @@
 import { Nullable } from "../../types/generic";
-import {
-  Button,
-  ButtonProps,
-  IconButton,
-  IconButtonProps,
-} from "../../barrel/mui.barrel";
-
 import React, { useEffect, useState } from "react";
-import { Error, Refresh } from "@mui/icons-material";
 import { notification } from "../../instances/notification";
+import { Button, ButtonProps } from "../../barrel/mui.barrel";
+import { Error, Refresh } from "../../barrel/mui.icons.barrel";
+import { IconButton, IconButtonProps } from "../../barrel/mui.barrel";
 
 type Props = {
   type?: Nullable<"button" | "icon">;

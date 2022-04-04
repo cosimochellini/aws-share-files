@@ -1,6 +1,6 @@
 import theme from "../themes";
-import type { Theme } from "@mui/material/styles";
 import { createContext, useContext } from "react";
+import type { Theme } from "../../src/barrel/mui.barrel";
 import { ConverterResponse } from "../types/converter.types";
 
 export const defaultContext = {

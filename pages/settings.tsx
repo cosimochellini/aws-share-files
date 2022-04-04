@@ -1,22 +1,14 @@
 import { forwardRef, useEffect } from "react";
-import List from "@mui/material/List";
-import Link from "../src/components/Link";
-import Divider from "@mui/material/Divider";
 import GlobalThemes from "../src/themes/index";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
+import { useAuth } from "../src/hooks/auth.hook";
 import { settings } from "../src/instances/settings";
+import { formatter } from "../src/formatters/formatter";
+import { useDarkMode } from "../src/hooks/darkMode.hook";
 import { useCurrentContext } from "../src/hooks/context.hook";
 import { navbarItems, Visibility } from "../src/instances/navbar";
-import {
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  ListItem,
-} from "../src/barrel/mui.barrel";
-import { useDarkMode } from "../src/hooks/darkMode.hook";
-import { useAuth } from "../src/hooks/auth.hook";
-import { formatter } from "../src/formatters/formatter";
+import { Checkbox, FormControlLabel } from "../src/barrel/mui.barrel";
+import { Grid, ListItem, ListItemIcon } from "../src/barrel/mui.barrel";
+import { ListItemText, Divider, Link, List } from "../src/barrel/mui.barrel";
 
 export default function Settings() {
   const { session } = useAuth();
