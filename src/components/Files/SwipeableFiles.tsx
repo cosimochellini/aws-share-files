@@ -1,21 +1,23 @@
-import Box from "@mui/material/Box";
 import { Files, Props } from "./Files";
 import { Global } from "@emotion/react";
-import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
-import { styled } from "@mui/material/styles";
-import { CssBaseline, Grid } from "@mui/material";
-import SwipeableDrawer from "@mui/material/SwipeableDrawer";
+import { colors } from "../../barrel/mui.icons.barrel";
+import { SwipeableDrawer } from "../../barrel/mui.barrel";
+import { Box, styled, Grid, CssBaseline } from "../../barrel/mui.barrel";
 
 const drawerBleeding = 56;
 const StyledBox = styled(Box)(({ theme }) => ({
-  backgroundColor: theme.palette.mode === "light" ? "#fff" : grey[800],
+  backgroundColor:
+    theme.palette.mode === "light" ? "#fff" : colors.greyColor[800],
 }));
 
 const Puller = styled(Box)(({ theme }) => ({
   width: 30,
   height: 6,
-  backgroundColor: theme.palette.mode === "light" ? grey[300] : grey[900],
+  backgroundColor:
+    theme.palette.mode === "light"
+      ? colors.greyColor[300]
+      : colors.greyColor[900],
   borderRadius: 3,
   position: "absolute",
   top: 8,

@@ -2,15 +2,13 @@ import Head from "next/head";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
-import { CssBaseline } from "@mui/material";
-import { ThemeProvider } from "@mui/system";
+import { CssBaseline } from "../src/barrel/mui.barrel";
 import GlobalThemes from "../src/themes/index";
 import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";
 import Layout from "../src/components/layouts/Layout";
 import { useDarkMode } from "../src/hooks/darkMode.hook";
 import { lazy, Suspense, useEffect, useState } from "react";
-import { conversionStore } from "../src/instances/conversionsStore";
 import { Context, defaultContext } from "../src/hooks/context.hook";
 import { NotificationHandler } from "../src/components/Global/NotificationHandler";
 
@@ -29,30 +27,14 @@ const AppGrid = (props: AppProps) => {
 
   const [jobs, setJobs] = useState(defaultContext.jobs);
   const [theme, setTheme] = useState(defaultContext.theme);
-  const [emails, setEmails] = useState(defaultContext.emails);
-  const [folders, setFolders] = useState(defaultContext.folders);
-  const [conversions, setConversions] = useState(defaultContext.conversions);
 
   const providedData = {
     jobs,
     theme,
-    emails,
-    folders,
-    conversions,
+
     setJobs,
     setTheme,
-    setEmails,
-    setFolders,
-    setConversions,
   };
-
-  useEffect(() => {
-    setConversions(conversionStore.value);
-  }, []);
-
-  useEffect(() => {
-    conversionStore.set(conversions);
-  }, [conversions]);
 
   useEffect(() => {
     setTheme(isDarkMode ? GlobalThemes.dark : GlobalThemes.light);

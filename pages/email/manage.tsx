@@ -1,31 +1,18 @@
 import { useState } from "react";
-import List from "@mui/material/List";
-import Grid from "@mui/material/Grid";
-import { Divider } from "@mui/material";
-import Avatar from "@mui/material/Avatar";
-import ListItem from "@mui/material/ListItem";
-import { Email, Star } from "@mui/icons-material";
-import Typography from "@mui/material/Typography";
-import DeleteIcon from "@mui/icons-material/Delete";
-import ListItemText from "@mui/material/ListItemText";
-import { UserEmail } from "../../src/types/dynamo.types";
-import { functions } from "../../src/instances/functions";
-import ListItemAvatar from "@mui/material/ListItemAvatar";
-import { notification } from "../../src/instances/notification";
+import { useEmailsStore } from "../../src/store/emails.store";
+import { ListItem, Grid, List } from "../../src/barrel/mui.barrel";
 import { NewUserEmail } from "../../src/components/Form/NewUserEmail";
-import { useUserEmail } from "../../src/hooks/state/useUserEmail.state";
 import { LoadingButton } from "../../src/components/Data/LoadingButton";
+import { Email, Star, Delete } from "../../src/barrel/mui.icons.barrel";
+import { Divider, Typography, Avatar } from "../../src/barrel/mui.barrel";
+import { ListItemText, ListItemAvatar } from "../../src/barrel/mui.barrel";
 import { FilesPlaceholders } from "../../src/components/Placeholders/FilesPlaceholders";
 
 export default function Manage() {
-  const { emails, refreshEmails } = useUserEmail();
-  const [indexActive, setIndexActive] = useState(-1);
+  const emails = useEmailsStore((x) => x.emails);
+  const deleteEmail = useEmailsStore((x) => x.deleteEmail);
 
-  const deleteEmail = (email: UserEmail) =>
-    functions.email
-      .deleteEmail(email)
-      .then(() => refreshEmails())
-      .catch(notification.error);
+  const [indexActive, setIndexActive] = useState(-1);
 
   return (
     <>
@@ -48,7 +35,7 @@ export default function Manage() {
                     secondaryAction={
                       <LoadingButton
                         type={"icon"}
-                        icon={<DeleteIcon />}
+                        icon={<Delete />}
                         clickAction={() => deleteEmail(email)}
                         iconProps={{
                           color: "error",

@@ -1,15 +1,15 @@
 import { MouseEvent, useState } from "react";
-import { Button, Menu } from "@mui/material";
 import { Nullable } from "../../types/generic";
+import { LoadingButton } from "../Data/LoadingButton";
 import { formatter } from "../../formatters/formatter";
+import { unresolvedPromise } from "../../utils/promise";
 import { StatusCode } from "../../types/converter.types";
 import { useJobs } from "../../hooks/state/useJobs.state";
-import { ChangeCircleRounded, Delete } from "@mui/icons-material";
-import { CheckCircle, Warning, Refresh } from "@mui/icons-material";
-import { useConversions } from "../../hooks/state/useConversions.state";
-import { MenuItem, Badge, Typography, IconButton, Chip } from "@mui/material";
-import { unresolvedPromise } from "../../utils/promise";
-import { LoadingButton } from "../Data/LoadingButton";
+import { ChangeCircleRounded, Delete } from "../../barrel/mui.icons.barrel";
+import { CheckCircle, Warning, Refresh } from "../../barrel/mui.icons.barrel";
+import { useConversionsStore } from "../../store/conversions.store";
+import { Button, Menu, Chip, Badge } from "../../barrel/mui.barrel";
+import { MenuItem, Typography, IconButton } from "../../barrel/mui.barrel";
 
 function getColor(code: StatusCode) {
   switch (code) {
@@ -27,7 +27,7 @@ function getColor(code: StatusCode) {
 
 export function Conversions() {
   const { jobs } = useJobs();
-  const { removeConversion } = useConversions();
+  const removeConversion = useConversionsStore((s) => s.removeConversion);
 
   const [anchorEl, setAnchorEl] = useState<Nullable<HTMLElement>>();
   const open = Boolean(anchorEl);

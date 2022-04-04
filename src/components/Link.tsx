@@ -1,9 +1,8 @@
 import clsx from "clsx";
 import { forwardRef } from "react";
 import { useRouter } from "next/router";
-import { styled } from "@mui/material/styles";
 import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import MuiLink, { LinkProps as MuiLinkProps } from "@mui/material/Link";
+import { MuiLinkProps, MuiLink, styled } from "../barrel/mui.barrel";
 
 // Add support for the sx prop for consistency with the other branches.
 const Anchor = styled("a")({});

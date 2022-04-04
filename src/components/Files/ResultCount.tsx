@@ -1,4 +1,5 @@
-import { Chip, Grid } from "@mui/material";
+import { Chip, Grid } from "../../barrel/mui.barrel";
+
 import { useEffect, useState } from "react";
 
 type Props = {

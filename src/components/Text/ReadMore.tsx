@@ -1,5 +1,5 @@
-import { Link } from "@mui/material";
 import { useState } from "react";
+import { Link } from "../../barrel/mui.barrel";
 import { Nullable } from "../../types/generic";
 
 type Props = {

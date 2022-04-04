@@ -1,5 +1,4 @@
-import Typography from "@mui/material/Typography";
-import MuiLink from "@mui/material/Link";
+import { Typography, MuiLink } from "../barrel/mui.barrel";
 
 export default function Copyright() {
   return (

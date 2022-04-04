@@ -1,9 +1,13 @@
 import Link from "../Link";
-import { styled } from "@mui/system";
+import { styled } from "../../barrel/mui.barrel";
 import { useRouter } from "next/router";
 import { forwardRef, useEffect, useState } from "react";
 import { navbarItems, Visibility } from "../../instances/navbar";
-import { BottomNavigation, BottomNavigationAction, Paper } from "@mui/material";
+import {
+  BottomNavigation,
+  BottomNavigationAction,
+  Paper,
+} from "../../barrel/mui.barrel";
 
 export default function ButtonNavigation() {
   const router = useRouter();

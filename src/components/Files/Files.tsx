@@ -1,18 +1,19 @@
 import { byAny, byValue } from "sort-es";
-import { Chip, Paper } from "@mui/material";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
+import { Chip, Paper } from "../../barrel/mui.barrel";
 import { LoadingButton } from "../Data/LoadingButton";
 import { useQueryString } from "../../hooks/query.hook";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { useCallback, useEffect, useState } from "react";
-import { AutoStories, Refresh } from "@mui/icons-material";
-import { useS3Folders } from "../../hooks/state/useS3Folders.state";
+import { useFolderStore } from "../../store/files.store";
+import { ListItem, ListItemAvatar } from "../../barrel/mui.barrel";
+import { AutoStories, Refresh } from "../../barrel/mui.icons.barrel";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
+import { ListItemText, TextField, List } from "../../barrel/mui.barrel";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
-import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
-import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
+import { Avatar, IconButton, InputAdornment } from "../../barrel/mui.barrel";
 import {
   FileListConfiguration,
   PagingConfiguration,
@@ -37,7 +38,9 @@ let initialLoad = true;
 
 export function Files(props: Props) {
   const { currentFolder } = props;
-  const { folders, refreshFolders } = useS3Folders();
+  const folders = useFolderStore((x) => x.folders);
+  const refreshFolders = useFolderStore((x) => x.refreshFolders);
+  const loadFolders = useFolderStore((x) => x.loadFolders);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [search, setSearch] = useQueryString("fileSearch");
@@ -48,6 +51,8 @@ export function Files(props: Props) {
   const handleDeleteAuthor = () => {
     props.onClearFolder?.();
   };
+
+  loadFolders();
 
   const handleSelectedFile = useCallback(
     (index: number) => {
