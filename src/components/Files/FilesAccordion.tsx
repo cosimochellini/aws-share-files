@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Typography } from "@mui/material";
+import { Typography } from "../../barrel/mui.barrel";
 import type { S3File } from "../../classes/S3File";
 import { useDevice } from "../../hooks/device.hook";
 import { functions } from "../../instances/functions";
@@ -9,8 +9,12 @@ import { formatter } from "../../formatters/formatter";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { downloadURI } from "../../utils/downloadHelper";
 import { Delete, Download, ExpandMore } from "@mui/icons-material";
-import { useS3Folders } from "../../hooks/state/useS3Folders.state";
-import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
+import {
+  Accordion,
+  AccordionDetails,
+  AccordionSummary,
+} from "../../barrel/mui.barrel";
+import { useFolderStore } from "../../store/files.store";
 
 type Props = {
   currentFile: S3FileGroup;
@@ -26,7 +30,7 @@ const downloadFile = async (key: string) => {
 export function FilesAccordion(props: Props) {
   const { currentFile } = props;
 
-  const { refreshFolders } = useS3Folders();
+  const refreshFolders = useFolderStore((x) => x.refreshFolders);
 
   const { isMobile } = useDevice();
 

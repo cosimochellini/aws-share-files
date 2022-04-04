@@ -8,7 +8,12 @@ import ListItemText from "@mui/material/ListItemText";
 import { settings } from "../src/instances/settings";
 import { useCurrentContext } from "../src/hooks/context.hook";
 import { navbarItems, Visibility } from "../src/instances/navbar";
-import { Checkbox, FormControlLabel, Grid, ListItem } from "@mui/material";
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  ListItem,
+} from "../src/barrel/mui.barrel";
 import { useDarkMode } from "../src/hooks/darkMode.hook";
 import { useAuth } from "../src/hooks/auth.hook";
 import { formatter } from "../src/formatters/formatter";

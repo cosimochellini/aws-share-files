@@ -2,8 +2,9 @@ import { useState } from "react";
 import Modal from "@mui/material/Modal";
 import { MoreVert } from "@mui/icons-material";
 import Typography from "@mui/material/Typography";
-import { ButtonGroup, Box, Select, MenuItem, Grid } from "@mui/material";
-import { Button, FormControl, IconButton, InputLabel } from "@mui/material";
+import { ButtonGroup, Box, Select } from "../../barrel/mui.barrel";
+import { MenuItem, Grid, Button } from "../../barrel/mui.barrel";
+import { FormControl, IconButton, InputLabel } from "../../barrel/mui.barrel";
 
 const style = {
   p: 4,

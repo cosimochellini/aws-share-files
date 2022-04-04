@@ -6,14 +6,15 @@ import { device } from "../src/services/device.service";
 import { VolumeInfo } from "../src/types/content.types";
 import { notification } from "../src/instances/notification";
 import { truncateString } from "../src/utils/truncateString";
-import { InputLabel, Grid, Typography } from "@mui/material";
+import { InputLabel, Grid, Typography, Card } from "../src/barrel/mui.barrel";
 import { useCurrentContext } from "../src/hooks/context.hook";
-import { Button, CardContent, FormControl } from "@mui/material";
-import { useS3Folders } from "../src/hooks/state/useS3Folders.state";
+import { Button, CardContent, FormControl } from "../src/barrel/mui.barrel";
 import { LoadingButton } from "../src/components/Data/LoadingButton";
 import { Book, FileUpload, Person, UploadFile } from "@mui/icons-material";
-import { CardHeader, TextField, MenuItem, Select, Card } from "@mui/material";
+import { CardHeader, TextField } from "../src/barrel/mui.barrel";
+import { MenuItem, Select } from "../src/barrel/mui.barrel";
 import { bucketFallbackStrategy } from "../src/fallback/bucketFallbackStrategy";
+import { useFolderStore } from "../src/store/files.store";
 
 const fullWidth = { minWidth: { xs: "100%", sm: "90%", md: "70%", lg: "60%" } };
 const maxHeight = 48 * 4.5 + 8;
@@ -21,7 +22,7 @@ const stringLength = device.isMobile ? 20 : 40;
 
 export default function Upload() {
   const { theme } = useCurrentContext();
-  const { refreshFolders } = useS3Folders();
+  const refreshFolders = useFolderStore((x) => x.refreshFolders);
 
   const [selectedFile, setSelectedFile] = useState<Nullable<File>>();
 

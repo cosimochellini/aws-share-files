@@ -5,9 +5,10 @@ import { LoadingButton } from "../Data/LoadingButton";
 import { functions } from "../../instances/functions";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { notification } from "../../instances/notification";
-import { Card, CardContent, CardHeader } from "@mui/material";
-import { useConversions } from "../../hooks/state/useConversions.state";
-import { FormControl, Grid, InputLabel, MenuItem, Select } from "@mui/material";
+import { useConversionsStore } from "../../store/conversions.store";
+import { Select } from "../../barrel/mui.barrel";
+import { Card, CardContent, CardHeader, Grid } from "../../barrel/mui.barrel";
+import { FormControl, InputLabel, MenuItem } from "../../barrel/mui.barrel";
 
 type Props = {
   currentFile: S3FileGroup;
@@ -18,7 +19,7 @@ const { extensions } = env.converter;
 export function FileConversion(props: Props) {
   const { currentFile } = props;
 
-  const { addConversion } = useConversions();
+  const addConversion = useConversionsStore((x) => x.addConversion);
 
   const fileExtensions = currentFile.Files.map((f) => f.extension);
 
@@ -38,9 +39,7 @@ export function FileConversion(props: Props) {
         file: f.file.Object.Key!,
       })
       .then((job) => addConversion(job.id))
-      .then(() => {
-        notification.success("Conversion started");
-      });
+      .then(() => notification.success("Conversion started"));
   };
 
   if (!availableExtensions.length) return null;

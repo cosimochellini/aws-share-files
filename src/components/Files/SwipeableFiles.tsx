@@ -4,7 +4,7 @@ import { Global } from "@emotion/react";
 import { grey } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
-import { CssBaseline, Grid } from "@mui/material";
+import { CssBaseline, Grid } from "../../barrel/mui.barrel";
 import SwipeableDrawer from "@mui/material/SwipeableDrawer";
 
 const drawerBleeding = 56;

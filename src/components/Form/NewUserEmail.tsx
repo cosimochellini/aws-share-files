@@ -2,25 +2,16 @@ import { Save } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
 import { UserEmail } from "../../types/dynamo.types";
 import { LoadingButton } from "../Data/LoadingButton";
-import { functions } from "../../instances/functions";
-import { notification } from "../../instances/notification";
-import { FormControlLabel, Grid, TextField } from "@mui/material";
-import { Card, CardContent, Checkbox } from "@mui/material";
-import { useUserEmail } from "../../hooks/state/useUserEmail.state";
+import { useEmailsStore } from "../../store/emails.store";
+import { Card, CardContent, Checkbox } from "../../barrel/mui.barrel";
+import { FormControlLabel, Grid, TextField } from "../../barrel/mui.barrel";
 
 export function NewUserEmail() {
-  const { refreshEmails } = useUserEmail();
+  const addEmail = useEmailsStore((x) => x.addEmail);
+
   const { register, handleSubmit, reset } = useForm<UserEmail>();
 
-  const onSubmit = handleSubmit((data: UserEmail) => {
-    return functions.email
-      .addEmail(data)
-      .then(() => {
-        reset();
-        refreshEmails();
-      })
-      .catch(notification.error);
-  });
+  const onSubmit = handleSubmit((email) => addEmail(email).then(() => reset()));
 
   return (
     <Grid

@@ -8,10 +8,11 @@ import { useState, useEffect, forwardRef } from "react";
 import { styled } from "@mui/material/styles";
 import { navbarItems, Visibility } from "../../instances/navbar";
 
-import { Typography, List, IconButton } from "@mui/material";
+import { Typography, List, IconButton } from "../../barrel/mui.barrel";
 import { Menu, ChevronLeft, ChevronRight } from "@mui/icons-material";
-import { Box, Drawer, CssBaseline, AppBar, Toolbar } from "@mui/material";
-import { ListItemText, ListItemIcon, ListItem, Divider } from "@mui/material";
+import { Box, Drawer, ListItem } from "../../barrel/mui.barrel";
+import { CssBaseline, AppBar, Toolbar } from "../../barrel/mui.barrel";
+import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
 import { Conversions } from "./Conversions";
 
 const drawerWidth = 240;

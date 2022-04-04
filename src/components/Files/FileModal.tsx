@@ -3,15 +3,15 @@ import { useEffect, useState } from "react";
 import { Nullable } from "../../types/generic";
 import { FilesAccordion } from "./FilesAccordion";
 import { FileConversion } from "./FileConversion";
-import { Card, CardContent } from "@mui/material";
+import { Card, CardContent } from "../../barrel/mui.barrel";
 import { useDevice } from "../../hooks/device.hook";
 import { functions } from "../../instances/functions";
 import { VolumeInfo } from "../../types/content.types";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { VolumeChipArray } from "../Data/VolumeChipArray";
-import { Divider, Modal, Typography } from "@mui/material";
+import { Divider, Modal, Typography } from "../../barrel/mui.barrel";
 import { notification } from "../../instances/notification";
-import { CardHeader, Rating, Skeleton } from "@mui/material";
+import { CardHeader, Rating, Skeleton } from "../../barrel/mui.barrel";
 
 type Props = {
   file: Nullable<S3FileGroup>;

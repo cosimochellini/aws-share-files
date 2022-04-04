@@ -1,13 +1,13 @@
-import { ReactEventHandler, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Nullable } from "../../types/generic";
 import { UserEmail } from "../../types/dynamo.types";
 import { functions } from "../../instances/functions";
 import { LoadingButton } from "../Data/LoadingButton";
 import { Mail, Send, Star } from "@mui/icons-material";
 import { notification } from "../../instances/notification";
-import { useUserEmail } from "../../hooks/state/useUserEmail.state";
-import { Grid, List, ListItem, ListItemText } from "@mui/material";
-import { Menu, MenuItem, Typography, ListItemIcon } from "@mui/material";
+import { Grid, List, ListItem, ListItemText } from "../../barrel/mui.barrel";
+import { Menu, MenuItem, Typography, ListItemIcon } from "../../barrel/mui.barrel";
+import { useEmailsStore } from "../../store/emails.store";
 
 type Props = {
   fileKey: string;
@@ -15,7 +15,7 @@ type Props = {
 
 export function SendFileViaEmail(props: Props) {
   const { fileKey } = props;
-  const { emails } = useUserEmail();
+  const emails = useEmailsStore((x) => x.emails);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<Nullable<number>>();

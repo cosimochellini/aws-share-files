@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Snackbar, Alert } from "@mui/material";
+import { Snackbar, Alert } from "../../barrel/mui.barrel";
 import { notificationData, notification } from "../../instances/notification";
 
 export function NotificationHandler() {

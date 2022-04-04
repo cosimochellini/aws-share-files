@@ -1,4 +1,4 @@
-import { Grid } from "@mui/material";
+import { Grid } from "../src/barrel/mui.barrel";
 import { Nullable } from "../src/types/generic";
 import { lazy, useState, Suspense } from "react";
 import { S3Folder } from "../src/classes/S3Folder";

@@ -4,7 +4,8 @@ import {
   ButtonProps,
   IconButton,
   IconButtonProps,
-} from "@mui/material";
+} from "../../barrel/mui.barrel";
+
 import React, { useEffect, useState } from "react";
 import { Error, Refresh } from "@mui/icons-material";
 import { notification } from "../../instances/notification";

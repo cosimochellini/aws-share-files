@@ -1,4 +1,4 @@
-import { Paper } from "@mui/material";
+import { Paper } from "../../barrel/mui.barrel";
 import { byValue, byAny } from "sort-es";
 import { useEffect, useState } from "react";
 import { ResultCount } from "./ResultCount";
@@ -6,17 +6,18 @@ import { S3Folder } from "../../classes/S3Folder";
 import { LoadingButton } from "../Data/LoadingButton";
 import { formatter } from "../../formatters/formatter";
 import { Folder as FolderIcon, Refresh } from "@mui/icons-material";
-import { useS3Folders } from "../../hooks/state/useS3Folders.state";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
-import { Avatar, IconButton, InputAdornment, ListItem } from "@mui/material";
-import { ListItemAvatar, ListItemText, TextField, List } from "@mui/material";
+import { Avatar, IconButton, InputAdornment } from "../../barrel/mui.barrel";
+import { ListItem, TextField } from "../../barrel/mui.barrel";
+import { ListItemAvatar, ListItemText, List } from "../../barrel/mui.barrel";
 import {
   FileListConfiguration,
   PagingConfiguration,
 } from "../Configurations/FileListConfiguration";
 import { useQueryString } from "../../hooks/query.hook";
 import { Nullable } from "../../types/generic";
+import { useFolderStore } from "../../store/files.store";
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
@@ -33,7 +34,8 @@ type Props = {
 let initialLoad = true;
 
 export default function Folders(props: Props) {
-  const { folders, refreshFolders } = useS3Folders();
+  const folders = useFolderStore((x) => x.folders);
+  const refreshFolders = useFolderStore((x) => x.refreshFolders);
 
   const [hoveredItem, setHoveredItem] = useState(0);
   const [search, setSearch] = useQueryString("folderSearch");
