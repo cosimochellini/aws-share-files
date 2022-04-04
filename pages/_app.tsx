@@ -2,7 +2,6 @@ import Head from "next/head";
 import "../styles/globals.css";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
-import { CssBaseline } from "../src/barrel/mui.barrel";
 import GlobalThemes from "../src/themes/index";
 import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";
@@ -10,6 +9,7 @@ import Layout from "../src/components/layouts/Layout";
 import { useDarkMode } from "../src/hooks/darkMode.hook";
 import { lazy, Suspense, useEffect, useState } from "react";
 import { Context, defaultContext } from "../src/hooks/context.hook";
+import { ThemeProvider, CssBaseline } from "../src/barrel/mui.barrel";
 import { NotificationHandler } from "../src/components/Global/NotificationHandler";
 
 const ButtonNavigation = lazy(
