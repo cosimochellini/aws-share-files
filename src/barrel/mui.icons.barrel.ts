@@ -14,7 +14,7 @@ import Folder from "@mui/icons-material/Folder";
 import Upload from "@mui/icons-material/Upload";
 import Refresh from "@mui/icons-material/Refresh";
 import Warning from "@mui/icons-material/Warning";
-import greyColor from "@mui/material/colors/grey";
+import { grey } from "@mui/material/colors";
 import MoreVert from "@mui/icons-material/MoreVert";
 import Download from "@mui/icons-material/Download";
 import Settings from "@mui/icons-material/Settings";
@@ -64,5 +64,5 @@ export {
 };
 
 export const colors = {
-  greyColor,
+  greyColor: grey,
 };
