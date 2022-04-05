@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { Snackbar, Alert } from "../../barrel/mui.barrel";
 import { notificationData, notification } from "../../instances/notification";
 
-export function NotificationHandler() {
+export default function NotificationHandler() {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({} as notificationData);
 

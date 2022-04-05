@@ -13,6 +13,7 @@ export class UnReactiveStore<T> {
     try {
       // Get from local storage by key
       const item = device.window?.localStorage.getItem(this._key);
+
       // Parse stored json or if none return initialValue
       return item ? (JSON.parse(item) as T) : this._initialValue;
     } catch (error) {

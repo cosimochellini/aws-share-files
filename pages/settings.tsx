@@ -1,10 +1,8 @@
-import { forwardRef, useEffect } from "react";
-import GlobalThemes from "../src/themes/index";
+import { forwardRef } from "react";
 import { useAuth } from "../src/hooks/auth.hook";
 import { settings } from "../src/instances/settings";
 import { formatter } from "../src/formatters/formatter";
-import { useDarkMode } from "../src/hooks/darkMode.hook";
-import { useCurrentContext } from "../src/hooks/context.hook";
+import { useThemeStore } from "../src/store/theme.store";
 import { navbarItems, Visibility } from "../src/instances/navbar";
 import { Checkbox, FormControlLabel } from "../src/barrel/mui.barrel";
 import { Grid, ListItem, ListItemIcon } from "../src/barrel/mui.barrel";
@@ -12,12 +10,9 @@ import { ListItemText, Divider, Link, List } from "../src/barrel/mui.barrel";
 
 export default function Settings() {
   const { session } = useAuth();
-  const context = useCurrentContext();
-  const [darkMode, setDarkMode] = useDarkMode();
 
-  useEffect(() => {
-    context.setTheme(darkMode ? GlobalThemes.dark : GlobalThemes.light);
-  }, [context, darkMode]);
+  const theme = useThemeStore((x) => x.dark);
+  const toggleTheme = useThemeStore((x) => x.toggleTheme);
 
   return (
     <>
@@ -52,8 +47,8 @@ export default function Settings() {
         label="Dark Mode"
         control={
           <Checkbox
-            onChange={(e) => setDarkMode(e.target.checked)}
-            checked={darkMode}
+            checked={theme}
+            onChange={(e) => toggleTheme(e.target.checked)}
           />
         }
       />

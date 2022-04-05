@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from "react";
-import { useCurrentContext } from "../context.hook";
 import { functions } from "../../instances/functions";
 import { StatusCode } from "../../types/converter.types";
 import { useFolderStore } from "../../store/files.store";
 import { useConversionsStore } from "../../store/conversions.store";
+import { useJobsStore } from "../../store/jobs.store";
 
 const state = {
   insert: false,
@@ -31,8 +31,9 @@ const state = {
 let loaded = false;
 
 export const useJobs = () => {
+  const jobs = useJobsStore((x) => x.jobs);
+  const setJobs = useJobsStore((x) => x.setJobs);
   const conversions = useConversionsStore((x) => x.conversions);
-  const { jobs, setJobs } = useCurrentContext();
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
 
   const syncConversions = useCallback(async () => {
