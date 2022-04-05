@@ -4,27 +4,26 @@ import { purgeName } from "../src/utils/purgeName";
 import { functions } from "../src/instances/functions";
 import { device } from "../src/services/device.service";
 import { VolumeInfo } from "../src/types/content.types";
+import { useThemeStore } from "../src/store/theme.store";
+import { useFolderStore } from "../src/store/files.store";
+import { MenuItem, Select } from "../src/barrel/mui.barrel";
 import { notification } from "../src/instances/notification";
 import { truncateString } from "../src/utils/truncateString";
-import { InputLabel, Grid, Typography, Card } from "../src/barrel/mui.barrel";
-import { useCurrentContext } from "../src/hooks/context.hook";
-import { Button, CardContent, FormControl } from "../src/barrel/mui.barrel";
-import { LoadingButton } from "../src/components/Data/LoadingButton";
+import { CardHeader, TextField } from "../src/barrel/mui.barrel";
 import { Book, FileUpload } from "../src/barrel/mui.icons.barrel";
 import { Person, UploadFile } from "../src/barrel/mui.icons.barrel";
-import { CardHeader, TextField } from "../src/barrel/mui.barrel";
-import { MenuItem, Select } from "../src/barrel/mui.barrel";
+import { LoadingButton } from "../src/components/Data/LoadingButton";
+import { Button, CardContent, FormControl } from "../src/barrel/mui.barrel";
+import { InputLabel, Grid, Typography, Card } from "../src/barrel/mui.barrel";
 import { bucketFallbackStrategy } from "../src/fallback/bucketFallbackStrategy";
-import { useFolderStore } from "../src/store/files.store";
 
 const fullWidth = { minWidth: { xs: "100%", sm: "90%", md: "70%", lg: "60%" } };
 const maxHeight = 48 * 4.5 + 8;
 const stringLength = device.isMobile ? 20 : 40;
 
 export default function Upload() {
-  const { theme } = useCurrentContext();
+  const theme = useThemeStore((x) => x.theme);
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
-
   const [selectedFile, setSelectedFile] = useState<Nullable<File>>();
 
   const [suggestedVolumes, setSuggestedVolumes] = useState([] as VolumeInfo[]);
