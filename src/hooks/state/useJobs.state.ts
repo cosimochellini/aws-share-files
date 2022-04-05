@@ -1,9 +1,9 @@
 import { useCallback, useEffect } from "react";
 import { functions } from "../../instances/functions";
+import { useJobsStore } from "../../store/jobs.store";
 import { StatusCode } from "../../types/converter.types";
 import { useFolderStore } from "../../store/files.store";
 import { useConversionsStore } from "../../store/conversions.store";
-import { useJobsStore } from "../../store/jobs.store";
 
 const state = {
   insert: false,
@@ -27,8 +27,7 @@ const state = {
     this.delete = false;
   },
 };
-
-let loaded = false;
+let startTimeout = false;
 
 export const useJobs = () => {
   const jobs = useJobsStore((x) => x.jobs);
@@ -36,7 +35,7 @@ export const useJobs = () => {
   const conversions = useConversionsStore((x) => x.conversions);
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
 
-  const syncConversions = useCallback(async () => {
+  const syncConversions = async () => {
     for (const job of conversions) {
       const currentJob = jobs.find((j) => j.id === job);
       const statusCode = currentJob?.status?.code;
@@ -72,24 +71,14 @@ export const useJobs = () => {
     if (state.update) refreshFolders(false);
 
     state.clear();
-  }, [conversions, jobs, refreshFolders, setJobs]);
+  };
 
   useEffect(() => {
-    if (!loaded) {
-      syncConversions();
-      loaded = true;
-    }
+    if (startTimeout) return;
 
-    const interval = setInterval(
-      (function intervalScan() {
-        syncConversions();
-        return intervalScan; //to call this function immediately
-      })(),
-      2000
-    );
-
-    return () => clearInterval(interval);
-  }, [syncConversions]);
+    setInterval(syncConversions, 2000);
+    startTimeout = true;
+  }, []);
 
   return { jobs };
 };
