@@ -11,9 +11,6 @@ export const functions = {
         files() {
             return caller<bucketTypes["getAllFiles"]>("s3/files.function");
         },
-        downloadFile(key: bucketArgs["downloadFile"]) {
-            return caller<bucketTypes["downloadFile"]>("s3/downloadFile.function", { key, });
-        },
         uploadFile(payload: bucketArgs["uploadFile"]) {
             return caller.formData<bucketTypes["uploadFile"]>("s3/uploadFile.function", payload);
         },

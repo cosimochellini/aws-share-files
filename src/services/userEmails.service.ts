@@ -1,37 +1,34 @@
 import { randomId } from "../utils/random";
-import { documentClient } from "../instances/aws";
+import { dynamoDbClient } from "../instances/aws";
 import { UserEmail } from "../types/dynamo.types";
 import { ServiceArguments, ServiceMapper } from "../types/generic";
 
 const TableName = "user-email";
 
 export const userEmails = {
-    getEmails(userEmail: string) {
-        return documentClient
-            .scan({
-                TableName,
-                FilterExpression: "sk = :e",
-                ExpressionAttributeValues: { ":e": userEmail },
-            })
-            .promise()
-            .then((x) => x.Items as UserEmail[]);
-    },
+  getEmails(userEmail: string) {
+    return dynamoDbClient
+      .scan({
+        TableName,
+        FilterExpression: "sk = :e",
+        ExpressionAttributeValues: { ":e": userEmail },
+      })
+      .then((x) => x.Items as UserEmail[]);
+  },
 
-    addEmail(item: Partial<UserEmail>) {
-        item.pk = randomId();
-        item.sk = item.user;
+  addEmail(item: Partial<UserEmail>) {
+    item.pk = randomId();
+    item.sk = item.user;
 
-        return documentClient.put({ TableName, Item: item }).promise();
-    },
+    return dynamoDbClient.put({ TableName, Item: item });
+  },
 
-    deleteEmail(item: Partial<UserEmail>) {
-        return documentClient
-            .delete({
-                TableName,
-                Key: { pk: item.pk, sk: item.sk },
-            })
-            .promise();
-    },
+  deleteEmail(item: Partial<UserEmail>) {
+    return dynamoDbClient.delete({
+      TableName,
+      Key: { pk: item.pk, sk: item.sk },
+    });
+  },
 };
 
 export type userEmailsType = ServiceMapper<typeof userEmails>;

@@ -1,6 +1,5 @@
 import { S3File } from "./S3File";
 import { FileInfo } from "./FileInfo";
-import { Object } from "aws-sdk/clients/s3";
 import { byString, byValue } from "sort-es";
 import { S3BaseContent } from "./S3BaseContent";
 

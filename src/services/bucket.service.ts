@@ -1,95 +1,85 @@
-import { s3 } from "../instances/aws";
 import { env } from "../instances/env";
+import { s3Client } from "../instances/aws";
 import { byValue, byString } from "sort-es";
 import { S3Folder } from "../classes/S3Folder";
 import { ServiceArguments, ServiceMapper } from "../types/generic";
+import {
+  PutObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsV2Command,
+} from "@aws-sdk/client-s3";
 
-export type uploadPayload = {
-    file: File | Buffer;
-    name: string;
-    author: string;
-    extension: string;
-};
+export interface UploadPayload {
+  name: string;
+  author: string;
+  extension: string;
+  file: File | Buffer;
+}
 
 export const bucket = {
-    async getAllFiles() {
-        const s3response = await s3
-            .listObjectsV2({ Bucket: env.aws.bucket })
-            .promise();
+  async getAllFiles() {
+    const command = new ListObjectsV2Command({ Bucket: env.aws.bucket });
 
-        const items = s3response.Contents ?? [];
+    const items = (await s3Client.send(command)).Contents ?? [];
 
-        return items
-            .filter((x) => x.Key?.endsWith("/"))
-            .map((item) => new S3Folder(item, items))
-            .sort(byValue((x) => x.FolderName, byString()));
-    },
+    return items
+      .filter((x) => x.Key?.endsWith("/"))
+      .map((item) => new S3Folder(item, items))
+      .sort(byValue((x) => x.FolderName, byString()));
+  },
 
-    getShareableUrl({ key, expires = 10 }: { key: string; expires?: number }) {
-        const url = s3.getSignedUrlPromise("getObject", {
-            Key: key,
-            Expires: expires,
-            Bucket: env.aws.bucket,
-        });
+  getShareableUrl({ key, expires = 10 }: { key: string; expires?: number }) {
+    return s3Client.getSignedUrl(key, expires);
+  },
 
-        return url
+  async uploadFile(payload: UploadPayload) {
+    const { file, name, author, extension } = payload;
 
-    },
+    const key = `${author}/${name}.${extension}`;
 
-    async downloadFile(key: string) {
-        const s3Object = s3.getObject({
-            Bucket: env.aws.bucket,
-            Key: key,
-        });
+    await this.createFolder(author);
 
-        return s3Object.promise()
-    },
+    const command = new PutObjectCommand({
+      Key: key,
+      Body: file,
+      Bucket: env.aws.bucket,
+    });
 
-    async uploadFile(payload: uploadPayload) {
-        const { file, name, author, extension } = payload;
+    return await s3Client.send(command);
+  },
 
-        const key = `${author}/${name}.${extension}`;
+  async createFolder(folderName: string) {
+    const exists = await this.folderExists(folderName);
 
-        await this.createFolder(author);
+    if (exists) return;
 
-        const s3Object = s3.upload({
-            Key: key,
-            Body: file,
-            Bucket: env.aws.bucket,
-        });
+    const command = new PutObjectCommand({
+      Key: `${folderName}/`,
+      Bucket: env.aws.bucket,
+    });
 
-        return s3Object.promise();
-    },
+    return await s3Client.send(command);
+  },
 
-    async createFolder(folderName: string) {
-        const exists = await this.folderExists(folderName);
+  async folderExists(folderName: string) {
+    const command = new ListObjectsV2Command({
+      Prefix: folderName,
+      Bucket: env.aws.bucket,
+    });
 
-        if (exists) return;
+    const s3response = await s3Client.send(command);
 
-        const s3Object = s3.putObject({
-            Bucket: env.aws.bucket,
-            Key: `${folderName}/`,
-        });
+    return !!s3response.Contents?.length;
+  },
 
-        await s3Object.promise();
-    },
+  deleteFile(key: string) {
+    const command = new DeleteObjectCommand({
+      Key: key,
+      Bucket: env.aws.bucket,
+    });
 
-    async folderExists(folderName: string) {
-        const s3response = await s3
-            .listObjectsV2({ Bucket: env.aws.bucket, Prefix: folderName })
-            .promise();
-
-        return !!s3response.Contents?.length;
-    },
-
-    deleteFile(key: string) {
-        const s3Object = s3.deleteObject({
-            Bucket: env.aws.bucket,
-            Key: key,
-        });
-
-        return s3Object.promise();
-    },
+    return s3Client.send(command);
+  },
 };
 
 export type bucketTypes = ServiceMapper<typeof bucket>;

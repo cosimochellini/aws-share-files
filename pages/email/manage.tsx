@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useEmailsStore } from "../../src/store/emails.store";
 import { ListItem, Grid, List } from "../../src/barrel/mui.barrel";
 import { NewUserEmail } from "../../src/components/Form/NewUserEmail";
@@ -9,8 +9,12 @@ import { ListItemText, ListItemAvatar } from "../../src/barrel/mui.barrel";
 import { FilesPlaceholders } from "../../src/components/Placeholders/FilesPlaceholders";
 
 export default function Manage() {
-  const emails = useEmailsStore((x) => x.emails);
+  const [emails, loadEmails] = useEmailsStore((x) => [x.emails, x.loadEmails]);
   const deleteEmail = useEmailsStore((x) => x.deleteEmail);
+
+  useEffect(() => {
+    loadEmails();
+  }, [loadEmails]);
 
   const [indexActive, setIndexActive] = useState(-1);
 

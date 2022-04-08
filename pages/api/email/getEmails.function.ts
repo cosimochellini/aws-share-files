@@ -8,4 +8,4 @@ export default defaultBehavior(async function (req, res, session) {
     const data = await userEmails.getEmails(email);
 
     return data;
-}, { shouldAuthenticate: true });
+}, { shouldAuthenticate: false });

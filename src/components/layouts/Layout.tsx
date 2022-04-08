@@ -1,19 +1,18 @@
 import Link from "../Link";
 import { AppProps } from "next/app";
 import { env } from "../../instances/env";
+import { Conversions } from "./Conversions";
 import { useAuth } from "../../hooks/auth.hook";
 import { useDevice } from "../../hooks/device.hook";
 import { useState, useEffect, forwardRef } from "react";
-
-import { styled } from "../../barrel/mui.barrel";
 import { navbarItems, Visibility } from "../../instances/navbar";
 
-import { Typography, List, IconButton } from "../../barrel/mui.barrel";
-import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
+import { styled } from "../../barrel/mui.barrel";
 import { Box, Drawer, ListItem } from "../../barrel/mui.barrel";
 import { CssBaseline, AppBar, Toolbar } from "../../barrel/mui.barrel";
+import { Typography, List, IconButton } from "../../barrel/mui.barrel";
 import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
-import { Conversions } from "./Conversions";
+import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
 
 const drawerWidth = 240;
 
@@ -158,6 +157,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
       {/* @ts-ignore */}
       <Main open={open}>
         <DrawerHeader />
+        {/* @ts-ignore */}
         {Component && <Component {...pageProps} />}
       </Main>
     </Box>
