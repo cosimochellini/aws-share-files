@@ -11,13 +11,13 @@ export const defaultBehavior = (
     res: BaseResponse,
     session: Session | null
   ) => unknown | Promise<unknown>,
-  options = { shouldAuthenticate: false }
+  options = { shouldAuthenticate: true }
 ) => {
   return async (req: NextApiRequest, res: BaseResponse) => {
     let currentSession: Session | null = null;
     try {
       if (options?.shouldAuthenticate) {
-        const session = await getSession({ req }).catch(console.error);
+        const session = await getSession({ req });
 
         if (!session)
           return res

@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.12.7",
+  "version": "0.12.9",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -24,7 +24,7 @@
     "formidable": "^2.0.1",
     "mitt": "^3.0.0",
     "next": "12.1.4",
-    "next-auth": "^4.3.1",
+    "next-auth": "4.1.2",
     "next-pwa": "^5.4.7",
     "nodemailer": "^6.7.3",
     "nodemailer-sendgrid": "^1.0.3",

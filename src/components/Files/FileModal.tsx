@@ -3,14 +3,15 @@ import { useEffect, useState } from "react";
 import { Nullable } from "../../types/generic";
 import { FilesAccordion } from "./FilesAccordion";
 import { FileConversion } from "./FileConversion";
-import { Card, CardContent } from "../../barrel/mui.barrel";
 import { useDevice } from "../../hooks/device.hook";
 import { functions } from "../../instances/functions";
 import { VolumeInfo } from "../../types/content.types";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { VolumeChipArray } from "../Data/VolumeChipArray";
-import { Divider, Modal, Typography } from "../../barrel/mui.barrel";
+import { useEmailsStore } from "../../store/emails.store";
 import { notification } from "../../instances/notification";
+import { Card, CardContent } from "../../barrel/mui.barrel";
+import { Divider, Modal, Typography } from "../../barrel/mui.barrel";
 import { CardHeader, Rating, Skeleton } from "../../barrel/mui.barrel";
 
 type Props = {
@@ -34,11 +35,12 @@ const style = {
 function FileModal(props: Props) {
   const { file } = props;
 
-  const { isDesktop } = useDevice();
-
   const open = !!props.file;
-
+  const { isDesktop } = useDevice();
+  const loadEmails = useEmailsStore((x) => x.loadEmails);
   const [volume, setVolume] = useState<Nullable<VolumeInfo>>();
+
+  loadEmails();
 
   useEffect(() => {
     if (!file) return;
