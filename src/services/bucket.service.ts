@@ -9,12 +9,12 @@ import {
   ListObjectsV2Command,
 } from "@aws-sdk/client-s3";
 
-export interface UploadPayload {
+export type UploadPayload = {
   name: string;
   author: string;
   extension: string;
   file: File | Buffer;
-}
+};
 
 export const bucket = {
   async getAllFiles() {
