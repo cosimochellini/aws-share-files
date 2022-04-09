@@ -14,4 +14,4 @@ export default defaultBehavior(async function (req, res, session) {
 
     return data;
 
-}, { shouldAuthenticate: true });
+});

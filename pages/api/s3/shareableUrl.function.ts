@@ -8,4 +8,4 @@ export default defaultBehavior(async (req) => {
         key: key as string,
         expires: parseInt((expires ?? "10") as string),
     });
-}, { shouldAuthenticate: true });
+});

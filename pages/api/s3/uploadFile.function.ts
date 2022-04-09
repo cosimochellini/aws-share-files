@@ -3,16 +3,16 @@ import { defaultBehavior } from "../../../src/utils/api/composable";
 import { bucket, UploadPayload } from "../../../src/services/bucket.service";
 
 export default defaultBehavior(async function (req) {
-    const { body, getFile } = await fileHandler<UploadPayload>(req);
+  const { body, getFile } = await fileHandler<UploadPayload>(req);
 
-    const file = await getFile();
-    const data = await bucket.uploadFile({ ...body, file });
+  const file = await getFile();
+  const data = await bucket.uploadFile({ ...body, file });
 
-    return data;
-}, { shouldAuthenticate: true });
+  return data;
+});
 
 export const config = {
-    api: {
-        bodyParser: false, // Disallow body parsing, consume as stream
-    },
+  api: {
+    bodyParser: false, // Disallow body parsing, consume as stream
+  },
 };

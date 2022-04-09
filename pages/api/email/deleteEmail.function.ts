@@ -8,4 +8,4 @@ export default defaultBehavior(async function (req) {
     const data = await userEmails.deleteEmail(item as UserEmail);
 
     return data;
-}, { shouldAuthenticate: true });
+});
