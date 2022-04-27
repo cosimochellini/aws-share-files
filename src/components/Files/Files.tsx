@@ -20,7 +20,7 @@ import {
 } from "../Configurations/FileListConfiguration";
 
 export type Props = {
-  fileKey: string;
+  fileKey: Nullable<string>;
   fileGroup: Nullable<S3FileGroup>;
   currentFolder: Nullable<S3Folder>;
   onClearFolder?: () => void;
