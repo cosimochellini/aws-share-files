@@ -8,7 +8,10 @@ import { MuiLinkProps, MuiLink, styled } from "../barrel/mui.barrel";
 const Anchor = styled("a")({});
 
 interface NextLinkComposedProps
-  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, "href">,
+  extends Omit<
+      React.AnchorHTMLAttributes<HTMLAnchorElement>,
+      keyof Omit<NextLinkProps, "as">
+    >,
     Omit<NextLinkProps, "href" | "as"> {
   to: NextLinkProps["href"];
   linkAs?: NextLinkProps["as"];
