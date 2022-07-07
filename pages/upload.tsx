@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { Nullable } from "../src/types/generic";
 import { purgeName } from "../src/utils/purgeName";
 import { functions } from "../src/instances/functions";
@@ -16,6 +16,7 @@ import { LoadingButton } from "../src/components/Data/LoadingButton";
 import { Button, CardContent, FormControl } from "../src/barrel/mui.barrel";
 import { InputLabel, Grid, Typography, Card } from "../src/barrel/mui.barrel";
 import { bucketFallbackStrategy } from "../src/fallback/bucketFallbackStrategy";
+import type { SelectChangeEvent } from "@mui/material";
 
 const fullWidth = { minWidth: { xs: "100%", sm: "90%", md: "70%", lg: "60%" } };
 const maxHeight = 48 * 4.5 + 8;
@@ -36,6 +37,15 @@ export default function Upload() {
     const file = event?.files?.[0];
 
     setSelectedFile(file);
+
+    if (file) {
+      const purgedName = purgeName(file.name);
+
+      functions.content
+        .findAllContent(purgedName)
+        .then((volumes) => setSuggestedVolumes(volumes))
+        .catch(notification.error);
+    }
   };
 
   const uploadFile = async () => {
@@ -56,25 +66,16 @@ export default function Upload() {
 
     await refreshFolders(true);
   };
+  const suggestionSelectHandler = (e: SelectChangeEvent<number>) => {
+    const ix = e.target.value as number;
+    const volume = suggestedVolumes[ix];
+    const title = volume.title;
+    const author = volume.authors?.[0];
 
-  useEffect(() => {
-    const currentVolume = suggestedVolumes[selectedVolumeIx];
-    if (currentVolume) {
-      setFileTitle(currentVolume.title);
-      setFileAuthor(currentVolume.authors?.[0] ?? "");
-    }
-  }, [selectedVolumeIx, suggestedVolumes]);
-
-  useEffect(() => {
-    if (selectedFile) {
-      const purgedName = purgeName(selectedFile.name);
-
-      functions.content
-        .findAllContent(purgedName)
-        .then((volumes) => setSuggestedVolumes(volumes))
-        .catch(notification.error);
-    }
-  }, [selectedFile]);
+    setSelectedVolumeIx(ix);
+    if (title) setFileTitle(title);
+    if (author) setFileAuthor(author);
+  };
 
   return (
     <div>
@@ -116,9 +117,7 @@ export default function Upload() {
                             value={selectedVolumeIx}
                             label="Available suggestions"
                             labelId="suggestions"
-                            onChange={(e) =>
-                              setSelectedVolumeIx(e.target.value as number)
-                            }
+                            onChange={suggestionSelectHandler}
                             MenuProps={{
                               PaperProps: { style: { maxHeight, width: 250 } },
                             }}

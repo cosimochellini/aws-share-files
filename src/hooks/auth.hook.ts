@@ -1,34 +1,38 @@
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 export const loginPath = "/api/auth/signin";
 
 export const useAuth = () => {
-    const router = useRouter()
+  const router = useRouter();
 
-    const onUnauthenticated = useCallback(() => {
-        if (router.pathname === loginPath) return;
+  const onUnauthenticated = useCallback(() => {
+    if (router.pathname === loginPath) return;
 
-        router.push(loginPath)
-    }, [router])
+    router.push(loginPath);
+  }, [router]);
 
-    const { data: session, status } = useSession({ onUnauthenticated, required: true });
+  const { data: session, status } = useSession({
+    onUnauthenticated,
+    required: true,
+  });
 
-    const [authenticated, setAuthenticated] = useState(true)
+  const authenticated = useMemo(() => {
+    if (status === "loading") return true;
 
-    useEffect(() => {
-        if (status === "loading") return;
+    return session?.user?.email;
+  }, [session?.user?.email, status]);
 
-        if (!session?.user?.email) {
-            onUnauthenticated()
-            setAuthenticated(false)
-            return;
-        }
+  useEffect(() => {
+    if (status === "loading") return;
 
-        setAuthenticated(!!session?.user?.email)
+    if (!session?.user?.email) {
+      onUnauthenticated();
 
-    }, [onUnauthenticated, session?.user?.email, status])
+      return;
+    }
+  }, [onUnauthenticated, session?.user?.email, status]);
 
-    return { authenticated, session, onUnauthenticated }
-}
+  return { authenticated, session, onUnauthenticated };
+};

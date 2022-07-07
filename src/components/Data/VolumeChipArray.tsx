@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useMemo } from "react";
 import { formatter } from "../../formatters/formatter";
 import { VolumeInfo } from "../../types/content.types";
 import { Chip, ChipProps, Grid } from "../../barrel/mui.barrel";
@@ -57,11 +57,7 @@ const chipsFactory = (volume: VolumeInfo) => {
 export function VolumeChipArray(props: Props) {
   const { volume } = props;
 
-  const [chips, setChips] = useState(() => chipsFactory(volume));
-
-  useEffect(() => {
-    setChips(chipsFactory(volume));
-  }, [volume]);
+  const chips = useMemo(() => chipsFactory(volume), [volume]);
 
   return (
     <Grid

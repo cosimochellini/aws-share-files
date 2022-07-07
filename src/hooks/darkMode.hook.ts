@@ -1,5 +1,5 @@
+import { useState } from "react";
 import { useDevice } from "./device.hook";
-import { useEffect, useState } from "react";
 import { useLocalStorage } from "../hooks/localStorage.hook";
 
 export const useDarkMode = () => {
@@ -7,14 +7,11 @@ export const useDarkMode = () => {
 
   const [darkMode, setDarkMode] = useState(true);
 
-  const [isDarkMode, setIsDarkMode] = useLocalStorage(
-    "DARK_MODE",
-    device.isDarkMode
-  );
+  const [, setIsDarkMode] = useLocalStorage("DARK_MODE", device.isDarkMode);
 
-  useEffect(() => {
-    setDarkMode(isDarkMode);
-  }, [isDarkMode]);
-
-  return [darkMode, setIsDarkMode] as const;
+  const publicSetDarkMode = (value: boolean) => {
+    setDarkMode(value);
+    setIsDarkMode(value);
+  };
+  return [darkMode, publicSetDarkMode] as const;
 };

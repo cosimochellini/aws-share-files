@@ -1,12 +1,16 @@
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { Nullable } from "../../types/generic";
-import { UserEmail } from "../../types/dynamo.types";
 import { functions } from "../../instances/functions";
 import { LoadingButton } from "../Data/LoadingButton";
 import { notification } from "../../instances/notification";
-import { Mail, Send, Star } from '../../barrel/mui.icons.barrel';
+import { Mail, Send, Star } from "../../barrel/mui.icons.barrel";
 import { Grid, List, ListItem, ListItemText } from "../../barrel/mui.barrel";
-import { Menu, MenuItem, Typography, ListItemIcon } from "../../barrel/mui.barrel";
+import {
+  Menu,
+  MenuItem,
+  Typography,
+  ListItemIcon,
+} from "../../barrel/mui.barrel";
 import { useEmailsStore } from "../../store/emails.store";
 
 type Props = {
@@ -19,13 +23,12 @@ export function SendFileViaEmail(props: Props) {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<Nullable<number>>();
-  const [selectedEmail, setSelectedEmail] = useState<Nullable<UserEmail>>();
+  const selectedEmail = useMemo(
+    () => emails?.[selectedIndex ?? 0],
+    [emails, selectedIndex]
+  );
 
   const open = Boolean(anchorEl);
-
-  useEffect(() => {
-    setSelectedEmail(emails?.[selectedIndex ?? 0]);
-  }, [emails, selectedEmail, selectedIndex]);
 
   const sendFile = async (event: React.SyntheticEvent) => {
     event.preventDefault();

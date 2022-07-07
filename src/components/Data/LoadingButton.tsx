@@ -1,5 +1,5 @@
 import { Nullable } from "../../types/generic";
-import React, { useEffect, useState } from "react";
+import React, { useMemo, useState } from "react";
 import { notification } from "../../instances/notification";
 import { Button, ButtonProps } from "../../barrel/mui.barrel";
 import { Error, Refresh } from "../../barrel/mui.icons.barrel";
@@ -19,31 +19,35 @@ export function LoadingButton(props: Props) {
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
-  const [color, setColor] = useState(
-    props.buttonProps?.color ?? props.iconProps?.color ?? "primary"
-  );
-  const [disabled, setDisabled] = useState(false);
-  const [currentIcon, setCurrentIcon] = useState(props.icon);
 
-  useEffect(() => {
-    if (error) {
-      setColor("error");
-      setCurrentIcon(<Error />);
-      setDisabled(false);
-      return;
-    }
+  const color = useMemo(() => {
+    if (loading) return "info";
 
-    if (loading) {
-      setColor("info");
-      setCurrentIcon(<Refresh className="spin" />);
-      setDisabled(true);
-      return;
-    }
+    if (error) return "error";
 
-    setColor("primary");
-    setCurrentIcon(props.icon);
-    setDisabled(false);
-  }, [error, loading, props.icon]);
+    return props.buttonProps?.color ?? props.iconProps?.color ?? "primary";
+  }, [loading, error, props.buttonProps?.color, props.iconProps?.color]);
+
+  const currentIcon = useMemo(() => {
+    if (loading) return <Refresh className="spin" />;
+
+    if (error) return <Error />;
+
+    return props.icon;
+  }, [loading, error, props.icon]);
+
+  const disabled = useMemo(() => {
+    if (loading) return true;
+
+    if (error) return false;
+
+    return false;
+  }, [loading, error]);
+
+  const handleError = (error: unknown) => {
+    notification.error(error);
+    setError(error);
+  };
 
   const handleClick = async (e: React.SyntheticEvent) => {
     if (loading) return;
@@ -52,10 +56,7 @@ export function LoadingButton(props: Props) {
 
     await props
       .clickAction(e)
-      .catch((e) => {
-        notification.error(e);
-        setError(e);
-      })
+      .catch(handleError)
       .finally(() => setLoading(false));
   };
 

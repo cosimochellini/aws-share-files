@@ -1,20 +1,20 @@
 import { env } from "./env";
 import nodemailer from "nodemailer";
 import { notification } from "./notification";
-import sgTransport from "nodemailer-sendgrid";
 
 const { email } = env;
 
-const transporter = nodemailer.createTransport(sgTransport({ apiKey: env.sendgrid.apiKey }));
+// const transporter = nodemailer.createTransport(
+//   sgTransport({ apiKey: env.sendgrid.apiKey })
+// );
 
 // const transporter = nodemailer.createTransport({ SES: sesClient });
+const transporter = nodemailer.createTransport(email);
 
 try {
-
-    transporter.verify?.()?.catch?.(console.error);
+  transporter.verify?.()?.catch?.(notification.error);
 } catch (error) {
-    console.error(error);
-
+  console.error(error);
 }
 
 export { transporter };

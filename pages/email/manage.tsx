@@ -12,9 +12,7 @@ export default function Manage() {
   const [emails, loadEmails] = useEmailsStore((x) => [x.emails, x.loadEmails]);
   const deleteEmail = useEmailsStore((x) => x.deleteEmail);
 
-  useEffect(() => {
-    loadEmails();
-  }, [loadEmails]);
+  loadEmails();
 
   const [indexActive, setIndexActive] = useState(-1);
 

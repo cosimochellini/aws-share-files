@@ -1,17 +1,17 @@
-import { useEffect } from "react";
 import { useRouter } from "next/router";
 import { signOut } from "next-auth/react";
 import { useAuth } from "../src/hooks/auth.hook";
+import { useEffectOnce } from "../src/hooks";
 
 export default function Logout() {
   const router = useRouter();
   const { onUnauthenticated } = useAuth();
 
-  useEffect(() => {
+  useEffectOnce(() => {
     signOut({}).then(() => router.push("/"));
 
     onUnauthenticated();
-  }, [onUnauthenticated, router]);
+  });
 
   return (
     <>

@@ -1,4 +1,3 @@
-import { useCallback, useEffect } from "react";
 import { functions } from "../../instances/functions";
 import { useJobsStore } from "../../store/jobs.store";
 import { StatusCode } from "../../types/converter.types";
@@ -74,13 +73,6 @@ export const useJobs = () => {
 
     state.clear();
   };
-
-  useEffect(() => {
-    if (startTimeout) return;
-
-    setInterval(syncConversions, 2000);
-    startTimeout = true;
-  }, []);
 
   return { jobs };
 };
