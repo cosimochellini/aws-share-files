@@ -52,7 +52,14 @@ export function Files(props: Props) {
 
   loadFolders();
 
-  const handleSelectedFile = (index: number) => {};
+  const handleSelectedFile = (index: number) => {
+    const file = displayedItems[index];
+
+    props.onSearch?.(file);
+
+    props.setFileKey(file?.Key ?? "");
+    setSelectedIndex(index);
+  };
 
   const displayedItems = useMemo(() => {
     setSelectedIndex(0);
@@ -79,12 +86,7 @@ export function Files(props: Props) {
       const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
 
       if (index < 0) return;
-      const file = displayedItems[index];
-
-      props.onSearch?.(file);
-
-      props.setFileKey(file?.Key ?? "");
-      setSelectedIndex(index);
+      handleSelectedFile(index);
     }
   });
 

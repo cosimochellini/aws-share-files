@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.13.3",
+  "version": "0.13.4",
   "private": false,
   "license": "MIT",
   "scripts": {

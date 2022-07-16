@@ -1,8 +1,8 @@
 import Head from "next/head";
 import "../styles/globals.css";
-import { fireOnce } from "../src/hooks";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
+import {  useEffectOnce } from "../src/hooks";
 import { lazy, Suspense, useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";
@@ -27,7 +27,7 @@ const AppGrid = (props: AppProps) => {
 
   const [currentTheme, setCurrentTheme] = useState(theme.dark);
 
-  fireOnce(() => setCurrentTheme(themeStore.theme));
+  useEffectOnce(() => setCurrentTheme(themeStore.theme));
 
   return (
     <>
