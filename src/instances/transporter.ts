@@ -4,10 +4,6 @@ import { notification } from "./notification";
 
 const { email } = env;
 
-// const transporter = nodemailer.createTransport(
-//   sgTransport({ apiKey: env.sendgrid.apiKey })
-// );
-
 // const transporter = nodemailer.createTransport({ SES: sesClient });
 const transporter = nodemailer.createTransport(email);
 

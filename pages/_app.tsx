@@ -1,11 +1,12 @@
 import Head from "next/head";
 import "../styles/globals.css";
+import { fireOnce } from "../src/hooks";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
+import { lazy, Suspense, useState } from "react";
 import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";
 import Layout from "../src/components/layouts/Layout";
-import { lazy, Suspense, useEffect, useState } from "react";
 import { theme, useThemeStore } from "../src/store/theme.store";
 import { ThemeProvider, CssBaseline } from "../src/barrel/mui.barrel";
 import NotificationHandler from "../src/components/Global/NotificationHandler";
@@ -26,9 +27,7 @@ const AppGrid = (props: AppProps) => {
 
   const [currentTheme, setCurrentTheme] = useState(theme.dark);
 
-  useEffect(() => {
-    setCurrentTheme(themeStore.theme);
-  }, [themeStore.theme]);
+  fireOnce(() => setCurrentTheme(themeStore.theme));
 
   return (
     <>

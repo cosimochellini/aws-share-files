@@ -13,7 +13,7 @@ export const email = {
 
         const ret = await transporter.sendMail({
             to,
-            from: env.sendgrid.email,
+            from: env.email.signature,
             subject: "New file sent ✔", // Subject line
             html: `<b> You've received a new file from ${env.info.appTitle}, enjoy! </b>`, // html body
             attachments: [

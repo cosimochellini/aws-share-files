@@ -1,4 +1,5 @@
 import { byAny, byValue } from "sort-es";
+import { useMemo, useState } from "react";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
@@ -6,7 +7,6 @@ import { Chip, Paper } from "../../barrel/mui.barrel";
 import { LoadingButton } from "../Data/LoadingButton";
 import { useQueryString } from "../../hooks/query.hook";
 import { S3FileGroup } from "../../classes/S3FileGroup";
-import { useCallback, useEffect, useState } from "react";
 import { useFolderStore } from "../../store/files.store";
 import { ListItem, ListItemAvatar } from "../../barrel/mui.barrel";
 import { AutoStories, Refresh } from "../../barrel/mui.icons.barrel";
@@ -34,19 +34,17 @@ const defaultConfiguration = {
   orderBy: "FileName",
 } as PagingConfiguration<S3FileGroup>;
 
-let initialLoad = true;
-
 export function Files(props: Props) {
   const { currentFolder } = props;
   const folders = useFolderStore((x) => x.folders);
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
   const loadFolders = useFolderStore((x) => x.loadFolders);
+  const subScribeOnDataLoaded = useFolderStore((x) => x.subscribeOnDataLoaded);
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [search, setSearch] = useQueryString("fileSearch");
 
   const [configuration, setConfiguration] = useState(defaultConfiguration);
-  const [displayedItems, setDisplayedItems] = useState([] as S3FileGroup[]);
 
   const handleDeleteAuthor = () => {
     props.onClearFolder?.();
@@ -54,32 +52,12 @@ export function Files(props: Props) {
 
   loadFolders();
 
-  const handleSelectedFile = useCallback(
-    (index: number) => {
-      const file = displayedItems[index];
+  const handleSelectedFile = (index: number) => {};
 
-      props.onSearch?.(file);
-
-      props.setFileKey(file?.Key ?? "");
-      setSelectedIndex(index);
-    },
-    [displayedItems, props]
-  );
-
-  useEffect(() => {
-    if (props.fileKey && initialLoad) {
-      const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
-
-      if (index < 0) return;
-      handleSelectedFile(index);
-      initialLoad = false;
-    }
-  }, [displayedItems, props, handleSelectedFile]);
-
-  useEffect(() => {
+  const displayedItems = useMemo(() => {
     setSelectedIndex(0);
 
-    let items = (folders ?? []).flatMap((item) => item.Files);
+    let items = folders?.flatMap((item) => item.Files) ?? [];
 
     if (search) {
       const searchLower = search.trim().toLowerCase();
@@ -93,8 +71,22 @@ export function Files(props: Props) {
 
     const { orderBy, orderDesc: desc } = configuration;
 
-    setDisplayedItems(items.sort(byValue(orderBy as any, byAny({ desc }))));
-  }, [search, folders, currentFolder, configuration, setSelectedIndex]);
+    return items.sort(byValue(orderBy as "Key", byAny({ desc })));
+  }, [search, folders, currentFolder, configuration]);
+
+  subScribeOnDataLoaded(() => {
+    if (props.fileKey) {
+      const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
+
+      if (index < 0) return;
+      const file = displayedItems[index];
+
+      props.onSearch?.(file);
+
+      props.setFileKey(file?.Key ?? "");
+      setSelectedIndex(index);
+    }
+  });
 
   return (
     <>

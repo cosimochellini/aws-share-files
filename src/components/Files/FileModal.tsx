@@ -1,15 +1,12 @@
 import { ReadMore } from "../Text/ReadMore";
-import { useEffect, useState } from "react";
 import { Nullable } from "../../types/generic";
 import { FilesAccordion } from "./FilesAccordion";
 import { FileConversion } from "./FileConversion";
 import { useDevice } from "../../hooks/device.hook";
-import { functions } from "../../instances/functions";
-import { VolumeInfo } from "../../types/content.types";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { VolumeChipArray } from "../Data/VolumeChipArray";
 import { useEmailsStore } from "../../store/emails.store";
-import { notification } from "../../instances/notification";
+import { useVolumesStore } from "../../store/volumes.store";
 import { Card, CardContent } from "../../barrel/mui.barrel";
 import { Divider, Modal, Typography } from "../../barrel/mui.barrel";
 import { CardHeader, Rating, Skeleton } from "../../barrel/mui.barrel";
@@ -38,18 +35,11 @@ function FileModal(props: Props) {
   const open = !!props.file;
   const { isDesktop } = useDevice();
   const loadEmails = useEmailsStore((x) => x.loadEmails);
-  const [volume, setVolume] = useState<Nullable<VolumeInfo>>();
+  const [volume, setVolume] = useVolumesStore((x) => [x.volume, x.getVolume]);
 
   loadEmails();
 
-  useEffect(() => {
-    if (!file) return;
-
-    functions.content
-      .findFirst(`${file.FileInfo.Name}, ${file.Hierarchy[0]}`)
-      .then((v) => setVolume(v))
-      .catch(notification.error);
-  }, [file]);
+  if (file) setVolume(`${file.FileInfo.Name}, ${file.Hierarchy[0]}`);
 
   const handleClose = () => {
     props.onClose();

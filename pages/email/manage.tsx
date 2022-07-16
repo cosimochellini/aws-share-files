@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useEmailsStore } from "../../src/store/emails.store";
 import { ListItem, Grid, List } from "../../src/barrel/mui.barrel";
 import { NewUserEmail } from "../../src/components/Form/NewUserEmail";
@@ -7,14 +7,14 @@ import { Email, Star, Delete } from "../../src/barrel/mui.icons.barrel";
 import { Divider, Typography, Avatar } from "../../src/barrel/mui.barrel";
 import { ListItemText, ListItemAvatar } from "../../src/barrel/mui.barrel";
 import { FilesPlaceholders } from "../../src/components/Placeholders/FilesPlaceholders";
+import { fireOnce } from "../../src/hooks";
 
 export default function Manage() {
-  const [emails, loadEmails] = useEmailsStore((x) => [x.emails, x.loadEmails]);
-  const deleteEmail = useEmailsStore((x) => x.deleteEmail);
-
-  loadEmails();
-
   const [indexActive, setIndexActive] = useState(-1);
+  const deleteEmail = useEmailsStore((x) => x.deleteEmail);
+  const [emails, loadEmails] = useEmailsStore((x) => [x.emails, x.loadEmails]);
+
+  fireOnce(loadEmails);
 
   return (
     <>

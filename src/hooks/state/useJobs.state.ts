@@ -36,8 +36,6 @@ const statusToSkip = [
   StatusCode.failed,
 ] as Nullable<StatusCode>[];
 
-let startTimeout = false;
-
 export const useJobs = () => {
   const jobs = useJobsStore((x) => x.jobs);
   const setJobs = useJobsStore((x) => x.setJobs);

@@ -35,3 +35,13 @@ export const useEffectOnce = (effect: () => void | (() => void)) => {
     };
   }, []);
 };
+
+export const fireOnce = (fn: () => unknown) => {
+  let called = false;
+  return () => {
+    if (!called) {
+      called = true;
+      fn();
+    }
+  };
+};
