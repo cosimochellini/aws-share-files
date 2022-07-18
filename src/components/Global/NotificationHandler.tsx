@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEffectOnce } from "../../hooks";
 import { Snackbar, Alert } from "../../barrel/mui.barrel";
 import { notificationData, notification } from "../../instances/notification";
 
@@ -10,12 +11,12 @@ export default function NotificationHandler() {
     setOpen(false);
   };
 
-  useEffect(() => {
+  useEffectOnce(() => {
     notification.onShow((data) => {
       setData(data);
       setOpen(true);
     });
-  }, []);
+  });
 
   return (
     <div>

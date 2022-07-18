@@ -41,7 +41,6 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
     const dark = theme.palette.mode === "dark";
 
     set({ theme, dark });
-    console.log("checkTheme", { dark });
 
     storage.set(dark);
   },

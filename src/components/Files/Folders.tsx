@@ -1,5 +1,5 @@
 import { byValue, byAny } from "sort-es";
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { Paper } from "../../barrel/mui.barrel";
@@ -31,15 +31,13 @@ type Props = {
   onSearch: (query: S3Folder) => void;
 };
 
-let initialLoad = true;
-
 export default function Folders(props: Props) {
   const folders = useFolderStore((x) => x.folders);
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
+  const subScribeOnDataLoaded = useFolderStore((x) => x.subscribeOnDataLoaded);
 
   const [hoveredItem, setHoveredItem] = useState(0);
   const [search, setSearch] = useQueryString("folderSearch");
-  const [displayedItems, setDisplayedItems] = useState([] as S3Folder[]);
   const [configuration, setConfiguration] = useState(defaultConfiguration);
 
   const handleCLick = (index: number) => {
@@ -48,7 +46,7 @@ export default function Folders(props: Props) {
     props.setFolderKey(folder?.Key ?? "");
   };
 
-  useEffect(() => {
+  const displayedItems = useMemo(() => {
     let items = [...(folders ?? [])];
 
     if (search) {
@@ -60,11 +58,11 @@ export default function Folders(props: Props) {
     }
     const { orderBy, orderDesc: desc } = configuration;
 
-    setDisplayedItems(items.sort(byValue(orderBy as any, byAny({ desc }))));
+    return items.sort(byValue(orderBy as any, byAny({ desc })));
   }, [search, folders, configuration]);
 
-  useEffect(() => {
-    if (props.folderKey && initialLoad) {
+  subScribeOnDataLoaded(() => {
+    if (props.folderKey) {
       const index = displayedItems.findIndex((i) => i.Key === props.folderKey);
 
       if (index < 0) return;
@@ -72,10 +70,8 @@ export default function Folders(props: Props) {
       const folder = displayedItems[index];
 
       props.onSearch(folder);
-
-      initialLoad = false;
     }
-  }, [displayedItems, props]);
+  });
 
   return (
     <>

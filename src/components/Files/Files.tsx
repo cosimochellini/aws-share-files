@@ -37,8 +37,8 @@ const defaultConfiguration = {
 export function Files(props: Props) {
   const { currentFolder } = props;
   const folders = useFolderStore((x) => x.folders);
-  const refreshFolders = useFolderStore((x) => x.refreshFolders);
   const loadFolders = useFolderStore((x) => x.loadFolders);
+  const refreshFolders = useFolderStore((x) => x.refreshFolders);
   const subScribeOnDataLoaded = useFolderStore((x) => x.subscribeOnDataLoaded);
 
   const [selectedIndex, setSelectedIndex] = useState(0);

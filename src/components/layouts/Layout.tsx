@@ -13,6 +13,7 @@ import { Typography, List, IconButton } from "../../barrel/mui.barrel";
 import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
 import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
 import { useEffectOnce } from "../../hooks";
+import { useAuth } from "../../hooks/auth.hook";
 
 const drawerWidth = 240;
 
@@ -65,6 +66,7 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
   const { isMobile, hasWidth } = useDevice();
+  const {} = useAuth();
   const [open, setOpen] = useState(false);
 
   useEffectOnce(() => {
