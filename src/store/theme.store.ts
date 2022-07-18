@@ -4,20 +4,22 @@ import { createTheme } from "../barrel/mui.barrel";
 import { UnReactiveStore } from "../classes/UnReactiveStore";
 
 export const theme = {
+  _dark: null as Theme | null,
   get dark() {
-    return createTheme({
+    return (this._dark ??= createTheme({
       palette: {
         mode: "dark",
       },
-    });
+    }));
   },
 
+  _light: null as Theme | null,
   get light() {
-    return createTheme({
+    return (this._light ??= createTheme({
       palette: {
         mode: "light",
       },
-    });
+    }));
   },
 };
 
@@ -27,31 +29,30 @@ interface ThemeState {
   dark: boolean;
   theme: Theme;
   setTheme: (theme: Theme) => void;
-  toggleTheme: (dark: boolean) => void;
+  toggleTheme: () => void;
+  checkTheme: () => void;
 }
 
-const initialDark = storage.value;
-
 export const useThemeStore = create<ThemeState>((set, get) => ({
-  dark: initialDark,
-  theme: initialDark ? theme.dark : theme.light,
+  dark: storage.value,
+  theme: theme.dark,
 
-  setTheme: (theme: Theme) => {
+  setTheme(theme) {
     const dark = theme.palette.mode === "dark";
 
     set({ theme, dark });
+    console.log("checkTheme", { dark });
 
     storage.set(dark);
   },
 
-  toggleTheme: (dark: boolean) => {
-    const { setTheme } = get();
-    setTheme(dark ? theme.dark : theme.light);
+  toggleTheme() {
+    const { setTheme, dark } = get();
+    setTheme(dark ? theme.light : theme.dark);
   },
 
-  checkTheme: () => {
-    const { toggleTheme } = get();
-
-    toggleTheme(storage.value);
+  checkTheme() {
+    const { setTheme } = get();
+    setTheme(storage.value ? theme.dark : theme.light);
   },
 }));

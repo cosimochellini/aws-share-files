@@ -1,7 +1,7 @@
 import Link from "../Link";
 import { styled } from "../../barrel/mui.barrel";
 import { useRouter } from "next/router";
-import { forwardRef, useEffect, useState } from "react";
+import { forwardRef, useMemo, useState } from "react";
 import { navbarItems, Visibility } from "../../instances/navbar";
 import {
   BottomNavigation,
@@ -11,15 +11,13 @@ import {
 
 export default function ButtonNavigation() {
   const router = useRouter();
-  const [value, setValue] = useState(0);
-
-  useEffect(() => {
+  const currentRoute = useMemo(() => {
     const { pathname } = router;
 
     const index =
       navbarItems.findIndex((item) => item.redirect === pathname) ?? 0;
 
-    setValue(index);
+    return index;
   }, [router]);
 
   const BottomDiv = styled("div")({
@@ -33,11 +31,7 @@ export default function ButtonNavigation() {
         sx={{ position: "fixed", bottom: 0, left: 0, right: 0 }}
         variant="outlined"
       >
-        <BottomNavigation
-          showLabels
-          value={value}
-          onChange={(_, newValue) => setValue(newValue)}
-        >
+        <BottomNavigation showLabels value={currentRoute}>
           {navbarItems
             .filter((x) =>
               [Visibility.All, Visibility.BottomBar].includes(x.visibility)

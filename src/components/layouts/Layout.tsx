@@ -2,9 +2,8 @@ import Link from "../Link";
 import { AppProps } from "next/app";
 import { env } from "../../instances/env";
 import { Conversions } from "./Conversions";
-import { useAuth } from "../../hooks/auth.hook";
+import { useState, forwardRef } from "react";
 import { useDevice } from "../../hooks/device.hook";
-import { useState, useEffect, forwardRef } from "react";
 import { navbarItems, Visibility } from "../../instances/navbar";
 
 import { styled } from "../../barrel/mui.barrel";
@@ -13,6 +12,7 @@ import { CssBaseline, AppBar, Toolbar } from "../../barrel/mui.barrel";
 import { Typography, List, IconButton } from "../../barrel/mui.barrel";
 import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
 import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
+import { useEffectOnce } from "../../hooks";
 
 const drawerWidth = 240;
 
@@ -64,13 +64,12 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
-  const {} = useAuth();
-  const [open, setOpen] = useState(false);
   const { isMobile, hasWidth } = useDevice();
+  const [open, setOpen] = useState(false);
 
-  useEffect(() => {
+  useEffectOnce(() => {
     setOpen(!isMobile && hasWidth(1200));
-  }, [isMobile, hasWidth]);
+  });
 
   const handleDrawerOpen = () => setOpen(true);
 

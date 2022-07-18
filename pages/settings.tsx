@@ -11,8 +11,11 @@ import { ListItemText, Divider, Link, List } from "../src/barrel/mui.barrel";
 export default function Settings() {
   const { session } = useAuth();
 
-  const theme = useThemeStore((x) => x.dark);
-  const toggleTheme = useThemeStore((x) => x.toggleTheme);
+  const [dark, theme, toggleTheme] = useThemeStore((x) => [
+    x.dark,
+    x.theme,
+    x.toggleTheme,
+  ]);
 
   return (
     <>
@@ -45,12 +48,7 @@ export default function Settings() {
 
       <FormControlLabel
         label="Dark Mode"
-        control={
-          <Checkbox
-            checked={theme}
-            onChange={(e) => toggleTheme(e.target.checked)}
-          />
-        }
+        control={<Checkbox checked={dark} onChange={toggleTheme} key={theme.palette.mode} />}
       />
       <Grid
         container
