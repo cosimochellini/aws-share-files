@@ -1,5 +1,6 @@
 import { byAny, byValue } from "sort-es";
 import { useMemo, useState } from "react";
+import { useOnce } from "../../hooks/once";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
@@ -8,15 +9,15 @@ import { LoadingButton } from "../Data/LoadingButton";
 import { useQueryString } from "../../hooks/query.hook";
 import { S3FileGroup } from "../../classes/S3FileGroup";
 import { useFolderStore } from "../../store/files.store";
+import { Avatar, InputAdornment } from "../../barrel/mui.barrel";
 import { ListItem, ListItemAvatar } from "../../barrel/mui.barrel";
 import { AutoStories, Refresh } from "../../barrel/mui.icons.barrel";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { ListItemText, TextField, List } from "../../barrel/mui.barrel";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
-import { Avatar, IconButton, InputAdornment } from "../../barrel/mui.barrel";
 import {
-  FileListConfiguration,
   PagingConfiguration,
+  FileListConfiguration,
 } from "../Configurations/FileListConfiguration";
 
 export type Props = {
@@ -36,21 +37,16 @@ const defaultConfiguration = {
 
 export function Files(props: Props) {
   const { currentFolder } = props;
-  const folders = useFolderStore((x) => x.folders);
-  const loadFolders = useFolderStore((x) => x.loadFolders);
-  const refreshFolders = useFolderStore((x) => x.refreshFolders);
-  const subScribeOnDataLoaded = useFolderStore((x) => x.subscribeOnDataLoaded);
-
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [search, setSearch] = useQueryString("fileSearch");
-
+  const { folders, loadFolders, refreshFolders } = useFolderStore();
   const [configuration, setConfiguration] = useState(defaultConfiguration);
 
   const handleDeleteAuthor = () => {
     props.onClearFolder?.();
   };
 
-  loadFolders();
+  useOnce(loadFolders);
 
   const handleSelectedFile = (index: number) => {
     const file = displayedItems[index];
@@ -81,14 +77,17 @@ export function Files(props: Props) {
     return items.sort(byValue(orderBy as "Key", byAny({ desc })));
   }, [search, folders, currentFolder, configuration]);
 
-  subScribeOnDataLoaded(() => {
-    if (props.fileKey) {
-      const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
+  useOnce(
+    () => {
+      if (props.fileKey && displayedItems?.length) {
+        const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
 
-      if (index < 0) return;
-      handleSelectedFile(index);
-    }
-  });
+        if (index < 0) return;
+        handleSelectedFile(index);
+      }
+    },
+    () => displayedItems.length
+  );
 
   return (
     <>
@@ -105,13 +104,11 @@ export function Files(props: Props) {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton edge="end">
-                <LoadingButton
-                  type={"icon"}
-                  icon={<Refresh />}
-                  clickAction={() => refreshFolders(true)}
-                />
-              </IconButton>
+              <LoadingButton
+                type={"icon"}
+                icon={<Refresh />}
+                clickAction={() => refreshFolders(true)}
+              />
             </InputAdornment>
           ),
 
@@ -156,7 +153,7 @@ export function Files(props: Props) {
                 sx={{ borderRadius: 6 }}
                 selected={selectedIndex === i}
                 onClick={() => handleSelectedFile(i)}
-                onMouseEnter={(_) => setSelectedIndex(i)}
+                onMouseEnter={() => setSelectedIndex(i)}
               >
                 <ListItemAvatar>
                   <Avatar>

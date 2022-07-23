@@ -10,14 +10,15 @@ import { useQueryString } from "../../hooks/query.hook";
 import { useFolderStore } from "../../store/files.store";
 import { ListItem, TextField } from "../../barrel/mui.barrel";
 import { Folder, Refresh } from "../../barrel/mui.icons.barrel";
+import { Avatar, InputAdornment } from "../../barrel/mui.barrel";
 import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
 import { sharedConfiguration } from "../../instances/sharedConfiguration";
-import { Avatar, IconButton, InputAdornment } from "../../barrel/mui.barrel";
 import { ListItemAvatar, ListItemText, List } from "../../barrel/mui.barrel";
 import {
-  FileListConfiguration,
   PagingConfiguration,
+  FileListConfiguration,
 } from "../Configurations/FileListConfiguration";
+import { useOnce } from "../../hooks/once";
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
@@ -32,11 +33,9 @@ type Props = {
 };
 
 export default function Folders(props: Props) {
-  const folders = useFolderStore((x) => x.folders);
-  const refreshFolders = useFolderStore((x) => x.refreshFolders);
-  const subScribeOnDataLoaded = useFolderStore((x) => x.subscribeOnDataLoaded);
 
   const [hoveredItem, setHoveredItem] = useState(0);
+  const { folders, refreshFolders } = useFolderStore();
   const [search, setSearch] = useQueryString("folderSearch");
   const [configuration, setConfiguration] = useState(defaultConfiguration);
 
@@ -61,17 +60,22 @@ export default function Folders(props: Props) {
     return items.sort(byValue(orderBy as any, byAny({ desc })));
   }, [search, folders, configuration]);
 
-  subScribeOnDataLoaded(() => {
-    if (props.folderKey) {
-      const index = displayedItems.findIndex((i) => i.Key === props.folderKey);
+  useOnce(
+    () => {
+      if (props.folderKey) {
+        const index = displayedItems.findIndex(
+          (i) => i.Key === props.folderKey
+        );
 
-      if (index < 0) return;
+        if (index < 0) return;
 
-      const folder = displayedItems[index];
+        const folder = displayedItems[index];
 
-      props.onSearch(folder);
-    }
-  });
+        props.onSearch(folder);
+      }
+    },
+    () => displayedItems?.length
+  );
 
   return (
     <>
@@ -87,13 +91,11 @@ export default function Folders(props: Props) {
         InputProps={{
           endAdornment: (
             <InputAdornment position="end">
-              <IconButton edge="end">
-                <LoadingButton
-                  type={"icon"}
-                  icon={<Refresh />}
-                  clickAction={() => refreshFolders(true)}
-                />
-              </IconButton>
+              <LoadingButton
+                type={"icon"}
+                icon={<Refresh />}
+                clickAction={() => refreshFolders(true)}
+              />
             </InputAdornment>
           ),
         }}

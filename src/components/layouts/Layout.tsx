@@ -2,8 +2,8 @@ import Link from "../Link";
 import { AppProps } from "next/app";
 import { env } from "../../instances/env";
 import { Conversions } from "./Conversions";
-import { useState, forwardRef } from "react";
 import { useDevice } from "../../hooks/device.hook";
+import { useState, forwardRef, useMemo } from "react";
 import { navbarItems, Visibility } from "../../instances/navbar";
 
 import { styled } from "../../barrel/mui.barrel";
@@ -12,8 +12,8 @@ import { CssBaseline, AppBar, Toolbar } from "../../barrel/mui.barrel";
 import { Typography, List, IconButton } from "../../barrel/mui.barrel";
 import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
 import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
-import { useEffectOnce } from "../../hooks";
 import { useAuth } from "../../hooks/auth.hook";
+import { Nullable } from "../../types/generic";
 
 const drawerWidth = 240;
 
@@ -65,13 +65,19 @@ const DrawerHeader = styled("div")(({ theme }) => ({
 }));
 
 export default function Layout({ Component, pageProps }: Partial<AppProps>) {
-  const { isMobile, hasWidth } = useDevice();
   const {} = useAuth();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(null as Nullable<boolean>);
+  const { isMobile, hasWidth } = useDevice();
 
-  useEffectOnce(() => {
-    setOpen(!isMobile && hasWidth(1200));
-  });
+  const initialOpen = useMemo(
+    () => !isMobile && hasWidth(1200),
+    [isMobile, hasWidth]
+  );
+
+  const isOpen = useMemo(() => {
+    return open ?? initialOpen;
+  }, [open, initialOpen]);
+
 
   const handleDrawerOpen = () => setOpen(true);
 
@@ -81,7 +87,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
     <Box sx={{ display: "flex", border: 0, borderRadius: 16 }}>
       <CssBaseline />
       {/* @ts-ignore */}
-      <MyAppBar position="fixed" open={open}>
+      <MyAppBar position="fixed" open={isOpen}>
         <Toolbar>
           {!isMobile && (
             <IconButton
@@ -89,7 +95,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
-              sx={{ mr: 2, ...(open && { display: "none" }) }}
+              sx={{ mr: 2, ...(isOpen && { display: "none" }) }}
             >
               <Menu />
             </IconButton>
@@ -111,12 +117,12 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         }}
         variant="persistent"
         anchor="left"
-        open={open}
+        open={isOpen}
       >
         {/* @ts-ignore */}
-        <DrawerHeader open={open}>
+        <DrawerHeader open={isOpen}>
           <IconButton onClick={handleDrawerClose}>
-            {open ? <ChevronLeft /> : <ChevronRight />}
+            {isOpen ? <ChevronLeft /> : <ChevronRight />}
           </IconButton>
         </DrawerHeader>
         <Divider />
@@ -156,7 +162,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         <Divider />
       </Drawer>
       {/* @ts-ignore */}
-      <Main open={open}>
+      <Main open={isOpen}>
         <DrawerHeader />
         {/* @ts-ignore */}
         {Component && <Component {...pageProps} />}

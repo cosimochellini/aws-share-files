@@ -1,27 +1,32 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
+import { useEffectOnce } from ".";
 import { debounce } from "../utils/callbacks";
 import { device } from "../services/device.service";
 
+const initialDeviceState = {
+  isClient: false,
+  isMobile: false,
+  isDarkMode: false,
+  isDesktop: false,
+  window: null,
+  runOnClient: () => {},
+  hasWidth: () => false,
+} as typeof device;
+
 export const useDevice = () => {
-    const [state, setState] = useState({ ...device });
+  const [state, setState] = useState(initialDeviceState);
 
-    useEffect(() => {
-        const handleResize = debounce((_: unknown) => {
-            const currentWindow = device.window;
-            if (!currentWindow) return;
+  useEffectOnce(() => {
+    const handleResize = debounce((_: unknown) => {
+      setState({ ...device, hasWidth: (x) => device.hasWidth(x) });
+    });
 
-            setState({
-                ...device,
-                hasWidth: (w) => device.hasWidth(w),
-            });
-        });
+    window.addEventListener("resize", handleResize);
 
-        window.addEventListener("resize", handleResize);
+    handleResize();
 
-        handleResize();
+    return () => window.removeEventListener("resize", handleResize);
+  });
 
-        return () => window.removeEventListener("resize", handleResize);
-    }, []);
-
-    return state;
+  return state;
 };
