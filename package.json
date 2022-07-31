@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.14.2",
+  "version": "0.14.4",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -31,7 +31,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.0",
     "sort-es": "^1.5.1",
-    "zustand": "^3.7.1"
+    "zustand": "^4.0.0"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.127.0",
