@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useEffectOnce } from ".";
+import { useEffectOnceWhen } from "./once";
 import { debounce } from "../utils/callbacks";
 import { device } from "../services/device.service";
 
@@ -16,7 +16,7 @@ const initialDeviceState = {
 export const useDevice = () => {
   const [state, setState] = useState(initialDeviceState);
 
-  useEffectOnce(() => {
+  useEffectOnceWhen(() => {
     const handleResize = debounce((_: unknown) => {
       setState({ ...device, hasWidth: (x) => device.hasWidth(x) });
     });

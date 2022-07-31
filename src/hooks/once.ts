@@ -1,15 +1,24 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 
-type Booleanish = boolean | string | number | null | undefined;
-
-export const useOnce = (
-  callback: () => void,
-  condition: () => Booleanish = () => true
-) => {
-  const hasRun = useRef(false);
-
-  if (!hasRun.current && condition()) {
-    hasRun.current = true;
-    callback();
-  }
-};
+/**
+ * useEffectOnceWhen hook
+ *
+ * @description It fires a callback once when a condition is true or become true.
+ * Fires the callback at most one time.
+ *
+ * @param callback The callback to fire
+ * @param when The condition which needs to be true
+ */
+export function useEffectOnceWhen(callback: () => void, when = true): void {
+  const hasRunOnceRef = useRef(false);
+  const callbackRef = useRef(callback);
+  useEffect(() => {
+    callbackRef.current = callback;
+  });
+  useEffect(() => {
+    if (when && !hasRunOnceRef.current) {
+      callbackRef.current();
+      hasRunOnceRef.current = true;
+    }
+  }, [when]);
+}

@@ -13,7 +13,7 @@ import { Typography, List, IconButton } from "../../barrel/mui.barrel";
 import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
 import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
 import { useAuth } from "../../hooks/auth.hook";
-import { Nullable } from "../../types/generic";
+import type { Nullable } from "../../types/generic";
 
 const drawerWidth = 240;
 

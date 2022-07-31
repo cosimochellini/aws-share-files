@@ -18,7 +18,7 @@ import {
   PagingConfiguration,
   FileListConfiguration,
 } from "../Configurations/FileListConfiguration";
-import { useOnce } from "../../hooks/once";
+import { useEffectOnceWhen } from "../../hooks/once";
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
@@ -33,7 +33,6 @@ type Props = {
 };
 
 export default function Folders(props: Props) {
-
   const [hoveredItem, setHoveredItem] = useState(0);
   const { folders, refreshFolders } = useFolderStore();
   const [search, setSearch] = useQueryString("folderSearch");
@@ -60,22 +59,17 @@ export default function Folders(props: Props) {
     return items.sort(byValue(orderBy as any, byAny({ desc })));
   }, [search, folders, configuration]);
 
-  useOnce(
-    () => {
-      if (props.folderKey) {
-        const index = displayedItems.findIndex(
-          (i) => i.Key === props.folderKey
-        );
+  useEffectOnceWhen(() => {
+    if (props.folderKey) {
+      const index = displayedItems.findIndex((i) => i.Key === props.folderKey);
 
-        if (index < 0) return;
+      if (index < 0) return;
 
-        const folder = displayedItems[index];
+      const folder = displayedItems[index];
 
-        props.onSearch(folder);
-      }
-    },
-    () => displayedItems?.length
-  );
+      props.onSearch(folder);
+    }
+  }, displayedItems?.length > 0);
 
   return (
     <>

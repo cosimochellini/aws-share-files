@@ -9,7 +9,7 @@ import Layout from "../src/components/layouts/Layout";
 import { useThemeStore } from "../src/store/theme.store";
 import { ThemeProvider, CssBaseline } from "../src/barrel/mui.barrel";
 import NotificationHandler from "../src/components/Global/NotificationHandler";
-import { useEffectOnce } from "../src/hooks";
+import { useEffectOnceWhen } from "../src/hooks/once";
 
 const ButtonNavigation = lazy(
   () => import("../src/components/layouts/ButtonNavigation")
@@ -25,7 +25,7 @@ const AppGrid = (props: AppProps) => {
 
   const [theme, checkTheme] = useThemeStore((x) => [x.theme, x.checkTheme]);
 
-  useEffectOnce(checkTheme);
+  useEffectOnceWhen(checkTheme);
 
   return (
     <>

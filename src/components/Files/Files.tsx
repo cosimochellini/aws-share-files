@@ -1,6 +1,6 @@
 import { byAny, byValue } from "sort-es";
 import { useMemo, useState } from "react";
-import { useOnce } from "../../hooks/once";
+import { useEffectOnceWhen } from "../../hooks/once";
 import { ResultCount } from "./ResultCount";
 import { Nullable } from "../../types/generic";
 import { S3Folder } from "../../classes/S3Folder";
@@ -46,7 +46,9 @@ export function Files(props: Props) {
     props.onClearFolder?.();
   };
 
-  useOnce(loadFolders);
+  useEffectOnceWhen(() => {
+    loadFolders();
+  });
 
   const handleSelectedFile = (index: number) => {
     const file = displayedItems[index];
@@ -77,17 +79,14 @@ export function Files(props: Props) {
     return items.sort(byValue(orderBy as "Key", byAny({ desc })));
   }, [search, folders, currentFolder, configuration]);
 
-  useOnce(
-    () => {
-      if (props.fileKey && displayedItems?.length) {
-        const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
+  useEffectOnceWhen(() => {
+    if (props.fileKey && displayedItems?.length) {
+      const index = displayedItems.findIndex((i) => i.Key === props.fileKey);
 
-        if (index < 0) return;
-        handleSelectedFile(index);
-      }
-    },
-    () => displayedItems.length
-  );
+      if (index < 0) return;
+      handleSelectedFile(index);
+    }
+  }, displayedItems?.length > 0);
 
   return (
     <>

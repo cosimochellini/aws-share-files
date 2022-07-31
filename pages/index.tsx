@@ -1,10 +1,10 @@
 import { useRouter } from "next/router";
-import { useEffectOnce } from "../src/hooks";
+import { useEffectOnceWhen } from "../src/hooks/once";
 
 export default function Index() {
   const router = useRouter();
 
-  useEffectOnce(() => {
+  useEffectOnceWhen(() => {
     router.push("/files");
   });
 

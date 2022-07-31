@@ -2,7 +2,7 @@ import mitt from "mitt";
 import { device } from "../services/device.service";
 import { retrieveError } from "../utils/retrieveError";
 
-const dialogEmitter = mitt();
+const dialogEmitter = mitt<Record<notificationActions, notificationData>>();
 
 export enum notificationType {
   success = "success",
@@ -22,10 +22,7 @@ export type notificationData = {
 
 export const notification = {
   show: (type: notificationType, message: string) => {
-    dialogEmitter.emit(notificationActions.show, {
-      type,
-      message,
-    } as notificationData);
+    dialogEmitter.emit(notificationActions.show, { type, message });
   },
 
   success: (message: string) => {
@@ -53,8 +50,6 @@ export const notification = {
   },
 
   onShow: (callback: (data: notificationData) => void) => {
-    dialogEmitter.on(notificationActions.show, (data) =>
-      callback(data as notificationData)
-    );
+    dialogEmitter.on(notificationActions.show, callback);
   },
 };
