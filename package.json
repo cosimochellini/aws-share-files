@@ -1,6 +1,6 @@
 {
   "name": "s3-share-files",
-  "version": "0.14.4",
+  "version": "0.14.7",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -12,20 +12,20 @@
     "run-scripts": "ts-node --skip-project ./script.runner.node.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.154.0",
-    "@aws-sdk/client-s3": "^3.154.0",
-    "@aws-sdk/lib-dynamodb": "^3.154.0",
-    "@aws-sdk/s3-request-presigner": "^3.154.0",
+    "@aws-sdk/client-dynamodb": "^3.159.0",
+    "@aws-sdk/client-s3": "^3.159.0",
+    "@aws-sdk/lib-dynamodb": "^3.159.0",
+    "@aws-sdk/s3-request-presigner": "^3.159.0",
     "@emotion/react": "^11.10.0",
     "@emotion/styled": "^11.10.0",
-    "@mui/icons-material": "^5.8.4",
-    "@mui/material": "^5.10.1",
+    "@mui/icons-material": "^5.10.2",
+    "@mui/material": "^5.10.2",
     "@next-auth/dynamodb-adapter": "^1.1.0",
     "formidable": "^2.0.1",
     "mitt": "^3.0.0",
-    "next": "12.2.4",
+    "next": "12.2.5",
     "next-auth": "^4.10.3",
-    "next-pwa": "^5.5.5",
+    "next-pwa": "^5.6.0",
     "nodemailer": "^6.7.8",
     "react": "18.2.0",
     "react-dom": "18.2.0",
@@ -34,17 +34,17 @@
     "zustand": "^4.1.1"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.127.0",
+    "@aws-sdk/types": "^3.159.0",
     "@types/formidable": "^2.0.4",
-    "@types/node": "18.7.9",
+    "@types/node": "18.7.13",
     "@types/nodemailer": "^6.4.5",
     "@types/react": "18.0.17",
     "dotenv": "^16.0.0",
     "dotenv-webpack": "^8.0.1",
-    "eslint": "^8.22.0",
+    "eslint": "^8.23.0",
     "eslint-config-next": "12.2.5",
     "ts-node": "^10.9.1",
-    "type-fest": "^2.18.1",
-    "typescript": "4.7.4"
+    "type-fest": "^2.19.0",
+    "typescript": "4.8.2"
   }
 }
