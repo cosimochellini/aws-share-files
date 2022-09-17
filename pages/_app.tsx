@@ -1,21 +1,22 @@
 import Head from "next/head";
 import "../styles/globals.css";
+import { lazy, Suspense } from "react";
+import type { Session } from "next-auth";
 import type { AppProps } from "next/app";
 import { env } from "../src/instances/env";
-import { lazy, Suspense } from "react";
 import { SessionProvider } from "next-auth/react";
 import { useDevice } from "../src/hooks/device.hook";
+import { useEffectOnceWhen } from "../src/hooks/once";
 import Layout from "../src/components/layouts/Layout";
 import { useThemeStore } from "../src/store/theme.store";
 import { ThemeProvider, CssBaseline } from "../src/barrel/mui.barrel";
 import NotificationHandler from "../src/components/Global/NotificationHandler";
-import { useEffectOnceWhen } from "../src/hooks/once";
 
 const ButtonNavigation = lazy(
   () => import("../src/components/layouts/ButtonNavigation")
 );
 
-const AppGrid = (props: AppProps) => {
+const AppGrid = (props: AppProps<{ session: Session }>) => {
   const {
     Component,
     pageProps: { session, ...pageProps },
