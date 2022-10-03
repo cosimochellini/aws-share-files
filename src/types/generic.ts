@@ -1,4 +1,5 @@
-import type { NextApiResponse } from "next";
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import type { NextApiResponse } from 'next';
 
 export type Awaited<T> = T extends PromiseLike<infer U> ? U : T;
 

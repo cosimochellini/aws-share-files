@@ -1,12 +1,13 @@
-import { Nullable } from "../../types/generic";
-import React, { useMemo, useState } from "react";
-import { notification } from "../../instances/notification";
-import { Button, ButtonProps } from "../../barrel/mui.barrel";
-import { Error, Refresh } from "../../barrel/mui.icons.barrel";
-import { IconButton, IconButtonProps } from "../../barrel/mui.barrel";
+import React, { useMemo, useState } from 'react';
+import { Nullable } from '../../types/generic';
+import { notification } from '../../instances/notification';
+import {
+  Button, ButtonProps, IconButton, IconButtonProps,
+} from '../../barrel/mui.barrel';
+import { Error, Refresh } from '../../barrel/mui.icons.barrel';
 
 type Props = {
-  type?: Nullable<"button" | "icon">;
+  type?: Nullable<'button' | 'icon'>;
   text?: Nullable<string>;
   icon: Nullable<JSX.Element>;
   clickAction: (event: React.SyntheticEvent) => Promise<unknown>;
@@ -15,17 +16,17 @@ type Props = {
 };
 
 export function LoadingButton(props: Props) {
-  const { type = "button" } = props;
+  const { type = 'button' } = props;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
 
   const color = useMemo(() => {
-    if (loading) return "info";
+    if (loading) return 'info';
 
-    if (error) return "error";
+    if (error) return 'error';
 
-    return props.buttonProps?.color ?? props.iconProps?.color ?? "primary";
+    return props.buttonProps?.color ?? props.iconProps?.color ?? 'primary';
   }, [loading, error, props.buttonProps?.color, props.iconProps?.color]);
 
   const currentIcon = useMemo(() => {
@@ -62,7 +63,7 @@ export function LoadingButton(props: Props) {
 
   return (
     <>
-      {type === "button" ? (
+      {type === 'button' ? (
         <Button
           endIcon={currentIcon}
           disabled={disabled}

@@ -1,5 +1,5 @@
-import create from "zustand";
-import { ConverterResponse } from "../types/converter.types";
+import create from 'zustand';
+import { ConverterResponse } from '../types/converter.types';
 
 interface JobsState {
   jobs: ConverterResponse[];

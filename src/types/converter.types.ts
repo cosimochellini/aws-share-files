@@ -1,8 +1,8 @@
 export enum StatusCode {
-  downloading = "downloading",
-  converting = "converting",
-  completed = "completed",
-  failed = "failed",
+  downloading = 'downloading',
+  converting = 'converting',
+  completed = 'completed',
+  failed = 'failed',
 }
 
 export interface StatusResponse {

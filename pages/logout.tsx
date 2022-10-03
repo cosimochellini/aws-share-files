@@ -1,14 +1,15 @@
-import { useRouter } from "next/router";
-import { signOut } from "next-auth/react";
-import { useAuth } from "../src/hooks/auth.hook";
-import { useEffectOnceWhen } from "../src/hooks/once";
+import { useRouter } from 'next/router';
+import { signOut } from 'next-auth/react';
+import { withDefaultLayout } from '../layouts';
+import { useAuth } from '../src/hooks/auth.hook';
+import { useEffectOnceWhen } from '../src/hooks/once';
 
-export default function Logout() {
+function Logout() {
   const router = useRouter();
   const { onUnauthenticated } = useAuth();
 
   useEffectOnceWhen(() => {
-    signOut({}).then(() => router.push("/"));
+    signOut({}).then(() => router.push('/'));
 
     onUnauthenticated();
   });
@@ -20,3 +21,5 @@ export default function Logout() {
     </>
   );
 }
+
+export default withDefaultLayout(Logout);

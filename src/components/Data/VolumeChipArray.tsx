@@ -1,49 +1,50 @@
-import { useMemo } from "react";
-import { formatter } from "../../formatters/formatter";
-import { VolumeInfo } from "../../types/content.types";
-import { Chip, ChipProps, Grid } from "../../barrel/mui.barrel";
-import { MenuBook, Person } from "../../barrel/mui.icons.barrel";
-import { CalendarToday, Class } from "../../barrel/mui.icons.barrel";
+import { useMemo } from 'react';
+import { formatter } from '../../formatters/formatter';
+import { VolumeInfo } from '../../types/content.types';
+import { Chip, ChipProps, Grid } from '../../barrel/mui.barrel';
+import {
+  MenuBook, Person, CalendarToday, Class,
+} from '../../barrel/mui.icons.barrel';
 
 type Props = {
   volume: VolumeInfo;
 };
 
-type color = ChipProps["color"];
+type color = ChipProps['color'];
 
 const chipsFactory = (volume: VolumeInfo) => {
   const authors = volume.authors?.map((label) => ({
     label,
     title: label,
     icon: <Person />,
-    color: "primary" as color,
+    color: 'primary' as color,
   }));
 
   const categories = volume.categories?.map((label) => ({
     label,
     title: label,
     icon: <Class />,
-    color: "warning" as color,
+    color: 'warning' as color,
   }));
 
   const pageCount = volume.pageCount
     ? [
-        {
-          label: `${volume.pageCount} pages`,
-          icon: <MenuBook />,
-          color: "success" as color,
-        },
-      ]
+      {
+        label: `${volume.pageCount} pages`,
+        icon: <MenuBook />,
+        color: 'success' as color,
+      },
+    ]
     : null;
 
   const publishedDate = volume.publishedDate
     ? [
-        {
-          label: formatter.dateFormatter(volume.publishedDate),
-          icon: <CalendarToday />,
-          color: "error" as color,
-        },
-      ]
+      {
+        label: formatter.dateFormatter(volume.publishedDate),
+        icon: <CalendarToday />,
+        color: 'error' as color,
+      },
+    ]
     : null;
 
   return [

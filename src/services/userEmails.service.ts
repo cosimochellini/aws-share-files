@@ -1,26 +1,25 @@
-import { randomId } from "../utils/random";
-import { dynamoDbClient } from "../instances/aws";
-import { UserEmail } from "../types/dynamo.types";
-import { ServiceArguments, ServiceMapper } from "../types/generic";
+import { randomId } from '../utils/random';
+import { dynamoDbClient } from '../instances/aws';
+import { UserEmail } from '../types/dynamo.types';
+import { ServiceArguments, ServiceMapper } from '../types/generic';
 
-const TableName = "user-email";
+const TableName = 'user-email';
 
 export const userEmails = {
   getEmails(userEmail: string) {
     return dynamoDbClient
       .scan({
         TableName,
-        FilterExpression: "sk = :e",
-        ExpressionAttributeValues: { ":e": userEmail },
+        FilterExpression: 'sk = :e',
+        ExpressionAttributeValues: { ':e': userEmail },
       })
       .then((x) => x.Items as UserEmail[]);
   },
 
   addEmail(item: Partial<UserEmail>) {
-    item.pk = randomId();
-    item.sk = item.user;
+    const Item = { ...item, pk: randomId(), sk: item.user };
 
-    return dynamoDbClient.put({ TableName, Item: item });
+    return dynamoDbClient.put({ TableName, Item });
   },
 
   deleteEmail(item: Partial<UserEmail>) {

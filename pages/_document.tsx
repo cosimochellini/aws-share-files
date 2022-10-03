@@ -1,5 +1,7 @@
-import { env } from "../src/instances/env";
-import Document, { Html, Head, Main, NextScript } from "next/document";
+import Document, {
+  Html, Head, Main, NextScript,
+} from 'next/document';
+import { env } from '../src/instances/env';
 
 class MyDocument extends Document {
   render() {
@@ -12,7 +14,7 @@ class MyDocument extends Document {
           />
           <meta name="theme-color" content="#fff" />
           <link rel="manifest" href="/manifest.json" />
-          <link rel="apple-touch-icon" href={env.info.appLogoUrl}></link>
+          <link rel="apple-touch-icon" href={env.info.appLogoUrl} />
         </Head>
         <body>
           <Main />

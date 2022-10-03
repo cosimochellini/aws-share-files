@@ -1,4 +1,4 @@
-import { Nullable } from "./generic";
+import { Nullable } from './generic';
 
 export interface ContentResponse {
   kind: string;

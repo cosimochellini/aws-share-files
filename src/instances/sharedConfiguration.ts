@@ -1,5 +1,5 @@
 export const sharedConfiguration = {
-  name: "sharedConfiguration",
+  name: 'sharedConfiguration',
   itemsConfiguration: {
     maxCount: 10,
   },

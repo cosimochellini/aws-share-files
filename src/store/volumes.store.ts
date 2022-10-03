@@ -1,8 +1,8 @@
-import create from "zustand";
-import { Nullable } from "../types/generic";
-import { VolumeInfo } from "../types/content.types";
-import { functions } from "../instances/functions";
-import { notification } from "../instances/notification";
+import create from 'zustand';
+import { Nullable } from '../types/generic';
+import { VolumeInfo } from '../types/content.types';
+import { functions } from '../instances/functions';
+import { notification } from '../instances/notification';
 
 interface VolumesState {
   volume: Nullable<VolumeInfo>;
@@ -25,7 +25,10 @@ export const useVolumesStore = create<VolumesState>((set, get) => ({
 
     if (cachedVolume === volume) return;
 
-    if (cachedVolume) return set({ volume: cachedVolume });
+    if (cachedVolume) {
+      set({ volume: cachedVolume });
+      return;
+    }
 
     set({ _cachedVolumesLoading: true, volume: null });
 

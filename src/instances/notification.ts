@@ -1,18 +1,18 @@
-import mitt from "mitt";
-import { device } from "../services/device.service";
-import { retrieveError } from "../utils/retrieveError";
+import mitt from 'mitt';
+import { device } from '../services/device.service';
+import { retrieveError } from '../utils/retrieveError';
 
 const dialogEmitter = mitt<Record<notificationActions, notificationData>>();
 
 export enum notificationType {
-  success = "success",
-  info = "info",
-  warning = "warning",
-  error = "error",
+  success = 'success',
+  info = 'info',
+  warning = 'warning',
+  error = 'error',
 }
 
 enum notificationActions {
-  show = "show",
+  show = 'show',
 }
 
 export type notificationData = {
@@ -44,9 +44,7 @@ export const notification = {
 
     const errorMessage = retrieveError(message);
 
-    device.runOnClient(() =>
-      notification.show(notificationType.error, errorMessage)
-    );
+    device.runOnClient(() => notification.show(notificationType.error, errorMessage));
   },
 
   onShow: (callback: (data: notificationData) => void) => {

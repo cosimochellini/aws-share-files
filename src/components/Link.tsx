@@ -1,27 +1,27 @@
-import clsx from "clsx";
-import { forwardRef } from "react";
-import { useRouter } from "next/router";
-import NextLink, { LinkProps as NextLinkProps } from "next/link";
-import { MuiLinkProps, MuiLink, styled } from "../barrel/mui.barrel";
+import clsx from 'clsx';
+import { forwardRef } from 'react';
+import { useRouter } from 'next/router';
+import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+import { MuiLinkProps, MuiLink, styled } from '../barrel/mui.barrel';
 
 // Add support for the sx prop for consistency with the other branches.
-const Anchor = styled("a")({});
+const Anchor = styled('a')({});
 
 interface NextLinkComposedProps
   extends Omit<
       React.AnchorHTMLAttributes<HTMLAnchorElement>,
-      keyof Omit<NextLinkProps, "as">
+      keyof Omit<NextLinkProps, 'as'>
     >,
-    Omit<NextLinkProps, "href" | "as"> {
-  to: NextLinkProps["href"];
-  linkAs?: NextLinkProps["as"];
-  href?: NextLinkProps["href"];
+    Omit<NextLinkProps, 'href' | 'as'> {
+  to: NextLinkProps['href'];
+  linkAs?: NextLinkProps['as'];
+  href?: NextLinkProps['href'];
 }
 
 export const NextLinkComposed = forwardRef<
   HTMLAnchorElement,
   NextLinkComposedProps
->(function NextLinkComposed(props, ref) {
+>((props, ref) => {
   const {
     to,
     linkAs,
@@ -52,20 +52,20 @@ export const NextLinkComposed = forwardRef<
 
 export type LinkProps = {
   activeClassName?: string;
-  as?: NextLinkProps["as"];
-  href: NextLinkProps["href"];
+  as?: NextLinkProps['as'];
+  href: NextLinkProps['href'];
   noLinkStyle?: boolean;
-} & Omit<NextLinkComposedProps, "to" | "linkAs" | "href"> &
-  Omit<MuiLinkProps, "href">;
+} & Omit<NextLinkComposedProps, 'to' | 'linkAs' | 'href'> &
+  Omit<MuiLinkProps, 'href'>;
 
 // A styled version of the Next.js Link component:
 // https://nextjs.org/docs/#with-link
-export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>((
   props,
-  ref
-) {
+  ref,
+) => {
   const {
-    activeClassName = "active",
+    activeClassName = 'active',
     as: linkAs,
     className: classNameProps,
     href,
@@ -75,14 +75,13 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>(function Link(
   } = props;
 
   const router = useRouter();
-  const pathname = typeof href === "string" ? href : href.pathname;
+  const pathname = typeof href === 'string' ? href : href.pathname;
   const className = clsx(classNameProps, {
     [activeClassName]: router.pathname === pathname && activeClassName,
   });
 
-  const isExternal =
-    typeof href === "string" &&
-    (href.indexOf("http") === 0 || href.indexOf("mailto:") === 0);
+  const isExternal = typeof href === 'string'
+    && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
 
   if (isExternal) {
     if (noLinkStyle) {

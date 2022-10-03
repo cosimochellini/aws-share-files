@@ -19,13 +19,13 @@ export const env = {
   get content() {
     return {
       baseUrl: process.env.CONTENT_API_URL as string,
-      invalidWords: (process.env.CONTENT_INVALID_WORDS as string).split(","),
+      invalidWords: (process.env.CONTENT_INVALID_WORDS as string).split(','),
     };
   },
 
   get email() {
     return {
-      service: "Gmail",
+      service: 'Gmail',
       signature: process.env.EMAIL_SIGNATURE as string,
       host: process.env.EMAIL_HOST as string,
       port: parseInt(process.env.EMAIL_PORT as string, 10),
@@ -41,7 +41,7 @@ export const env = {
       apiKey: process.env.CONVERTER_API_KEY as string,
       baseUrl: process.env.CONVERTER_API_URL as string,
       header: process.env.CONVERTER_API_HEADER as string,
-      extensions: (process.env.CONVERTER_API_EXTENSION as string).split(","),
+      extensions: (process.env.CONVERTER_API_EXTENSION as string).split(','),
     };
   },
 
@@ -58,14 +58,14 @@ export const env = {
     return {
       name: info.appTitle,
       short_name: info.appTitle,
-      start_url: "/files/",
-      display: "standalone",
-      orientation: "portrait",
+      start_url: '/files/',
+      display: 'standalone',
+      orientation: 'portrait',
       icons: [
         {
           src: info.appLogoUrl,
-          sizes: "192x192",
-          type: "image/png",
+          sizes: '192x192',
+          type: 'image/png',
         },
       ],
     };
@@ -73,7 +73,7 @@ export const env = {
 
   get auth() {
     return {
-      emails: (process.env.AUTH_AUTHORIZED_EMAILS as string).split(","),
+      emails: (process.env.AUTH_AUTHORIZED_EMAILS as string).split(','),
     };
   },
 };

@@ -1,29 +1,31 @@
-import create from "zustand";
-import type { Theme } from "../barrel/mui.barrel";
-import { createTheme } from "../barrel/mui.barrel";
-import { UnReactiveStore } from "../classes/UnReactiveStore";
+import create from 'zustand';
+import type { Theme } from '../barrel/mui.barrel';
+import { createTheme } from '../barrel/mui.barrel';
+import { UnReactiveStore } from '../classes/UnReactiveStore';
 
 export const theme = {
-  _dark: null as Theme | null,
+  __dark: null as Theme | null,
   get dark() {
-    return (this._dark ??= createTheme({
+    // eslint-disable-next-line no-return-assign, no-underscore-dangle
+    return (this.__dark ??= createTheme({
       palette: {
-        mode: "dark",
+        mode: 'dark',
       },
     }));
   },
 
   _light: null as Theme | null,
   get light() {
+    // eslint-disable-next-line no-return-assign, no-underscore-dangle
     return (this._light ??= createTheme({
       palette: {
-        mode: "light",
+        mode: 'light',
       },
     }));
   },
 };
 
-const storage = new UnReactiveStore("LS_DARK", true);
+const storage = new UnReactiveStore('LS_DARK', true);
 
 interface ThemeState {
   dark: boolean;
@@ -38,7 +40,7 @@ export const useThemeStore = create<ThemeState>((set, get) => ({
   theme: theme.dark,
 
   setTheme(theme) {
-    const dark = theme.palette.mode === "dark";
+    const dark = theme.palette.mode === 'dark';
 
     set({ theme, dark });
 

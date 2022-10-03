@@ -1,7 +1,8 @@
-import { useState } from "react";
-import { useEffectOnceWhen } from "./once";
-import { debounce } from "../utils/callbacks";
-import { device } from "../services/device.service";
+import { useState } from 'react';
+import { noop } from '../utils/noop';
+import { useEffectOnceWhen } from './once';
+import { debounce } from '../utils/callbacks';
+import { device } from '../services/device.service';
 
 const initialDeviceState = {
   isClient: false,
@@ -9,7 +10,7 @@ const initialDeviceState = {
   isDarkMode: false,
   isDesktop: false,
   window: null,
-  runOnClient: () => {},
+  runOnClient: noop,
   hasWidth: () => false,
 } as typeof device;
 
@@ -17,15 +18,15 @@ export const useDevice = () => {
   const [state, setState] = useState(initialDeviceState);
 
   useEffectOnceWhen(() => {
-    const handleResize = debounce((_: unknown) => {
+    const handleResize = debounce(() => {
       setState({ ...device, hasWidth: (x) => device.hasWidth(x) });
     });
 
-    window.addEventListener("resize", handleResize);
+    window.addEventListener('resize', () => handleResize());
 
     handleResize();
 
-    return () => window.removeEventListener("resize", handleResize);
+    return () => window.removeEventListener('resize', () => handleResize());
   });
 
   return state;

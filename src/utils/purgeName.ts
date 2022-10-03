@@ -1,20 +1,20 @@
-import { env } from "../instances/env";
+import { env } from '../instances/env';
 
 const { invalidWords } = env.content;
 
-export const purgeName = (name: string = ""): string => {
-  let plainName = removeExtension(name);
+export const purgeName = (name = ''): string => {
+  const plainName = removeExtension(name);
 
-  for (const word of invalidWords) {
-    plainName = plainName.replace(new RegExp(word, "gi"), "");
-  }
-  return plainName
-    .replaceAll("_", " ")
-    .replaceAll("-", " ")
-    .replaceAll(".", " ")
-    .replaceAll("  ", " ");
+  const purgedName = invalidWords.reduce(
+    (prev, current) => prev.replace(new RegExp(current, 'gi'), ''),
+    plainName,
+  );
+
+  return purgedName
+    .replaceAll('_', ' ')
+    .replaceAll('-', ' ')
+    .replaceAll('.', ' ')
+    .replaceAll('  ', ' ');
 };
 
-const removeExtension = (name: string): string => {
-  return name.replace(/\.[^/.]+$/, "");
-};
+const removeExtension = (name: string): string => name.replace(/\.[^/.]+$/, '');

@@ -1,12 +1,15 @@
-import { useRouter } from "next/router";
-import { useEffectOnceWhen } from "../src/hooks/once";
+import { useRouter } from 'next/router';
+import { withDefaultLayout } from '../layouts';
+import { useEffectOnceWhen } from '../src/hooks/once';
 
-export default function Index() {
+function Index() {
   const router = useRouter();
 
   useEffectOnceWhen(() => {
-    router.push("/files");
+    router.push('/files');
   });
 
   return <div>Loading</div>;
 }
+
+export default withDefaultLayout(Index);

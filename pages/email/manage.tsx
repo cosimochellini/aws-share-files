@@ -1,22 +1,21 @@
-import { useState } from "react";
-import { useEffectOnceWhen } from "../../src/hooks/once";
-import { useEmailsStore } from "../../src/store/emails.store";
-import { ListItem, Grid, List } from "../../src/barrel/mui.barrel";
-import { NewUserEmail } from "../../src/components/Form/NewUserEmail";
-import { LoadingButton } from "../../src/components/Data/LoadingButton";
-import { Email, Star, Delete } from "../../src/barrel/mui.icons.barrel";
-import { Divider, Typography, Avatar } from "../../src/barrel/mui.barrel";
-import { ListItemText, ListItemAvatar } from "../../src/barrel/mui.barrel";
-import { FilesPlaceholders } from "../../src/components/Placeholders/FilesPlaceholders";
+import { useState } from 'react';
+import { useEffectOnceWhen } from '../../src/hooks/once';
+import { useEmailsStore } from '../../src/store/emails.store';
+import {
+  ListItem, Grid, List, Divider, Typography, Avatar, ListItemText, ListItemAvatar,
+} from '../../src/barrel/mui.barrel';
+import { NewUserEmail } from '../../src/components/Form/NewUserEmail';
+import { LoadingButton } from '../../src/components/Data/LoadingButton';
+import { Email, Star, Delete } from '../../src/barrel/mui.icons.barrel';
+import { FilesPlaceholders } from '../../src/components/Placeholders/FilesPlaceholders';
+import { withDefaultLayout } from '../../layouts';
 
-export default function Manage() {
+function Manage() {
   const [indexActive, setIndexActive] = useState(-1);
   const deleteEmail = useEmailsStore((x) => x.deleteEmail);
   const [emails, loadEmails] = useEmailsStore((x) => [x.emails, x.loadEmails]);
 
-  useEffectOnceWhen(() => {
-    loadEmails();
-  });
+  useEffectOnceWhen(loadEmails);
 
   return (
     <>
@@ -36,17 +35,17 @@ export default function Manage() {
                   <ListItem
                     selected={indexActive === i}
                     onMouseEnter={() => setIndexActive(i)}
-                    secondaryAction={
+                    secondaryAction={(
                       <LoadingButton
-                        type={"icon"}
+                        type="icon"
                         icon={<Delete />}
                         clickAction={() => deleteEmail(email)}
                         iconProps={{
-                          color: "error",
+                          color: 'error',
                           sx: { borderRadius: 2, border: 1 },
                         }}
                       />
-                    }
+                    )}
                   >
                     <ListItemAvatar>
                       <Avatar>
@@ -74,3 +73,5 @@ export default function Manage() {
     </>
   );
 }
+
+export default withDefaultLayout(Manage);

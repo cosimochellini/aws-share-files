@@ -1,20 +1,20 @@
-import { useState } from "react";
-import { Typography } from "../../barrel/mui.barrel";
-import type { S3File } from "../../classes/S3File";
-import { useDevice } from "../../hooks/device.hook";
-import { functions } from "../../instances/functions";
-import { LoadingButton } from "../Data/LoadingButton";
-import { SendFileViaEmail } from "./SendFileViaEmail";
-import { formatter } from "../../formatters/formatter";
-import { S3FileGroup } from "../../classes/S3FileGroup";
-import { downloadURI } from "../../utils/downloadHelper";
-import { Delete, Download, ExpandMore } from "../../barrel/mui.icons.barrel";
+import { useState } from 'react';
 import {
+  Typography,
   Accordion,
   AccordionDetails,
   AccordionSummary,
-} from "../../barrel/mui.barrel";
-import { useFolderStore } from "../../store/files.store";
+} from '../../barrel/mui.barrel';
+import type { S3File } from '../../classes/S3File';
+import { useDevice } from '../../hooks/device.hook';
+import { functions } from '../../instances/functions';
+import { LoadingButton } from '../Data/LoadingButton';
+import { SendFileViaEmail } from './SendFileViaEmail';
+import { formatter } from '../../formatters/formatter';
+import { S3FileGroup } from '../../classes/S3FileGroup';
+import { downloadURI } from '../../utils/downloadHelper';
+import { Delete, Download, ExpandMore } from '../../barrel/mui.icons.barrel';
+import { useFolderStore } from '../../store/files.store';
 
 type Props = {
   currentFile: S3FileGroup;
@@ -22,7 +22,7 @@ type Props = {
 
 const downloadFile = async (key: string) => {
   const signedUrl = await functions.s3.shareableUrl({ key });
-  const fileName = key.split("/").at(-1);
+  const fileName = key.split('/').at(-1);
 
   downloadURI(signedUrl, fileName!);
 };
@@ -77,23 +77,23 @@ export function FilesAccordion(props: Props) {
             aria-controls="panel1a-content"
           >
             <Typography
-              sx={{ width: { xs: "70%", sm: "80%", md: "85%" }, flexShrink: 0 }}
+              sx={{ width: { xs: '70%', sm: '80%', md: '85%' }, flexShrink: 0 }}
             >
               {fileTitle(file.file)}
             </Typography>
 
             <LoadingButton
-              type={"icon"}
-              iconProps={{ size: "small", color: "error", sx: { marginX: 1 } }}
+              type="icon"
+              iconProps={{ size: 'small', color: 'error', sx: { marginX: 1 } }}
               icon={<Delete />}
               clickAction={() => deleteFile(file.file.Key)}
             />
 
             <LoadingButton
-              type={"icon"}
+              type="icon"
               iconProps={{
-                size: "small",
-                color: "success",
+                size: 'small',
+                color: 'success',
                 sx: { marginX: 1 },
               }}
               icon={<Download />}

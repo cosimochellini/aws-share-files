@@ -1,7 +1,7 @@
-import { useState } from "react";
-import { useEffectOnceWhen } from "../../hooks/once";
-import { Snackbar, Alert } from "../../barrel/mui.barrel";
-import { notificationData, notification } from "../../instances/notification";
+import { useState } from 'react';
+import { useEffectOnceWhen } from '../../hooks/once';
+import { Snackbar, Alert } from '../../barrel/mui.barrel';
+import { notificationData, notification } from '../../instances/notification';
 
 export default function NotificationHandler() {
   const [open, setOpen] = useState(false);
@@ -30,7 +30,7 @@ export default function NotificationHandler() {
           onClose={handleClose}
           severity={data.type}
           variant="filled"
-          sx={{ width: "100%" }}
+          sx={{ width: '100%' }}
         >
           {data.message}
         </Alert>

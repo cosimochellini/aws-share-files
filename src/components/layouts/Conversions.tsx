@@ -1,27 +1,39 @@
-import { MouseEvent, useState } from "react";
-import { Nullable } from "../../types/generic";
-import { LoadingButton } from "../Data/LoadingButton";
-import { formatter } from "../../formatters/formatter";
-import { unresolvedPromise } from "../../utils/promise";
-import { StatusCode } from "../../types/converter.types";
-import { useJobs } from "../../hooks/state/useJobs.state";
-import { ChangeCircleRounded, Delete } from "../../barrel/mui.icons.barrel";
-import { CheckCircle, Warning, Refresh } from "../../barrel/mui.icons.barrel";
-import { useConversionsStore } from "../../store/conversions.store";
-import { Button, Menu, Chip, Badge } from "../../barrel/mui.barrel";
-import { MenuItem, Typography, IconButton } from "../../barrel/mui.barrel";
+import { MouseEvent, useState } from 'react';
+import { Nullable } from '../../types/generic';
+import { LoadingButton } from '../Data/LoadingButton';
+import { formatter } from '../../formatters/formatter';
+import { unresolvedPromise } from '../../utils/promise';
+import { StatusCode } from '../../types/converter.types';
+import { useJobs } from '../../hooks/state/useJobs.state';
+import {
+  ChangeCircleRounded,
+  Delete,
+  CheckCircle,
+  Warning,
+  Refresh,
+} from '../../barrel/mui.icons.barrel';
+import { useConversionsStore } from '../../store/conversions.store';
+import {
+  Button,
+  Menu,
+  Chip,
+  Badge,
+  MenuItem,
+  Typography,
+  IconButton,
+} from '../../barrel/mui.barrel';
 
 function getColor(code: StatusCode) {
   switch (code) {
     case StatusCode.completed:
     case StatusCode.converting:
-      return "success";
+      return 'success';
 
     case StatusCode.failed:
-      return "warning";
+      return 'warning';
 
     default:
-      return "default";
+      return 'default';
   }
 }
 
@@ -50,60 +62,60 @@ export function Conversions() {
       <Button
         onClick={handleClick}
         sx={{ marginX: { xl: 8 } }}
-        endIcon={
+        endIcon={(
           <Badge
             badgeContent={
               jobs.filter((j) => j.status.code !== StatusCode.completed).length
             }
             color="secondary"
             anchorOrigin={{
-              vertical: "bottom",
-              horizontal: "right",
+              vertical: 'bottom',
+              horizontal: 'right',
             }}
           >
             <ChangeCircleRounded />
           </Badge>
-        }
+        )}
       >
         Conversions
       </Button>
       <Menu open={open} anchorEl={anchorEl} onClose={handleClose}>
         {jobs.length
           ? jobs.map((job) => (
-              <MenuItem key={job.id}>
-                <Chip
-                  label={formatter.timeFormatter(job.created_at)}
-                  sx={{ marginX: 1 }}
-                />
+            <MenuItem key={job.id}>
+              <Chip
+                label={formatter.timeFormatter(job.created_at)}
+                sx={{ marginX: 1 }}
+              />
 
-                <Typography
-                  variant="body2"
-                  color={getColor(job.status?.code)}
-                  style={{ flex: 1 }}
-                >
-                  {job.conversion?.[0]?.output_target?.[0]?.parameters?.file
-                    ?.split("/")
-                    .at(-1) ?? "Unknown"}
-                </Typography>
-                <IconButton>
-                  {job.status?.code === StatusCode.failed ? (
-                    <Warning color="warning" />
-                  ) : job.status?.code === StatusCode.completed ? (
-                    <CheckCircle color="success" />
-                  ) : (
-                    <Refresh color="secondary" className="spin" />
-                  )}
-                </IconButton>
-                <LoadingButton
-                  type="icon"
-                  icon={<Delete />}
-                  iconProps={{ color: "error" }}
-                  clickAction={() =>
-                    unresolvedPromise(() => removeConversion(job.id))
-                  }
-                ></LoadingButton>
-              </MenuItem>
-            ))
+              <Typography
+                variant="body2"
+                color={getColor(job.status?.code)}
+                style={{ flex: 1 }}
+              >
+                {job.conversion?.[0]?.output_target?.[0]?.parameters?.file
+                  ?.split('/')
+                  .at(-1) ?? 'Unknown'}
+              </Typography>
+              <IconButton>
+                {job.status?.code === StatusCode.failed ? (
+                  <Warning color="warning" />
+                ) : null}
+
+                {job.status?.code === StatusCode.completed ? (
+                  <CheckCircle color="success" />
+                ) : (
+                  <Refresh color="secondary" className="spin" />
+                )}
+              </IconButton>
+              <LoadingButton
+                type="icon"
+                icon={<Delete />}
+                iconProps={{ color: 'error' }}
+                clickAction={() => unresolvedPromise(() => removeConversion(job.id))}
+              />
+            </MenuItem>
+          ))
           : empty}
       </Menu>
     </div>

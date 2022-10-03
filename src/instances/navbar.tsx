@@ -1,41 +1,47 @@
-import { Folder, Logout, Mail, Settings, Upload } from "../barrel/mui.icons.barrel";
+import {
+  Folder,
+  Logout,
+  Mail,
+  Settings,
+  Upload,
+} from '../barrel/mui.icons.barrel';
 
 export enum Visibility {
-  All = "All",
-  Sidebar = "Sidebar",
-  BottomBar = "BottomBar",
-  Disabled = "Disabled",
+  All = 'All',
+  Sidebar = 'Sidebar',
+  BottomBar = 'BottomBar',
+  Disabled = 'Disabled',
 }
 
 export const navbarItems = [
   {
-    name: "Files",
-    redirect: "/files",
+    name: 'Files',
+    redirect: '/files',
     icon: <Folder />,
     visibility: Visibility.All,
   },
   {
-    name: "Upload",
-    redirect: "/upload",
+    name: 'Upload',
+    redirect: '/upload',
     icon: <Upload />,
     visibility: Visibility.All,
   },
   {
-    name: "Settings",
-    redirect: "/settings",
+    name: 'Settings',
+    redirect: '/settings',
     icon: <Settings />,
     visibility: Visibility.All,
   },
   {
-    name: "Manage Email",
-    redirect: "/email/manage",
+    name: 'Manage Email',
+    redirect: '/email/manage',
     icon: <Mail />,
     visibility: Visibility.Sidebar,
   },
   {
-    name: "Logout",
-    redirect: "/logout",
+    name: 'Logout',
+    redirect: '/logout',
     icon: <Logout />,
     visibility: Visibility.Sidebar,
   },
-];
+] as const;

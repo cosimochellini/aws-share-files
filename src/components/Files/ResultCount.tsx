@@ -1,4 +1,4 @@
-import { Chip, Grid } from "../../barrel/mui.barrel";
+import { Chip, Grid } from '../../barrel/mui.barrel';
 
 type Props = {
   displayedItems: number;
@@ -13,7 +13,7 @@ export function ResultCount(props: Props) {
   const shouldDisplayItems = displayedItems < totalItems;
 
   return shouldDisplayItems ? (
-    <Grid item xs={12} style={{ textAlign: "center" }} onClick={props.onClick}>
+    <Grid item xs={12} style={{ textAlign: 'center' }} onClick={props.onClick}>
       <Chip
         label={`${remainingItems} ${props.displayName} remaining...`}
         variant="outlined"

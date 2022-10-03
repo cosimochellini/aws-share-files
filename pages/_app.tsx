@@ -1,32 +1,19 @@
-import Head from "next/head";
-import "../styles/globals.css";
-import { lazy, Suspense } from "react";
-import type { Session } from "next-auth";
-import type { AppProps } from "next/app";
-import { env } from "../src/instances/env";
-import { SessionProvider } from "next-auth/react";
-import { useDevice } from "../src/hooks/device.hook";
-import { useEffectOnceWhen } from "../src/hooks/once";
-import Layout from "../src/components/layouts/Layout";
-import { useThemeStore } from "../src/store/theme.store";
-import { ThemeProvider, CssBaseline } from "../src/barrel/mui.barrel";
-import NotificationHandler from "../src/components/Global/NotificationHandler";
+import '../styles/globals.css';
 
-const ButtonNavigation = lazy(
-  () => import("../src/components/layouts/ButtonNavigation")
-);
+import Head from 'next/head';
+import type { Session } from 'next-auth';
+import { SessionProvider } from 'next-auth/react';
 
-const AppGrid = (props: AppProps<{ session: Session }>) => {
+import { env } from '../src/instances/env';
+import type { AppPropsWithLayout } from '../src/types';
+
+function AppGrid(props: AppPropsWithLayout<{ session: Session }>) {
   const {
     Component,
     pageProps: { session, ...pageProps },
   } = props;
 
-  const { isMobile } = useDevice();
-
-  const [theme, checkTheme] = useThemeStore((x) => [x.theme, x.checkTheme]);
-
-  useEffectOnceWhen(checkTheme);
+  const getLayout = Component.getLayout ?? ((page) => page);
 
   return (
     <>
@@ -34,20 +21,11 @@ const AppGrid = (props: AppProps<{ session: Session }>) => {
         <title>{env.info.appTitle}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <SessionProvider session={session}>
-          <CssBaseline />
-          <Layout Component={Component} pageProps={pageProps} />
-          {isMobile && (
-            <Suspense fallback={null}>
-              <ButtonNavigation />
-            </Suspense>
-          )}
-          <NotificationHandler />
-        </SessionProvider>
-      </ThemeProvider>
+      <SessionProvider session={session}>
+        {getLayout(<Component {...pageProps} />)}
+      </SessionProvider>
     </>
   );
-};
+}
 
 export default AppGrid;

@@ -1,7 +1,7 @@
-import create from "zustand";
-import { S3Folder } from "../classes/S3Folder";
-import { functions } from "../instances/functions";
-import { notification } from "../instances/notification";
+import create from 'zustand';
+import { S3Folder } from '../classes/S3Folder';
+import { functions } from '../instances/functions';
+import { notification } from '../instances/notification';
 
 export interface FilesState {
   folders: S3Folder[] | undefined;

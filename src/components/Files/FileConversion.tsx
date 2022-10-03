@@ -1,14 +1,14 @@
-import { useState } from "react";
-import { env } from "../../instances/env";
-import { Select } from "../../barrel/mui.barrel";
-import { LoadingButton } from "../Data/LoadingButton";
-import { functions } from "../../instances/functions";
-import { S3FileGroup } from "../../classes/S3FileGroup";
-import { notification } from "../../instances/notification";
-import { ChangeCircle } from "../../barrel/mui.icons.barrel";
-import { useConversionsStore } from "../../store/conversions.store";
-import { FormControl, InputLabel, MenuItem } from "../../barrel/mui.barrel";
-import { Card, CardContent, CardHeader, Grid } from "../../barrel/mui.barrel";
+import { useState } from 'react';
+import { env } from '../../instances/env';
+import {
+  Select, FormControl, InputLabel, MenuItem, Card, CardContent, CardHeader, Grid,
+} from '../../barrel/mui.barrel';
+import { LoadingButton } from '../Data/LoadingButton';
+import { functions } from '../../instances/functions';
+import { S3FileGroup } from '../../classes/S3FileGroup';
+import { notification } from '../../instances/notification';
+import { ChangeCircle } from '../../barrel/mui.icons.barrel';
+import { useConversionsStore } from '../../store/conversions.store';
 
 type Props = {
   currentFile: S3FileGroup;
@@ -24,7 +24,7 @@ export function FileConversion(props: Props) {
   const fileExtensions = currentFile.Files.map((f) => f.extension);
 
   const availableExtensions = extensions.filter(
-    (ext) => !fileExtensions.includes(ext)
+    (ext) => !fileExtensions.includes(ext),
   );
 
   const [file, setFile] = useState(fileExtensions[0]);
@@ -39,7 +39,7 @@ export function FileConversion(props: Props) {
         file: f.file.Object.Key!,
       })
       .then((job) => addConversion(job.id))
-      .then(() => notification.success("Conversion started"));
+      .then(() => notification.success('Conversion started'));
   };
 
   if (!availableExtensions.length) return null;
@@ -47,7 +47,7 @@ export function FileConversion(props: Props) {
   return (
     <div>
       <Card variant="outlined" sx={{ padding: 2, marginTop: 3 }}>
-        <CardHeader title="File conversion"></CardHeader>
+        <CardHeader title="File conversion" />
         <CardContent>
           <Grid
             gap={2}
@@ -94,10 +94,10 @@ export function FileConversion(props: Props) {
             </Grid>
             <Grid item xs={6} md={4}>
               <LoadingButton
-                text={`Convert`}
+                text="Convert"
                 icon={<ChangeCircle />}
                 clickAction={convertFile}
-                buttonProps={{ variant: "contained" }}
+                buttonProps={{ variant: 'contained' }}
               />
             </Grid>
           </Grid>

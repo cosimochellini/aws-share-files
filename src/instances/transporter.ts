@@ -1,6 +1,6 @@
-import { env } from "./env";
-import nodemailer from "nodemailer";
-import { notification } from "./notification";
+import nodemailer from 'nodemailer';
+import { env } from './env';
+import { notification } from './notification';
 
 const { email } = env;
 

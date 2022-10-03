@@ -1,6 +1,6 @@
-import { useState } from "react";
-import { Link } from "../../barrel/mui.barrel";
-import { Nullable } from "../../types/generic";
+import { useState } from 'react';
+import { Link } from '../../barrel/mui.barrel';
+import { Nullable } from '../../types/generic';
 
 type Props = {
   text: Nullable<string>;
@@ -14,13 +14,13 @@ export function ReadMore(props: Props) {
 
   return (
     <>
-      {isExpanded ? text : text.slice(0, maxLength) + "...  "}
+      {isExpanded ? text : `${text.slice(0, maxLength)}...  `}
       {text.length > maxLength && (
         <Link
           onClick={() => setIsExpanded(!isExpanded)}
           className="read-more-button"
         >
-          {isExpanded ? "Read Less" : "Read More"}
+          {isExpanded ? 'Read Less' : 'Read More'}
         </Link>
       )}
     </>

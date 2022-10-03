@@ -1,15 +1,15 @@
-import { ReadMore } from "../Text/ReadMore";
-import { Nullable } from "../../types/generic";
-import { FilesAccordion } from "./FilesAccordion";
-import { FileConversion } from "./FileConversion";
-import { useDevice } from "../../hooks/device.hook";
-import { S3FileGroup } from "../../classes/S3FileGroup";
-import { VolumeChipArray } from "../Data/VolumeChipArray";
-import { useEmailsStore } from "../../store/emails.store";
-import { useVolumesStore } from "../../store/volumes.store";
-import { Card, CardContent } from "../../barrel/mui.barrel";
-import { Divider, Modal, Typography } from "../../barrel/mui.barrel";
-import { CardHeader, Rating, Skeleton } from "../../barrel/mui.barrel";
+import { ReadMore } from '../Text/ReadMore';
+import { Nullable } from '../../types/generic';
+import { FilesAccordion } from './FilesAccordion';
+import { FileConversion } from './FileConversion';
+import { useDevice } from '../../hooks/device.hook';
+import { S3FileGroup } from '../../classes/S3FileGroup';
+import { VolumeChipArray } from '../Data/VolumeChipArray';
+import { useEmailsStore } from '../../store/emails.store';
+import { useVolumesStore } from '../../store/volumes.store';
+import {
+  Card, CardContent, Divider, Modal, Typography, CardHeader, Rating, Skeleton,
+} from '../../barrel/mui.barrel';
 
 type Props = {
   file: Nullable<S3FileGroup>;
@@ -17,16 +17,18 @@ type Props = {
 };
 
 const style = {
-  position: "absolute" as "absolute",
-  top: "50%",
-  left: "50%",
-  transform: "translate(-50%, -50%)",
-  maxWidth: "100%",
-  bgcolor: "background.paper",
+  position: 'absolute' as const,
+  top: '50%',
+  left: '50%',
+  transform: 'translate(-50%, -50%)',
+  maxWidth: '100%',
+  bgcolor: 'background.paper',
   boxShadow: 24,
-  overflow: "scroll",
-  maxHeight: "80%",
-  width: { xs: "95%", sm: "80%", md: "60%", lg: "50%", xl: "40%" },
+  overflow: 'scroll',
+  maxHeight: '80%',
+  width: {
+    xs: '95%', sm: '80%', md: '60%', lg: '50%', xl: '40%',
+  },
 };
 
 function FileModal(props: Props) {
@@ -58,8 +60,8 @@ function FileModal(props: Props) {
             {volume ? (
               <CardHeader
                 action={
-                  isDesktop &&
-                  volume.averageRating && (
+                  isDesktop
+                  && volume.averageRating && (
                     <Rating
                       name="read-only"
                       value={volume.averageRating}

@@ -1,17 +1,18 @@
-import { useMemo, useState } from "react";
-import { Nullable } from "../../types/generic";
-import { functions } from "../../instances/functions";
-import { LoadingButton } from "../Data/LoadingButton";
-import { notification } from "../../instances/notification";
-import { Mail, Send, Star } from "../../barrel/mui.icons.barrel";
-import { Grid, List, ListItem, ListItemText } from "../../barrel/mui.barrel";
+import { useMemo, useState } from 'react';
+import { Nullable } from '../../types/generic';
+import { functions } from '../../instances/functions';
+import { LoadingButton } from '../Data/LoadingButton';
+import { notification } from '../../instances/notification';
+import { Mail, Send, Star } from '../../barrel/mui.icons.barrel';
 import {
+  Grid, List, ListItem, ListItemText,
+
   Menu,
   MenuItem,
   Typography,
   ListItemIcon,
-} from "../../barrel/mui.barrel";
-import { useEmailsStore } from "../../store/emails.store";
+} from '../../barrel/mui.barrel';
+import { useEmailsStore } from '../../store/emails.store';
 
 type Props = {
   fileKey: string;
@@ -25,7 +26,7 @@ export function SendFileViaEmail(props: Props) {
   const [selectedIndex, setSelectedIndex] = useState<Nullable<number>>();
   const selectedEmail = useMemo(
     () => emails?.[selectedIndex ?? 0],
-    [emails, selectedIndex]
+    [emails, selectedIndex],
   );
 
   const open = Boolean(anchorEl);
@@ -36,7 +37,7 @@ export function SendFileViaEmail(props: Props) {
 
     await functions.email
       .sendFile({ fileKey, to: selectedEmail.email })
-      .then(() => notification.success("File sent successfully"))
+      .then(() => notification.success('File sent successfully'))
       .catch(notification.error);
   };
 
@@ -59,7 +60,7 @@ export function SendFileViaEmail(props: Props) {
         container
         alignItems="center"
         justifyContent="center"
-        direction={{ xs: "column", md: "row" }}
+        direction={{ xs: 'column', md: 'row' }}
         gap={2}
       >
         <Grid item xs={12} md={8}>
@@ -68,7 +69,7 @@ export function SendFileViaEmail(props: Props) {
             sx={{
               border: 1,
               borderRadius: 2,
-              borderColor: "gray",
+              borderColor: 'gray',
             }}
             dense
           >
@@ -90,7 +91,7 @@ export function SendFileViaEmail(props: Props) {
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
-            MenuListProps={{ role: "listbox" }}
+            MenuListProps={{ role: 'listbox' }}
           >
             {(emails ?? []).map((email, index) => (
               <MenuItem
@@ -112,7 +113,7 @@ export function SendFileViaEmail(props: Props) {
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
-                  fontSize={"small"}
+                  fontSize="small"
                   sx={{ margin: 1 }}
                 >
                   {`(${email.email})`}
@@ -127,8 +128,8 @@ export function SendFileViaEmail(props: Props) {
             icon={<Send />}
             text="Send"
             buttonProps={{
-              color: "primary",
-              variant: "outlined",
+              color: 'primary',
+              variant: 'outlined',
             }}
           />
         </Grid>

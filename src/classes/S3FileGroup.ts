@@ -1,10 +1,11 @@
-import { S3File } from "./S3File";
-import { FileInfo } from "./FileInfo";
-import { byString, byValue } from "sort-es";
-import { S3BaseContent } from "./S3BaseContent";
+import { byString, byValue } from 'sort-es';
+import { S3File } from './S3File';
+import { FileInfo } from './FileInfo';
+import { S3BaseContent } from './S3BaseContent';
 
 export class S3FileGroup extends S3BaseContent {
   public FileName: string;
+
   public FileInfo: FileInfo;
 
   public Files: { extension: string; file: S3File }[];
@@ -44,11 +45,10 @@ export class S3FileGroup extends S3BaseContent {
 
     return map
       .map(
-        (f) =>
-          new S3FileGroup(
-            f.files[0].Object,
-            f.files.map((x) => x.Object)
-          )
+        (f) => new S3FileGroup(
+          f.files[0].Object,
+          f.files.map((x) => x.Object),
+        ),
       )
       .sort(byValue((x) => x.FileName, byString()));
   }

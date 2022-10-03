@@ -1,13 +1,13 @@
-import { env } from "../instances/env";
-import { s3Client } from "../instances/aws";
-import { byValue, byString } from "sort-es";
-import { S3Folder } from "../classes/S3Folder";
-import { ServiceArguments, ServiceMapper } from "../types/generic";
+import { byValue, byString } from 'sort-es';
 import {
   PutObjectCommand,
   DeleteObjectCommand,
   ListObjectsV2Command,
-} from "@aws-sdk/client-s3";
+} from '@aws-sdk/client-s3';
+import { env } from '../instances/env';
+import { s3Client } from '../instances/aws';
+import { S3Folder } from '../classes/S3Folder';
+import { ServiceArguments, ServiceMapper } from '../types/generic';
 
 export type UploadPayload = {
   name: string;
@@ -23,7 +23,7 @@ export const bucket = {
     const items = (await s3Client.send(command)).Contents ?? [];
 
     return items
-      .filter((x) => x.Key?.endsWith("/"))
+      .filter((x) => x.Key?.endsWith('/'))
       .map((item) => new S3Folder(item, items))
       .sort(byValue((x) => x.FolderName, byString()));
   },
@@ -33,7 +33,9 @@ export const bucket = {
   },
 
   async uploadFile(payload: UploadPayload) {
-    const { file, name, author, extension } = payload;
+    const {
+      file, name, author, extension,
+    } = payload;
 
     const key = `${author}/${name}.${extension}`;
 
@@ -45,7 +47,7 @@ export const bucket = {
       Bucket: env.aws.bucket,
     });
 
-    return await s3Client.send(command);
+    return s3Client.send(command);
   },
 
   async createFolder(folderName: string) {
@@ -58,7 +60,7 @@ export const bucket = {
       Bucket: env.aws.bucket,
     });
 
-    return await s3Client.send(command);
+    await s3Client.send(command);
   },
 
   async folderExists(folderName: string) {

@@ -1,10 +1,10 @@
-import { Nullable } from "../types/generic";
-import { useState } from "react";
-import { getQueryStringValue, setQueryStringValue } from "../utils/queryString";
+import { useState } from 'react';
+import { Nullable } from '../types/generic';
+import { getQueryStringValue, setQueryStringValue } from '../utils/queryString';
 
-export function useQueryString(key: string, initialValue: string = "") {
+export function useQueryString(key: string, initialValue = '') {
   const [value, setValue] = useState<Nullable<string>>(
-    getQueryStringValue(key) ?? initialValue
+    getQueryStringValue(key) ?? initialValue,
   );
 
   const onSetValue = (newValue: Nullable<string>) => {

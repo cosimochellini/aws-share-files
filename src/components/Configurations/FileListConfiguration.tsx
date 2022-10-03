@@ -1,19 +1,29 @@
-import { useState } from "react";
-import { MoreVert } from "../../barrel/mui.icons.barrel";
-import { ButtonGroup, Box, Select, Modal } from "../../barrel/mui.barrel";
-import { MenuItem, Grid, Button, Typography } from "../../barrel/mui.barrel";
-import { FormControl, IconButton, InputLabel } from "../../barrel/mui.barrel";
+import { useState } from 'react';
+import { MoreVert } from '../../barrel/mui.icons.barrel';
+import {
+  ButtonGroup,
+  Box,
+  Select,
+  Modal,
+  MenuItem,
+  Grid,
+  Button,
+  Typography,
+  FormControl,
+  IconButton,
+  InputLabel,
+} from '../../barrel/mui.barrel';
 
 const style = {
   p: 4,
   width: 400,
-  top: "50%",
-  left: "50%",
+  top: '50%',
+  left: '50%',
   boxShadow: 24,
-  border: "2px solid #000",
-  bgcolor: "background.paper",
-  transform: "translate(-50%, -50%)",
-  position: "absolute" as "absolute",
+  border: '2px solid #000',
+  bgcolor: 'background.paper',
+  transform: 'translate(-50%, -50%)',
+  position: 'absolute' as const,
 };
 
 export type KeyProp<T> = [title: string, value: keyof T];
@@ -31,8 +41,10 @@ export type PagingConfiguration<T> = {
   orderDesc: boolean;
 };
 
-export function FileListConfiguration<T extends {}>(props: Props<T>) {
-  const { availableKeys, configuration } = props;
+export function FileListConfiguration<T>(props: Props<T>) {
+  const {
+    availableKeys, configuration, title, onUpdateConfiguration,
+  } = props;
   const [open, setOpen] = useState(false);
 
   return (
@@ -43,7 +55,7 @@ export function FileListConfiguration<T extends {}>(props: Props<T>) {
       <Modal open={open} onClose={() => setOpen(false)}>
         <Box sx={style}>
           <Typography variant="h6" component="h2">
-            {props.title}
+            {title}
           </Typography>
 
           <FormControl fullWidth sx={{ mt: 3 }}>
@@ -53,7 +65,7 @@ export function FileListConfiguration<T extends {}>(props: Props<T>) {
               value={configuration.orderBy}
               label="Order by field"
               onChange={(e) => {
-                props.onUpdateConfiguration({
+                onUpdateConfiguration({
                   ...configuration,
                   orderBy: e.target.value as keyof T,
                 });
@@ -71,12 +83,12 @@ export function FileListConfiguration<T extends {}>(props: Props<T>) {
             <InputLabel id="select-order-direction">Order direction</InputLabel>
             <Select
               labelId="select-order-direction"
-              value={configuration.orderDesc ? "desc" : "asc"}
+              value={configuration.orderDesc ? 'desc' : 'asc'}
               label="Order direction"
               onChange={(e) => {
-                props.onUpdateConfiguration({
+                onUpdateConfiguration({
                   ...configuration,
-                  orderDesc: e.target.value === "desc",
+                  orderDesc: e.target.value === 'desc',
                 });
               }}
             >
@@ -86,14 +98,14 @@ export function FileListConfiguration<T extends {}>(props: Props<T>) {
           </FormControl>
 
           <FormControl fullWidth sx={{ mt: 3 }}>
-            <Grid item xs={12} style={{ textAlign: "center" }}>
+            <Grid item xs={12} style={{ textAlign: 'center' }}>
               <ButtonGroup
                 variant="outlined"
                 aria-label="outlined primary button group"
               >
                 <Button
                   onClick={() => {
-                    props.onUpdateConfiguration({
+                    onUpdateConfiguration({
                       ...configuration,
                       size: configuration.size - 10,
                     });
@@ -101,10 +113,10 @@ export function FileListConfiguration<T extends {}>(props: Props<T>) {
                 >
                   - 10
                 </Button>
-                <Button>show {configuration.size} elements</Button>
+                <Button>{`show ${configuration.size} elements`}</Button>
                 <Button
                   onClick={() => {
-                    props.onUpdateConfiguration({
+                    onUpdateConfiguration({
                       ...configuration,
                       size: configuration.size + 10,
                     });

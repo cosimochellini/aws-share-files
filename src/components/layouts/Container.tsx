@@ -1,35 +1,34 @@
-import Link from "../Link";
-import { AppProps } from "next/app";
-import { env } from "../../instances/env";
-import { Conversions } from "./Conversions";
-import { useDevice } from "../../hooks/device.hook";
-import { useState, forwardRef, useMemo } from "react";
-import { navbarItems, Visibility } from "../../instances/navbar";
+import {
+  useState, forwardRef, useMemo, ReactElement,
+} from 'react';
+import Link from '../Link';
+import { env } from '../../instances/env';
+import { Conversions } from './Conversions';
+import { useDevice } from '../../hooks/device.hook';
+import { navbarItems, Visibility } from '../../instances/navbar';
 
-import { styled } from "../../barrel/mui.barrel";
-import { Box, Drawer, ListItem } from "../../barrel/mui.barrel";
-import { CssBaseline, AppBar, Toolbar } from "../../barrel/mui.barrel";
-import { Typography, List, IconButton } from "../../barrel/mui.barrel";
-import { ListItemText, ListItemIcon, Divider } from "../../barrel/mui.barrel";
-import { Menu, ChevronLeft, ChevronRight } from "../../barrel/mui.icons.barrel";
-import { useAuth } from "../../hooks/auth.hook";
-import type { Nullable } from "../../types/generic";
+import { useAuth } from '../../hooks/auth.hook';
+import {
+  styled, Box, Drawer, ListItem, CssBaseline, AppBar, Toolbar, Typography, List, IconButton, ListItemText, ListItemIcon, Divider,
+} from '../../barrel/mui.barrel';
+import type { Nullable } from '../../types/generic';
+import { Menu, ChevronLeft, ChevronRight } from '../../barrel/mui.icons.barrel';
 
 const drawerWidth = 240;
 
-const Main = styled("main", {
-  shouldForwardProp: (prop) => prop !== "open",
+const Main = styled('main', {
+  shouldForwardProp: (prop) => prop !== 'open',
   /* @ts-ignore */
 })(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
-  transition: theme.transitions.create("margin", {
+  transition: theme.transitions.create('margin', {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   marginLeft: `-${drawerWidth}px`,
   ...(open && {
-    transition: theme.transitions.create("margin", {
+    transition: theme.transitions.create('margin', {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
@@ -38,53 +37,50 @@ const Main = styled("main", {
 }));
 
 const MyAppBar = styled(AppBar, {
-  shouldForwardProp: (prop) => prop !== "open",
+  shouldForwardProp: (prop) => prop !== 'open',
   /* @ts-ignore */
 })(({ theme, open }) => ({
-  transition: theme.transitions.create(["margin", "width"], {
+  transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
   }),
   ...(open && {
     width: `calc(100% - ${drawerWidth}px)`,
     marginLeft: `${drawerWidth}px`,
-    transition: theme.transitions.create(["margin", "width"], {
+    transition: theme.transitions.create(['margin', 'width'], {
       easing: theme.transitions.easing.easeOut,
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
 }));
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
+const DrawerHeader = styled('div')(({ theme }) => ({
+  display: 'flex',
+  alignItems: 'center',
   padding: theme.spacing(0, 1),
   // necessary for content to be below app bar
   ...theme.mixins.toolbar,
-  justifyContent: "flex-end",
+  justifyContent: 'flex-end',
 }));
 
-export default function Layout({ Component, pageProps }: Partial<AppProps>) {
+export function Container({ Component }: { Component: ReactElement }) {
   const {} = useAuth();
   const [open, setOpen] = useState(null as Nullable<boolean>);
   const { isMobile, hasWidth } = useDevice();
 
   const initialOpen = useMemo(
     () => !isMobile && hasWidth(1200),
-    [isMobile, hasWidth]
+    [isMobile, hasWidth],
   );
 
-  const isOpen = useMemo(() => {
-    return open ?? initialOpen;
-  }, [open, initialOpen]);
-
+  const isOpen = useMemo(() => open ?? initialOpen, [open, initialOpen]);
 
   const handleDrawerOpen = () => setOpen(true);
 
   const handleDrawerClose = () => setOpen(false);
 
   return (
-    <Box sx={{ display: "flex", border: 0, borderRadius: 16 }}>
+    <Box sx={{ display: 'flex', border: 0, borderRadius: 16 }}>
       <CssBaseline />
       {/* @ts-ignore */}
       <MyAppBar position="fixed" open={isOpen}>
@@ -95,7 +91,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
               aria-label="open drawer"
               onClick={handleDrawerOpen}
               edge="start"
-              sx={{ mr: 2, ...(isOpen && { display: "none" }) }}
+              sx={{ mr: 2, ...(isOpen && { display: 'none' }) }}
             >
               <Menu />
             </IconButton>
@@ -110,9 +106,9 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
         sx={{
           width: drawerWidth,
           flexShrink: 0,
-          "& .MuiDrawer-paper": {
+          '& .MuiDrawer-paper': {
             width: drawerWidth,
-            boxSizing: "border-box",
+            boxSizing: 'border-box',
           },
         }}
         variant="persistent"
@@ -133,9 +129,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
               <ListItem
                 key={name}
                 button
-                component={forwardRef(function Component(prop, ref) {
-                  return <Link key={name} href={redirect} {...prop} />;
-                })}
+                component={forwardRef((prop, ref) => <Link key={name} href={redirect} {...prop} />)}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={name} />
@@ -150,9 +144,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
               <ListItem
                 key={name}
                 button
-                component={forwardRef(function Component(prop, ref) {
-                  return <Link key={name} href={redirect} {...prop} />;
-                })}
+                component={forwardRef((prop, ref) => <Link key={name} href={redirect} {...prop} />)}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={name} />
@@ -164,8 +156,7 @@ export default function Layout({ Component, pageProps }: Partial<AppProps>) {
       {/* @ts-ignore */}
       <Main open={isOpen}>
         <DrawerHeader />
-        {/* @ts-ignore */}
-        {Component && <Component {...pageProps} />}
+        {Component}
       </Main>
     </Box>
   );

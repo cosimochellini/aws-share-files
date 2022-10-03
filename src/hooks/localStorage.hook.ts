@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { device } from "../services/device.service";
+import { useState } from 'react';
+import { device } from '../services/device.service';
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   // State to store our value
@@ -22,8 +22,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
   const setValue = (value: T) => {
     try {
       // Allow value to be a function so we have same API as useState
-      const valueToStore =
-        value instanceof Function ? value(storedValue) : value;
+      const valueToStore = value instanceof Function ? value(storedValue) : value;
       // Save state
       setStoredValue(valueToStore);
       // Save to local storage

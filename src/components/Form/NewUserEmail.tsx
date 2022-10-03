@@ -1,10 +1,11 @@
-import { useForm } from "react-hook-form";
-import { UserEmail } from "../../types/dynamo.types";
-import { Save } from "../../barrel/mui.icons.barrel";
-import { LoadingButton } from "../Data/LoadingButton";
-import { useEmailsStore } from "../../store/emails.store";
-import { Card, CardContent, Checkbox } from "../../barrel/mui.barrel";
-import { FormControlLabel, Grid, TextField } from "../../barrel/mui.barrel";
+import { useForm } from 'react-hook-form';
+import { UserEmail } from '../../types/dynamo.types';
+import { Save } from '../../barrel/mui.icons.barrel';
+import { LoadingButton } from '../Data/LoadingButton';
+import { useEmailsStore } from '../../store/emails.store';
+import {
+  Card, CardContent, Checkbox, FormControlLabel, Grid, TextField,
+} from '../../barrel/mui.barrel';
 
 export function NewUserEmail() {
   const addEmail = useEmailsStore((x) => x.addEmail);
@@ -21,40 +22,40 @@ export function NewUserEmail() {
       justifyContent="center"
     >
       <Grid item>
-        <Card variant="outlined" sx={{ maxWidth: "30rem" }}>
+        <Card variant="outlined" sx={{ maxWidth: '30rem' }}>
           <CardContent>
             <form onSubmit={onSubmit}>
               <Grid container gap={2}>
                 <Grid item xs={12}>
                   <TextField
                     label="Email"
-                    type={"email"}
+                    type="email"
                     variant="outlined"
                     fullWidth
-                    {...register("email")}
+                    {...register('email')}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    type={"email"}
+                    type="email"
                     fullWidth
                     variant="outlined"
                     label="Description"
-                    {...register("description")}
+                    {...register('description')}
                   />
                 </Grid>
 
                 <Grid item xs={6}>
                   <FormControlLabel
                     label="Default"
-                    control={<Checkbox {...register("default")} />}
+                    control={<Checkbox {...register('default')} />}
                   />
                 </Grid>
                 <Grid item xs={6}>
                   <LoadingButton
                     text="save"
                     icon={<Save />}
-                    buttonProps={{ variant: "outlined" }}
+                    buttonProps={{ variant: 'outlined' }}
                     clickAction={onSubmit}
                   />
                 </Grid>

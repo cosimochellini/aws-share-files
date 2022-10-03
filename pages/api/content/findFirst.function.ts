@@ -1,7 +1,7 @@
-import { content } from "../../../src/services/content.service";
-import { defaultBehavior } from "../../../src/utils/api/composable";
+import { content } from '../../../src/services/content.service';
+import { defaultBehavior } from '../../../src/utils/api/composable';
 
-export default defaultBehavior(async function (req) {
+export default defaultBehavior(async (req) => {
   const { query } = req.query;
 
   const data = await content.findFirstContent(query as string);

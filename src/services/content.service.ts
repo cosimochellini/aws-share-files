@@ -1,25 +1,25 @@
-import { env } from "../instances/env";
-import { ServiceArguments, ServiceMapper } from "../types/generic";
-import { notification } from "../instances/notification";
-import { ContentResponse } from "../types/content.types";
+import { env } from '../instances/env';
+import { ServiceArguments, ServiceMapper } from '../types/generic';
+import { notification } from '../instances/notification';
+import { ContentResponse } from '../types/content.types';
 
 const contentApiCaller = <T>(section: string, query = {}) => {
   const url = env.content.baseUrl + section;
 
-  return fetch(url + "?" + new URLSearchParams(query).toString())
+  return fetch(`${url}?${new URLSearchParams(query).toString()}`)
     .then((res) => res.json())
     .catch(notification.error) as Promise<T>;
 };
 
 export const content = {
   findFirstContent(query: string) {
-    return contentApiCaller<ContentResponse>("/volumes", { q: query }).then(
-      (res) => res.items?.[0]?.volumeInfo
+    return contentApiCaller<ContentResponse>('/volumes', { q: query }).then(
+      (res) => res.items?.[0]?.volumeInfo,
     );
   },
   findAllContent(query: string) {
-    return contentApiCaller<ContentResponse>("/volumes", { q: query }).then(
-      (res) => res.items?.map((x) => x.volumeInfo) ?? []
+    return contentApiCaller<ContentResponse>('/volumes', { q: query }).then(
+      (res) => res.items?.map((x) => x.volumeInfo) ?? [],
     );
   },
 };

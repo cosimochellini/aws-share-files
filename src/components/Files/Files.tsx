@@ -1,24 +1,23 @@
-import { byAny, byValue } from "sort-es";
-import { useMemo, useState } from "react";
-import { useEffectOnceWhen } from "../../hooks/once";
-import { ResultCount } from "./ResultCount";
-import { Nullable } from "../../types/generic";
-import { S3Folder } from "../../classes/S3Folder";
-import { Chip, Paper } from "../../barrel/mui.barrel";
-import { LoadingButton } from "../Data/LoadingButton";
-import { useQueryString } from "../../hooks/query.hook";
-import { S3FileGroup } from "../../classes/S3FileGroup";
-import { useFolderStore } from "../../store/files.store";
-import { Avatar, InputAdornment } from "../../barrel/mui.barrel";
-import { ListItem, ListItemAvatar } from "../../barrel/mui.barrel";
-import { AutoStories, Refresh } from "../../barrel/mui.icons.barrel";
-import { FilesPlaceholders } from "../Placeholders/FilesPlaceholders";
-import { ListItemText, TextField, List } from "../../barrel/mui.barrel";
-import { sharedConfiguration } from "../../instances/sharedConfiguration";
+import { byAny, byValue } from 'sort-es';
+import { useMemo, useState } from 'react';
+import { useEffectOnceWhen } from '../../hooks/once';
+import { ResultCount } from './ResultCount';
+import { Nullable } from '../../types/generic';
+import { S3Folder } from '../../classes/S3Folder';
+import {
+  Chip, Paper, Avatar, InputAdornment, ListItem, ListItemAvatar, ListItemText, TextField, List,
+} from '../../barrel/mui.barrel';
+import { LoadingButton } from '../Data/LoadingButton';
+import { useQueryString } from '../../hooks/query.hook';
+import { S3FileGroup } from '../../classes/S3FileGroup';
+import { useFolderStore } from '../../store/files.store';
+import { AutoStories, Refresh } from '../../barrel/mui.icons.barrel';
+import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
+import { sharedConfiguration } from '../../instances/sharedConfiguration';
 import {
   PagingConfiguration,
   FileListConfiguration,
-} from "../Configurations/FileListConfiguration";
+} from '../Configurations/FileListConfiguration';
 
 export type Props = {
   fileKey: Nullable<string>;
@@ -32,13 +31,13 @@ export type Props = {
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
   orderDesc: false,
-  orderBy: "FileName",
+  orderBy: 'FileName',
 } as PagingConfiguration<S3FileGroup>;
 
 export function Files(props: Props) {
   const { currentFolder } = props;
   const [selectedIndex, setSelectedIndex] = useState(0);
-  const [search, setSearch] = useQueryString("fileSearch");
+  const [search, setSearch] = useQueryString('fileSearch');
   const { folders, loadFolders, refreshFolders } = useFolderStore();
   const [configuration, setConfiguration] = useState(defaultConfiguration);
 
@@ -55,7 +54,7 @@ export function Files(props: Props) {
 
     props.onSearch?.(file);
 
-    props.setFileKey(file?.Key ?? "");
+    props.setFileKey(file?.Key ?? '');
     setSelectedIndex(index);
   };
 
@@ -76,7 +75,7 @@ export function Files(props: Props) {
 
     const { orderBy, orderDesc: desc } = configuration;
 
-    return items.sort(byValue(orderBy as "Key", byAny({ desc })));
+    return items.sort(byValue(orderBy as 'Key', byAny({ desc })));
   }, [search, folders, currentFolder, configuration]);
 
   useEffectOnceWhen(() => {
@@ -96,7 +95,7 @@ export function Files(props: Props) {
         label="Search for a file"
         type="search"
         sx={{
-          width: { xs: "88%", md: "88%" },
+          width: { xs: '88%', md: '88%' },
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -104,7 +103,7 @@ export function Files(props: Props) {
           endAdornment: (
             <InputAdornment position="end">
               <LoadingButton
-                type={"icon"}
+                type="icon"
                 icon={<Refresh />}
                 clickAction={() => refreshFolders(true)}
               />
@@ -114,9 +113,9 @@ export function Files(props: Props) {
           startAdornment: currentFolder && (
             <Chip
               variant="outlined"
-              sx={{ marginRight: "5px" }}
+              sx={{ marginRight: '5px' }}
               onDelete={handleDeleteAuthor}
-              label={"Author: " + currentFolder.FolderName}
+              label={`Author: ${currentFolder.FolderName}`}
             />
           ),
         }}
@@ -126,21 +125,21 @@ export function Files(props: Props) {
         configuration={configuration}
         onUpdateConfiguration={setConfiguration}
         availableKeys={[
-          ["Title", "FileName"],
-          ["Last update", "LastModified"],
-          ["Size", "Size"],
+          ['Title', 'FileName'],
+          ['Last update', 'LastModified'],
+          ['Size', 'Size'],
         ]}
       />
       <Paper
         style={{
           maxHeight: 750,
-          overflowY: "scroll",
-          background: "transparent",
+          overflowY: 'scroll',
+          background: 'transparent',
         }}
       >
         <List
           sx={{
-            width: { xs: "100%", md: "90%" },
+            width: { xs: '100%', md: '90%' },
           }}
         >
           {!folders ? (
@@ -162,15 +161,13 @@ export function Files(props: Props) {
                 <ListItemText
                   primary={file.FileInfo.Name}
                   secondary={file.Hierarchy[0]}
-                ></ListItemText>
+                />
 
                 <Chip
                   size="small"
-                  sx={{ marginX: "1px" }}
-                  title={file.Files.map(({ extension }) => extension).join(" ")}
-                  label={file.Files.map((f) =>
-                    f.extension[0]?.toUpperCase()
-                  ).join(" ")}
+                  sx={{ marginX: '1px' }}
+                  title={file.Files.map(({ extension }) => extension).join(' ')}
+                  label={file.Files.map((f) => f.extension[0]?.toUpperCase()).join(' ')}
                 />
               </ListItem>
             ))
@@ -180,12 +177,10 @@ export function Files(props: Props) {
           displayName="files"
           totalItems={displayedItems.length}
           displayedItems={configuration.size}
-          onClick={() =>
-            setConfiguration({
-              ...configuration,
-              size: configuration.size + 10,
-            })
-          }
+          onClick={() => setConfiguration({
+            ...configuration,
+            size: configuration.size + 10,
+          })}
         />
       </Paper>
     </>

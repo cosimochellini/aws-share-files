@@ -1,5 +1,5 @@
-import { randomId } from "../../utils/random";
-import { Skeleton, Typography } from "../../barrel/mui.barrel";
+import { randomId } from '../../utils/random';
+import { Skeleton, Typography } from '../../barrel/mui.barrel';
 
 type Props = {
   count: number;

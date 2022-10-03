@@ -1,10 +1,10 @@
-import { createTheme } from "../barrel/mui.barrel";
+import { createTheme } from '../barrel/mui.barrel';
 
 const theme = {
   get dark() {
     return createTheme({
       palette: {
-        mode: "dark",
+        mode: 'dark',
       },
     });
   },
@@ -12,7 +12,7 @@ const theme = {
   get light() {
     return createTheme({
       palette: {
-        mode: "light",
+        mode: 'light',
       },
     });
   },

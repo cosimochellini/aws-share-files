@@ -1,7 +1,8 @@
-import { device } from "../services/device.service";
+import { device } from '../services/device.service';
 
 export class UnReactiveStore<T> {
   private _key: string;
+
   private _initialValue: T;
 
   constructor(key: string, initialValue: T) {
