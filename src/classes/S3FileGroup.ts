@@ -36,8 +36,8 @@ export class S3FileGroup extends S3BaseContent {
     const map = files.reduce((cache, file) => {
       const { Name } = file.FileInfo;
 
-      if (map.findIndex((f) => f.fileName === Name) === -1) {
-        map.push({ fileName: Name, files: [] });
+      if (cache.findIndex((f) => f.fileName === Name) === -1) {
+        cache.push({ fileName: Name, files: [] });
       }
 
       cache.find((f) => f.fileName === Name)?.files.push(file);
