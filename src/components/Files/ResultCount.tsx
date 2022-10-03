@@ -8,14 +8,16 @@ type Props = {
 };
 
 export function ResultCount(props: Props) {
-  const { displayedItems, totalItems } = props;
+  const {
+    displayedItems, totalItems, displayName, onClick,
+  } = props;
   const remainingItems = totalItems - displayedItems;
   const shouldDisplayItems = displayedItems < totalItems;
 
   return shouldDisplayItems ? (
-    <Grid item xs={12} style={{ textAlign: 'center' }} onClick={props.onClick}>
+    <Grid item xs={12} style={{ textAlign: 'center' }} onClick={onClick}>
       <Chip
-        label={`${remainingItems} ${props.displayName} remaining...`}
+        label={`${remainingItems} ${displayName} remaining...`}
         variant="outlined"
       />
     </Grid>

@@ -1,9 +1,16 @@
 import { byValue, byAny } from 'sort-es';
 import { useMemo, useState } from 'react';
-import { ResultCount } from './ResultCount';
+
 import { Nullable } from '../../types/generic';
 import {
-  Paper, ListItem, TextField, Avatar, InputAdornment, ListItemAvatar, ListItemText, List,
+  Paper,
+  ListItem,
+  TextField,
+  Avatar,
+  InputAdornment,
+  ListItemAvatar,
+  ListItemText,
+  List,
 } from '../../barrel/mui.barrel';
 import { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
@@ -19,11 +26,13 @@ import {
 } from '../Configurations/FileListConfiguration';
 import { useEffectOnceWhen } from '../../hooks/once';
 
+import { ResultCount } from './ResultCount';
+
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
-  orderBy: 'Key',
+  orderBy: 'Key' as const,
   orderDesc: false,
-} as PagingConfiguration<S3Folder>;
+} as Readonly<PagingConfiguration<S3Folder>>;
 
 type Props = {
   folderKey: Nullable<string>;
@@ -35,12 +44,15 @@ export default function Folders(props: Props) {
   const [hoveredItem, setHoveredItem] = useState(0);
   const { folders, refreshFolders } = useFolderStore();
   const [search, setSearch] = useQueryString('folderSearch');
+
   const [configuration, setConfiguration] = useState(defaultConfiguration);
+
+  const { onSearch, setFolderKey, folderKey } = props;
 
   const handleCLick = (index: number) => {
     const folder = displayedItems[index];
-    props.onSearch(folder);
-    props.setFolderKey(folder?.Key ?? '');
+    onSearch(folder);
+    setFolderKey(folder?.Key ?? '');
   };
 
   const displayedItems = useMemo(() => {
@@ -53,18 +65,18 @@ export default function Folders(props: Props) {
     }
     const { orderBy, orderDesc: desc } = configuration;
 
-    return items.sort(byValue(orderBy as any, byAny({ desc })));
+    return items.sort(byValue(orderBy as 'Key', byAny({ desc })));
   }, [search, folders, configuration]);
 
   useEffectOnceWhen(() => {
-    if (props.folderKey) {
-      const index = displayedItems.findIndex((i) => i.Key === props.folderKey);
+    if (folderKey) {
+      const index = displayedItems.findIndex((i) => i.Key === folderKey);
 
       if (index < 0) return;
 
       const folder = displayedItems[index];
 
-      props.onSearch(folder);
+      onSearch(folder);
     }
   }, displayedItems?.length > 0);
 

@@ -1,8 +1,10 @@
 import { useState } from 'react';
+
 import { noop } from '../utils/noop';
-import { useEffectOnceWhen } from './once';
 import { debounce } from '../utils/callbacks';
 import { device } from '../services/device.service';
+
+import { useEffectOnceWhen } from './once';
 
 const initialDeviceState = {
   isClient: false,

@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { Link } from '../../barrel/mui.barrel';
+
+import { MuiLink } from '../../barrel/mui.barrel';
 import { Nullable } from '../../types/generic';
 
 type Props = {
@@ -16,12 +17,12 @@ export function ReadMore(props: Props) {
     <>
       {isExpanded ? text : `${text.slice(0, maxLength)}...  `}
       {text.length > maxLength && (
-        <Link
+        <MuiLink
           onClick={() => setIsExpanded(!isExpanded)}
           className="read-more-button"
         >
           {isExpanded ? 'Read Less' : 'Read More'}
-        </Link>
+        </MuiLink>
       )}
     </>
   );

@@ -1,8 +1,12 @@
 import React, { useMemo, useState } from 'react';
+
 import { Nullable } from '../../types/generic';
 import { notification } from '../../instances/notification';
 import {
-  Button, ButtonProps, IconButton, IconButtonProps,
+  Button,
+  ButtonProps,
+  IconButton,
+  IconButtonProps,
 } from '../../barrel/mui.barrel';
 import { Error, Refresh } from '../../barrel/mui.icons.barrel';
 
@@ -10,13 +14,15 @@ type Props = {
   type?: Nullable<'button' | 'icon'>;
   text?: Nullable<string>;
   icon: Nullable<JSX.Element>;
-  clickAction: (event: React.SyntheticEvent) => Promise<unknown>;
   buttonProps?: Nullable<ButtonProps>;
   iconProps?: Nullable<IconButtonProps>;
+  clickAction: (event: React.SyntheticEvent) => Promise<unknown>;
 };
 
 export function LoadingButton(props: Props) {
-  const { type = 'button' } = props;
+  const {
+    type = 'button', buttonProps, icon, iconProps, clickAction, text,
+  } = props;
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
@@ -26,16 +32,16 @@ export function LoadingButton(props: Props) {
 
     if (error) return 'error';
 
-    return props.buttonProps?.color ?? props.iconProps?.color ?? 'primary';
-  }, [loading, error, props.buttonProps?.color, props.iconProps?.color]);
+    return buttonProps?.color ?? iconProps?.color ?? 'primary';
+  }, [loading, error, buttonProps?.color, iconProps?.color]);
 
   const currentIcon = useMemo(() => {
     if (loading) return <Refresh className="spin" />;
 
     if (error) return <Error />;
 
-    return props.icon;
-  }, [loading, error, props.icon]);
+    return icon;
+  }, [loading, error, icon]);
 
   const disabled = useMemo(() => {
     if (loading) return true;
@@ -55,33 +61,28 @@ export function LoadingButton(props: Props) {
 
     setLoading(true);
 
-    await props
-      .clickAction(e)
+    await clickAction(e)
       .catch(handleError)
       .finally(() => setLoading(false));
   };
 
-  return (
-    <>
-      {type === 'button' ? (
-        <Button
-          endIcon={currentIcon}
-          disabled={disabled}
-          onClick={handleClick}
-          {...(props.buttonProps ?? {})}
-        >
-          {props.text}
-        </Button>
-      ) : (
-        <IconButton
-          color={color}
-          disabled={disabled}
-          onClick={handleClick}
-          {...(props.iconProps ?? {})}
-        >
-          {currentIcon}
-        </IconButton>
-      )}
-    </>
+  return type === 'button' ? (
+    <Button
+      endIcon={currentIcon}
+      disabled={disabled}
+      onClick={handleClick}
+      {...buttonProps}
+    >
+      {text}
+    </Button>
+  ) : (
+    <IconButton
+      color={color}
+      disabled={disabled}
+      onClick={handleClick}
+      {...iconProps}
+    >
+      {currentIcon}
+    </IconButton>
   );
 }

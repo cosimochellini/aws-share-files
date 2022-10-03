@@ -53,7 +53,6 @@ function FilesPage() {
           <Files
             fileKey={fileKey}
             setFileKey={setFileKey}
-            fileGroup={selectedFileGroup}
             onSearch={setSelectedFileGroup}
             currentFolder={selectedFolder}
             onClearFolder={() => {

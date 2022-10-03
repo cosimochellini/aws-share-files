@@ -1,6 +1,7 @@
-import { debounce } from './callbacks';
 import { device } from '../services/device.service';
 import { Nullable } from '../types/generic';
+
+import { debounce } from './callbacks';
 
 const cache: Record<string, URLSearchParams> = {
   '': new URLSearchParams(''),

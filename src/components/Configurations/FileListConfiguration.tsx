@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import { MoreVert } from '../../barrel/mui.icons.barrel';
 import {
   ButtonGroup,
@@ -13,6 +14,7 @@ import {
   IconButton,
   InputLabel,
 } from '../../barrel/mui.barrel';
+import { Nullable } from '../../types/generic';
 
 const style = {
   p: 4,
@@ -23,10 +25,14 @@ const style = {
   border: '2px solid #000',
   bgcolor: 'background.paper',
   transform: 'translate(-50%, -50%)',
-  position: 'absolute' as const,
-};
+  position: 'absolute',
+} as const;
 
-export type KeyProp<T> = [title: string, value: keyof T];
+export type CorrectKeyProp<T> = NonNullable<{
+  [key in keyof T]: T[key] extends Nullable<(string | number | Date)> ? key : never
+}>[keyof T]
+
+export type KeyProp<T> = [title: string, value: CorrectKeyProp<T>];
 
 type Props<T> = {
   title: string;
@@ -37,7 +43,7 @@ type Props<T> = {
 
 export type PagingConfiguration<T> = {
   size: number;
-  orderBy: keyof T;
+  orderBy: CorrectKeyProp<T>;
   orderDesc: boolean;
 };
 
@@ -67,7 +73,7 @@ export function FileListConfiguration<T>(props: Props<T>) {
               onChange={(e) => {
                 onUpdateConfiguration({
                   ...configuration,
-                  orderBy: e.target.value as keyof T,
+                  orderBy: e.target.value as CorrectKeyProp<T>,
                 });
               }}
             >

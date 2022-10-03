@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import {
   Typography,
   Accordion,
@@ -9,12 +10,13 @@ import type { S3File } from '../../classes/S3File';
 import { useDevice } from '../../hooks/device.hook';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
-import { SendFileViaEmail } from './SendFileViaEmail';
 import { formatter } from '../../formatters/formatter';
 import { S3FileGroup } from '../../classes/S3FileGroup';
 import { downloadURI } from '../../utils/downloadHelper';
 import { Delete, Download, ExpandMore } from '../../barrel/mui.icons.barrel';
 import { useFolderStore } from '../../store/files.store';
+
+import { SendFileViaEmail } from './SendFileViaEmail';
 
 type Props = {
   currentFile: S3FileGroup;
@@ -24,7 +26,7 @@ const downloadFile = async (key: string) => {
   const signedUrl = await functions.s3.shareableUrl({ key });
   const fileName = key.split('/').at(-1);
 
-  downloadURI(signedUrl, fileName!);
+  downloadURI(signedUrl, fileName as string);
 };
 
 export function FilesAccordion(props: Props) {

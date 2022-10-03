@@ -1,4 +1,5 @@
 import nodemailer from 'nodemailer';
+
 import { env } from './env';
 import { notification } from './notification';
 
@@ -10,7 +11,7 @@ const transporter = nodemailer.createTransport(email);
 try {
   transporter.verify?.()?.catch?.(notification.error);
 } catch (error) {
-  console.error(error);
+  notification.error(error);
 }
 
 export { transporter };

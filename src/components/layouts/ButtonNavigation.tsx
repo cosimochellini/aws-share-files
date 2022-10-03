@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router';
-import { forwardRef, useMemo, useState } from 'react';
-import Link from '../Link';
+import { forwardRef, useMemo } from 'react';
+
+import { Link } from '../Link';
 import {
   styled,
   BottomNavigation,
@@ -35,17 +36,18 @@ export default function ButtonNavigation() {
         <BottomNavigation showLabels value={currentRoute}>
           {navbarItems
             .filter((x) => [Visibility.All, Visibility.BottomBar].includes(x.visibility))
-            .map((item, index) => (
+            .map((item) => (
               <BottomNavigationAction
-                component={forwardRef((prop, ref) => (
+                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+                component={forwardRef<HTMLAnchorElement>((prop, ref) => (
                   <Link
                     {...prop}
-                    ref={ref as any}
+                    ref={ref}
                     key={item.name}
                     href={item.redirect}
                   />
                 ))}
-                key={index}
+                key={item.name}
                 label={item.name}
                 icon={item.icon}
               />

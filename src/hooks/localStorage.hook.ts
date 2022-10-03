@@ -1,5 +1,7 @@
 import { useState } from 'react';
+
 import { device } from '../services/device.service';
+import { notification } from '../instances/notification';
 
 export const useLocalStorage = <T>(key: string, initialValue: T) => {
   // State to store our value
@@ -12,7 +14,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
       return item ? (JSON.parse(item) as T) : initialValue;
     } catch (error) {
       // If error also return initialValue
-      console.error(error);
+      notification.error(error);
       return initialValue;
     }
   });
@@ -29,7 +31,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
       device.window?.localStorage.setItem(key, JSON.stringify(valueToStore));
     } catch (error) {
       // A more advanced implementation would handle the error case
-      console.error(error);
+      notification.error(error);
     }
   };
 

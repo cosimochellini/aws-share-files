@@ -5,7 +5,7 @@ import { formatter } from '../src/formatters/formatter';
 import { useThemeStore } from '../src/store/theme.store';
 import { navbarItems, Visibility } from '../src/instances/navbar';
 import {
-  Checkbox, FormControlLabel, Grid, ListItem, ListItemIcon, ListItemText, Divider, Link, List,
+  Checkbox, FormControlLabel, Grid, ListItem, ListItemIcon, ListItemText, Divider, MuiLink, List,
 } from '../src/barrel/mui.barrel';
 
 function Settings() {
@@ -35,7 +35,7 @@ function Settings() {
                   button
                   // eslint-disable-next-line react/no-unstable-nested-components
                   component={(prop) => (
-                    <Link key={name} href={redirect} {...prop} />
+                    <MuiLink key={name} href={redirect} {...prop} />
                   )}
                 >
                   <ListItemIcon>{icon}</ListItemIcon>

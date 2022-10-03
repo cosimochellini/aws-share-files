@@ -4,8 +4,8 @@ import { defaultBehavior } from '../../../src/utils/api/composable';
 export default defaultBehavior(async (req) => {
   const { key, expires } = req.query;
 
-  return await bucket.getShareableUrl({
+  return bucket.getShareableUrl({
     key: key as string,
-    expires: parseInt((expires ?? '10') as string),
+    expires: parseInt((expires ?? '10') as string, 10),
   });
 });

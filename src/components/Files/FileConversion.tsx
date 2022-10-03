@@ -1,7 +1,15 @@
 import { useState } from 'react';
+
 import { env } from '../../instances/env';
 import {
-  Select, FormControl, InputLabel, MenuItem, Card, CardContent, CardHeader, Grid,
+  Select,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Card,
+  CardContent,
+  CardHeader,
+  Grid,
 } from '../../barrel/mui.barrel';
 import { LoadingButton } from '../Data/LoadingButton';
 import { functions } from '../../instances/functions';
@@ -31,13 +39,18 @@ export function FileConversion(props: Props) {
   const [target, setTarget] = useState(availableExtensions[0]);
 
   const convertFile = async () => {
-    const f = currentFile.Files.find((f) => f.extension === file)!;
+    const f = currentFile.Files.find((f) => f.extension === file);
+
+    const fileKey = f?.file.Object.Key;
+
+    if (!fileKey) {
+      notification.error('No file found');
+
+      return;
+    }
 
     await functions.convert
-      .convert({
-        target,
-        file: f.file.Object.Key!,
-      })
+      .convert({ target, file: fileKey })
       .then((job) => addConversion(job.id))
       .then(() => notification.success('Conversion started'));
   };

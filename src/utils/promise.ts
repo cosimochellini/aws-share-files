@@ -1,5 +1,6 @@
-import { noop } from './noop';
 import { GenericFunction, Nullable } from '../types/generic';
+
+import { noop } from './noop';
 
 export const wait = (milliseconds: number) => new Promise((resolve) => {
   setTimeout(resolve, milliseconds);

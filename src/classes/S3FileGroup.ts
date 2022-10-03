@@ -1,4 +1,6 @@
 import { byString, byValue } from 'sort-es';
+import type { _Object } from '@aws-sdk/client-s3';
+
 import { S3File } from './S3File';
 import { FileInfo } from './FileInfo';
 import { S3BaseContent } from './S3BaseContent';
@@ -10,7 +12,7 @@ export class S3FileGroup extends S3BaseContent {
 
   public Files: { extension: string; file: S3File }[];
 
-  constructor(file: Object, siblings: Object[]) {
+  constructor(file: _Object, siblings: _Object[]) {
     super(file);
 
     this.FileName = this.Hierarchy[this.Hierarchy.length - 1];
@@ -28,20 +30,20 @@ export class S3FileGroup extends S3BaseContent {
    * group files by their file + extension
    * @param files
    */
-  public static Create(filesInCurrentFolder: Object[]): S3FileGroup[] {
+  public static Create(filesInCurrentFolder: _Object[]): S3FileGroup[] {
     const files = filesInCurrentFolder.map((file) => new S3File(file));
 
-    const map = [] as { fileName: string; files: S3File[] }[];
-
-    for (const file of files) {
+    const map = files.reduce((cache, file) => {
       const { Name } = file.FileInfo;
 
       if (map.findIndex((f) => f.fileName === Name) === -1) {
         map.push({ fileName: Name, files: [] });
       }
 
-      map.find((f) => f.fileName === Name)!.files.push(file);
-    }
+      cache.find((f) => f.fileName === Name)?.files.push(file);
+
+      return cache;
+    }, [] as { fileName: string; files: S3File[] }[]);
 
     return map
       .map(

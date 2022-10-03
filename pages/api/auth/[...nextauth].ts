@@ -1,6 +1,7 @@
 import NextAuth from 'next-auth';
 import EmailProvider from 'next-auth/providers/email';
 import { DynamoDBAdapter } from '@next-auth/dynamodb-adapter';
+
 import { env } from '../../../src/instances/env';
 import { dynamoDbClient } from '../../../src/instances/aws';
 

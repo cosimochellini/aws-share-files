@@ -6,7 +6,7 @@ export class FileInfo {
   public CompleteName: string;
 
   constructor(fileName: string) {
-    const fixedFileName = fileName.split('/').pop()!;
+    const fixedFileName = fileName.split('/').pop() as string;
 
     this.CompleteName = fixedFileName;
 

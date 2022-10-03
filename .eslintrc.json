@@ -25,9 +25,28 @@
     ],
     "react/jsx-props-no-spreading": "off",
     "import/prefer-default-export": "off",
-    "@typescript-eslint/no-unused-vars": "error",
     "no-use-before-define": "off",
     "no-shadow": "off",
-    "react/require-default-props": "off"
+    "react/require-default-props": "off",
+    "@typescript-eslint/no-unused-vars": [
+      "error",
+      {
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "@typescript-eslint/ban-ts-comment": "warn",
+    "import/order": [
+      "error",
+      {
+        "newlines-between": "always",
+        "pathGroupsExcludedImportTypes": [
+          "builtin"
+        ]
+      }
+    ],
+    "jsx-a11y/anchor-is-valid": "warn",
+    "react/display-name": "off"
   }
 }

@@ -1,5 +1,6 @@
 import { useRouter } from 'next/router';
 import { signOut } from 'next-auth/react';
+
 import { withDefaultLayout } from '../layouts';
 import { useAuth } from '../src/hooks/auth.hook';
 import { useEffectOnceWhen } from '../src/hooks/once';

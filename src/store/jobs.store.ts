@@ -1,4 +1,5 @@
 import create from 'zustand';
+
 import { ConverterResponse } from '../types/converter.types';
 
 interface JobsState {

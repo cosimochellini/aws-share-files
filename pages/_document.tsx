@@ -1,6 +1,7 @@
 import Document, {
   Html, Head, Main, NextScript,
 } from 'next/document';
+
 import { env } from '../src/instances/env';
 
 class MyDocument extends Document {

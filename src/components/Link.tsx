@@ -1,7 +1,9 @@
+// eslint-disable-next-line import/no-extraneous-dependencies
 import clsx from 'clsx';
 import { forwardRef } from 'react';
 import { useRouter } from 'next/router';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+
 import { MuiLinkProps, MuiLink, styled } from '../barrel/mui.barrel';
 
 // Add support for the sx prop for consistency with the other branches.
@@ -25,7 +27,7 @@ export const NextLinkComposed = forwardRef<
   const {
     to,
     linkAs,
-    href,
+    href: _,
     replace,
     scroll,
     shallow,
@@ -70,7 +72,7 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((
     className: classNameProps,
     href,
     noLinkStyle,
-    role, // Link don't have roles.
+    role: _, // Link don't have roles.
     ...other
   } = props;
 

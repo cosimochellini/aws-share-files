@@ -1,6 +1,7 @@
 import { Session } from 'next-auth';
 import { NextApiRequest } from 'next';
 import { getSession } from 'next-auth/react';
+
 import { env } from '../../instances/env';
 import { retrieveError } from '../retrieveError';
 import type { BaseResponse } from '../../types/generic';

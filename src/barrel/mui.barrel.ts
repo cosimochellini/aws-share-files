@@ -1,5 +1,4 @@
 import Box from '@mui/material/Box';
-import Link from '@mui/material/Link';
 import Menu from '@mui/material/Menu';
 import Card from '@mui/material/Card';
 import List from '@mui/material/List';
@@ -35,6 +34,7 @@ import FormControl from '@mui/material/FormControl';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+// eslint-disable-next-line import/no-extraneous-dependencies
 import ThemeProvider from '@mui/system/ThemeProvider';
 import InputAdornment from '@mui/material/InputAdornment';
 import ListItemAvatar from '@mui/material/ListItemAvatar';
@@ -51,7 +51,6 @@ import BottomNavigationAction from '@mui/material/BottomNavigationAction';
 export {
   Box,
   Grid,
-  Link,
   Card,
   Menu,
   Chip,

@@ -1,8 +1,8 @@
 import { MouseEvent, useState } from 'react';
+
 import { Nullable } from '../../types/generic';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
-import { unresolvedPromise } from '../../utils/promise';
 import { StatusCode } from '../../types/converter.types';
 import { useJobs } from '../../hooks/state/useJobs.state';
 import {
@@ -112,7 +112,7 @@ export function Conversions() {
                 type="icon"
                 icon={<Delete />}
                 iconProps={{ color: 'error' }}
-                clickAction={() => unresolvedPromise(() => removeConversion(job.id))}
+                clickAction={async () => removeConversion(job.id)}
               />
             </MenuItem>
           ))

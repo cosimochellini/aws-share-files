@@ -1,18 +1,30 @@
 import {
   useState, forwardRef, useMemo, ReactElement,
 } from 'react';
-import Link from '../Link';
+
+import { Link } from '../Link';
 import { env } from '../../instances/env';
-import { Conversions } from './Conversions';
 import { useDevice } from '../../hooks/device.hook';
 import { navbarItems, Visibility } from '../../instances/navbar';
-
-import { useAuth } from '../../hooks/auth.hook';
 import {
-  styled, Box, Drawer, ListItem, CssBaseline, AppBar, Toolbar, Typography, List, IconButton, ListItemText, ListItemIcon, Divider,
+  styled,
+  Box,
+  Drawer,
+  ListItem,
+  CssBaseline,
+  AppBar,
+  Toolbar,
+  Typography,
+  List,
+  IconButton,
+  ListItemText,
+  ListItemIcon,
+  Divider,
 } from '../../barrel/mui.barrel';
 import type { Nullable } from '../../types/generic';
 import { Menu, ChevronLeft, ChevronRight } from '../../barrel/mui.icons.barrel';
+
+import { Conversions } from './Conversions';
 
 const drawerWidth = 240;
 
@@ -64,7 +76,6 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export function Container({ Component }: { Component: ReactElement }) {
-  const {} = useAuth();
   const [open, setOpen] = useState(null as Nullable<boolean>);
   const { isMobile, hasWidth } = useDevice();
 
@@ -129,7 +140,10 @@ export function Container({ Component }: { Component: ReactElement }) {
               <ListItem
                 key={name}
                 button
-                component={forwardRef((prop, ref) => <Link key={name} href={redirect} {...prop} />)}
+                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+                component={forwardRef((prop, _) => (
+                  <Link key={name} href={redirect} {...prop} />
+                ))}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={name} />
@@ -144,7 +158,10 @@ export function Container({ Component }: { Component: ReactElement }) {
               <ListItem
                 key={name}
                 button
-                component={forwardRef((prop, ref) => <Link key={name} href={redirect} {...prop} />)}
+                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+                component={forwardRef((prop, _) => (
+                  <Link key={name} href={redirect} {...prop} />
+                ))}
               >
                 <ListItemIcon>{icon}</ListItemIcon>
                 <ListItemText primary={name} />

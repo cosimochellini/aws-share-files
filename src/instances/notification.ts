@@ -1,4 +1,5 @@
 import mitt from 'mitt';
+
 import { device } from '../services/device.service';
 import { retrieveError } from '../utils/retrieveError';
 
@@ -40,6 +41,7 @@ export const notification = {
   error: (message: unknown) => {
     // keeping console.error for backwards compatibility
     // and to log errors to the server
+    // eslint-disable-next-line no-console
     console.error(message);
 
     const errorMessage = retrieveError(message);

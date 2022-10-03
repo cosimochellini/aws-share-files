@@ -1,8 +1,9 @@
 import { env } from '../instances/env';
-import { bucket } from './bucket.service';
 import { FileInfo } from '../classes/FileInfo';
 import { transporter } from '../instances/transporter';
 import { ServiceArguments, ServiceMapper } from '../types/generic';
+
+import { bucket } from './bucket.service';
 
 export const email = {
   async sendFile({ to, fileKey }: { to: string; fileKey: string }) {

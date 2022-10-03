@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { SelectChangeEvent } from '@mui/material';
+
 import { withDefaultLayout } from '../layouts';
 import { Nullable } from '../src/types/generic';
 import { purgeName } from '../src/utils/purgeName';
@@ -9,12 +10,25 @@ import { VolumeInfo } from '../src/types/content.types';
 import { useThemeStore } from '../src/store/theme.store';
 import { useFolderStore } from '../src/store/files.store';
 import {
-  MenuItem, Select, CardHeader, TextField, Button, CardContent, FormControl, InputLabel, Grid, Typography, Card,
+  MenuItem,
+  Select,
+  CardHeader,
+  TextField,
+  Button,
+  CardContent,
+  FormControl,
+  InputLabel,
+  Grid,
+  Typography,
+  Card,
 } from '../src/barrel/mui.barrel';
 import { notification } from '../src/instances/notification';
 import { truncateString } from '../src/utils/truncateString';
 import {
-  Book, FileUpload, Person, UploadFile,
+  Book,
+  FileUpload,
+  Person,
+  UploadFile,
 } from '../src/barrel/mui.icons.barrel';
 import { LoadingButton } from '../src/components/Data/LoadingButton';
 import { bucketFallbackStrategy } from '../src/fallback/bucketFallbackStrategy';
@@ -23,7 +37,10 @@ const maxHeight = 48 * 4.5 + 8;
 const stringLength = device.isMobile ? 20 : 40;
 const fullWidth = {
   minWidth: {
-    xs: '100%', sm: '90%', md: '70%', lg: '60%',
+    xs: '100%',
+    sm: '90%',
+    md: '70%',
+    lg: '60%',
   },
 };
 
