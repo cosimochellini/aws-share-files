@@ -11,6 +11,11 @@ import { S3FileGroup } from '../src/classes/S3FileGroup';
 const FolderAsync = lazy(() => import('../src/components/Files/Folders'));
 const FileModalAsync = lazy(() => import('../src/components/Files/FileModal'));
 
+const sx = { minHeight: { xs: 0, sm: 800 } };
+const gridProps = {
+  sx, md: 6, xs: 12, item: true,
+};
+
 function FilesPage() {
   const [fileKey, setFileKey] = useQueryString('fileKey');
   const [folderKey, setFolderKey] = useQueryString('folderKey');
@@ -24,11 +29,6 @@ function FilesPage() {
   };
 
   const { hasWidth } = useDevice();
-
-  const sx = { minHeight: { xs: 0, sm: 800 } };
-  const gridProps = {
-    sx, md: 6, xs: 12, item: true,
-  };
 
   return (
     <>

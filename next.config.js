@@ -1,11 +1,10 @@
 // @ts-check
 
-require('dotenv').config()
+require('dotenv').config();
 
-const { withPWA } = require('./plugins/pwa.plugin')
-const { withWebpack } = require('./plugins/webpack.plugin')
-const { withRedirects } = require('./plugins/redirects.plugins')
-
+const { withPWA } = require('./plugins/pwa.plugin');
+const { withWebpack } = require('./plugins/webpack.plugin');
+const { withRedirects } = require('./plugins/redirects.plugins');
 
 /**
  * @type {import('next').NextConfig}
@@ -13,8 +12,7 @@ const { withRedirects } = require('./plugins/redirects.plugins')
 const nextConfig = {
   reactStrictMode: true,
   webpack: withWebpack,
-  redirects: withRedirects
-}
+  redirects: withRedirects,
+};
 
-
-module.exports = withPWA(nextConfig)
+module.exports = withPWA(nextConfig);
