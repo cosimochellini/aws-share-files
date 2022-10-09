@@ -30,7 +30,7 @@ import { ResultCount } from './ResultCount';
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
-  orderBy: 'Key' as const,
+  orderBy: 'FolderName',
   orderDesc: false,
 } as Readonly<PagingConfiguration<S3Folder>>;
 

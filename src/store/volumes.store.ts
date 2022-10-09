@@ -24,7 +24,7 @@ export const useVolumesStore = create<VolumesState>((set, get) => ({
 
     const cachedVolume = _cachedVolumes.get(name);
 
-    if (cachedVolume === volume) return;
+    if (cachedVolume && cachedVolume === volume) return;
 
     if (cachedVolume) {
       set({ volume: cachedVolume });

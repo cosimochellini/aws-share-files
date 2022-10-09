@@ -4,6 +4,7 @@ import { byBoolean, byValue } from 'sort-es';
 import { UserEmail } from '../types/dynamo.types';
 import { functions } from '../instances/functions';
 import { notification } from '../instances/notification';
+import { useEffectOnceWhen } from '../hooks/once';
 
 interface EmailsStore {
   emails: UserEmail[];
@@ -19,7 +20,7 @@ interface EmailsStore {
   deleteEmail: (email: UserEmail) => Promise<void>;
 }
 
-export const useEmailsStore = crate<EmailsStore>((set, get) => ({
+const store = crate<EmailsStore>((set, get) => ({
   emails: [],
   loading: false,
 
@@ -67,3 +68,13 @@ export const useEmailsStore = crate<EmailsStore>((set, get) => ({
       .catch(notification.error);
   },
 }));
+
+export const useEmailsStore = store;
+
+export const useEmailsStoreLoader = () => {
+  const initializer = store((x) => x.loadEmails);
+
+  useEffectOnceWhen(initializer);
+
+  return store;
+};

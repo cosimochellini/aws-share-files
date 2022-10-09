@@ -1,8 +1,10 @@
+import { useEffect } from 'react';
+
 import { ReadMore } from '../Text/ReadMore';
 import { Nullable } from '../../types/generic';
 import { useDevice } from '../../hooks/device.hook';
 import { VolumeChipArray } from '../Data/VolumeChipArray';
-import { useEmailsStore } from '../../store/emails.store';
+import { useEmailsStoreLoader } from '../../store/emails.store';
 import { useVolumesStore } from '../../store/volumes.store';
 import {
   Card,
@@ -13,6 +15,7 @@ import {
   CardHeader,
   Rating,
   Skeleton,
+  Avatar,
 } from '../../barrel/mui.barrel';
 import type { S3File } from '../../classes/S3File';
 
@@ -47,26 +50,36 @@ function FileModal(props: Props) {
 
   const open = !!file;
   const { isDesktop } = useDevice();
-  const loadEmails = useEmailsStore((x) => x.loadEmails);
+  const _ = useEmailsStoreLoader();
+
   const [volume, getVolume] = useVolumesStore((x) => [x.volume, x.getVolume]);
-
-  loadEmails();
-
-  if (file) getVolume(file.FileInfo.Name);
 
   const handleClose = () => {
     onClose();
   };
 
-  return file ? (
+  useEffect(() => {
+    if (file) getVolume(file.FileInfo.Name);
+  }, [file, getVolume]);
+
+  return (
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby={volume?.title ?? file.FileInfo.Name}
-      aria-describedby={volume?.subtitle ?? file.FileInfo.Name}
+      aria-labelledby={volume?.title ?? file?.FileInfo.Name}
+      aria-describedby={volume?.subtitle ?? file?.FileInfo.CompleteName}
     >
       <Card sx={style} variant="outlined">
         <CardHeader
+          avatar={
+            volume ? (
+              <Avatar
+                src={volume.imageLinks.thumbnail}
+                sx={{ width: 56, height: 56 }}
+                alt={volume.title}
+              />
+            ) : null
+          }
           action={
             isDesktop
             && volume?.averageRating && (
@@ -78,7 +91,7 @@ function FileModal(props: Props) {
               />
             )
           }
-          title={volume?.title ?? file.FileInfo.Name}
+          title={volume?.title ?? file?.FileInfo.Name}
           subheader={volume?.subtitle}
         />
 
@@ -100,11 +113,11 @@ function FileModal(props: Props) {
             <Skeleton animation="wave" variant="text" />
           )}
 
-          <FilesAccordion currentFile={file} />
+          {file && <FilesAccordion currentFile={file} />}
         </CardContent>
       </Card>
     </Modal>
-  ) : null;
+  );
 }
 
 export { FileModal };

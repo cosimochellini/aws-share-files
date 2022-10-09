@@ -1,22 +1,27 @@
 import { useState } from 'react';
 
-import { useEffectOnceWhen } from '../../src/hooks/once';
-import { useEmailsStore } from '../../src/store/emails.store';
+import { useEmailsStoreLoader } from '../../src/store/emails.store';
 import {
-  ListItem, Grid, List, Divider, Typography, Avatar, ListItemText, ListItemAvatar,
+  ListItem,
+  Grid,
+  List,
+  Divider,
+  Typography,
+  Avatar,
+  ListItemText,
+  ListItemAvatar,
 } from '../../src/barrel/mui.barrel';
+import { withDefaultLayout } from '../../layouts';
 import { NewUserEmail } from '../../src/components/Form/NewUserEmail';
 import { LoadingButton } from '../../src/components/Data/LoadingButton';
 import { Email, Star, Delete } from '../../src/barrel/mui.icons.barrel';
 import { FilesPlaceholders } from '../../src/components/Placeholders/FilesPlaceholders';
-import { withDefaultLayout } from '../../layouts';
 
 function Manage() {
+  const useEmailsStore = useEmailsStoreLoader();
+  const emails = useEmailsStore((x) => x.emails);
   const [indexActive, setIndexActive] = useState(-1);
   const deleteEmail = useEmailsStore((x) => x.deleteEmail);
-  const [emails, loadEmails] = useEmailsStore((x) => [x.emails, x.loadEmails]);
-
-  useEffectOnceWhen(loadEmails);
 
   return (
     <>
