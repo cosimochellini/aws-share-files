@@ -1,4 +1,4 @@
-import { byAny, byValue } from 'sort-es';
+import { byString, byValue } from 'sort-es';
 import { useMemo, useState } from 'react';
 
 import { useEffectOnceWhen } from '../../hooks/once';
@@ -83,12 +83,12 @@ export function Files(props: Props) {
     }
 
     if (currentFolder) {
-      items = items.filter((i) => i.Key?.includes(currentFolder.Key));
+      items = items.filter((i) => i.FileInfo.Parent?.includes(currentFolder.FolderName));
     }
 
     const { orderBy, orderDesc: desc } = configuration;
 
-    return items.sort(byValue(orderBy as 'Key', byAny({ desc })));
+    return items.sort(byValue(orderBy as 'Key', byString({ desc })));
   }, [search, folders, currentFolder, configuration]);
 
   useEffectOnceWhen(() => {
