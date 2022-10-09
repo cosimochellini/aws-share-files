@@ -17,7 +17,6 @@ import {
 } from '../../barrel/mui.barrel';
 import { LoadingButton } from '../Data/LoadingButton';
 import { useQueryString } from '../../hooks/query.hook';
-import { S3FileGroup } from '../../classes/S3FileGroup';
 import { useFolderStore } from '../../store/files.store';
 import { AutoStories, Refresh } from '../../barrel/mui.icons.barrel';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
@@ -26,6 +25,7 @@ import {
   PagingConfiguration,
   FileListConfiguration,
 } from '../Configurations/FileListConfiguration';
+import { S3File } from '../../classes/S3File';
 
 import { ResultCount } from './ResultCount';
 
@@ -34,14 +34,14 @@ export type Props = {
   currentFolder: Nullable<S3Folder>;
   onClearFolder?: () => void;
   setFileKey: (fileKey: string) => void;
-  onSearch?: (query: S3FileGroup) => void;
+  onSearch?: (query: S3File) => void;
 };
 
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
   orderDesc: false,
-  orderBy: 'FileName',
-} as Readonly<PagingConfiguration<S3FileGroup>>;
+  orderBy: 'Key',
+} as Readonly<PagingConfiguration<S3File>>;
 
 export function Files(props: Props) {
   const {
@@ -138,9 +138,8 @@ export function Files(props: Props) {
         configuration={configuration}
         onUpdateConfiguration={setConfiguration}
         availableKeys={[
-          ['Title', 'FileName'],
+          ['Title', 'Key'],
           ['Last update', 'LastModified'],
-          ['Size', 'Size'],
         ]}
       />
       <Paper
@@ -173,14 +172,7 @@ export function Files(props: Props) {
                 </ListItemAvatar>
                 <ListItemText
                   primary={file.FileInfo.Name}
-                  secondary={file.Hierarchy[0]}
-                />
-
-                <Chip
-                  size="small"
-                  sx={{ marginX: '1px' }}
-                  title={file.Files.map(({ extension }) => extension).join(' ')}
-                  label={file.Files.map((f) => f.extension[0]?.toUpperCase()).join(' ')}
+                  secondary={file.FileInfo.Parent}
                 />
               </ListItem>
             ))

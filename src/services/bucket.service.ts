@@ -1,4 +1,3 @@
-import { byValue, byString } from 'sort-es';
 import {
   PutObjectCommand,
   DeleteObjectCommand,
@@ -23,10 +22,7 @@ export const bucket = {
 
     const items = (await s3Client.send(command)).Contents ?? [];
 
-    return items
-      .filter((x) => x.Key?.endsWith('/'))
-      .map((item) => new S3Folder(item, items))
-      .sort(byValue((x) => x.FolderName, byString()));
+    return S3Folder.Create(items);
   },
 
   getShareableUrl({ key, expires = 10 }: { key: string; expires?: number }) {

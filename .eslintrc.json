@@ -47,6 +47,8 @@
       }
     ],
     "jsx-a11y/anchor-is-valid": "warn",
-    "react/display-name": "off"
+    "react/display-name": "off",
+    "no-restricted-syntax": "off",
+    "no-continue": "warn"
   }
 }

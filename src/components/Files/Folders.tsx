@@ -109,7 +109,6 @@ export default function Folders(props: Props) {
         onUpdateConfiguration={setConfiguration}
         availableKeys={[
           ['Last update', 'LastModified'],
-          ['Size', 'Size'],
           ['Title', 'Key'],
         ]}
       />

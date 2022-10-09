@@ -1,6 +1,6 @@
 {
   "name": "aws-share-files",
-  "version": "0.15.4",
+  "version": "0.16.1",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -31,7 +31,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.37.0",
     "sort-es": "^1.5.2",
-    "zustand": "^4.1.1"
+    "zustand": "^4.1.2"
   },
   "devDependencies": {
     "@aws-sdk/types": "^3.186.0",
@@ -43,7 +43,7 @@
     "@typescript-eslint/parser": "^5.39.0",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
-    "eslint": "^8.24.0",
+    "eslint": "^8.25.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "12.3.1",

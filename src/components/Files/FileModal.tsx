@@ -1,7 +1,6 @@
 import { ReadMore } from '../Text/ReadMore';
 import { Nullable } from '../../types/generic';
 import { useDevice } from '../../hooks/device.hook';
-import { S3FileGroup } from '../../classes/S3FileGroup';
 import { VolumeChipArray } from '../Data/VolumeChipArray';
 import { useEmailsStore } from '../../store/emails.store';
 import { useVolumesStore } from '../../store/volumes.store';
@@ -15,17 +14,17 @@ import {
   Rating,
   Skeleton,
 } from '../../barrel/mui.barrel';
+import type { S3File } from '../../classes/S3File';
 
-import { FileConversion } from './FileConversion';
 import { FilesAccordion } from './FilesAccordion';
 
 type Props = {
-  file: Nullable<S3FileGroup>;
+  file: Nullable<S3File>;
   onClose: () => void;
 };
 
 const style = {
-  position: 'absolute' as const,
+  position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
@@ -41,7 +40,7 @@ const style = {
     lg: '50%',
     xl: '40%',
   },
-};
+} as const;
 
 function FileModal(props: Props) {
   const { file, onClose } = props;
@@ -49,11 +48,11 @@ function FileModal(props: Props) {
   const open = !!file;
   const { isDesktop } = useDevice();
   const loadEmails = useEmailsStore((x) => x.loadEmails);
-  const [volume, setVolume] = useVolumesStore((x) => [x.volume, x.getVolume]);
+  const [volume, getVolume] = useVolumesStore((x) => [x.volume, x.getVolume]);
 
   loadEmails();
 
-  if (file) setVolume(`${file.FileInfo.Name}, ${file.Hierarchy[0]}`);
+  if (file) getVolume(file.FileInfo.Name);
 
   const handleClose = () => {
     onClose();
@@ -63,29 +62,26 @@ function FileModal(props: Props) {
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby={volume?.title ?? file.FileName}
-      aria-describedby={volume?.subtitle ?? file.FileName}
+      aria-labelledby={volume?.title ?? file.FileInfo.Name}
+      aria-describedby={volume?.subtitle ?? file.FileInfo.Name}
     >
       <Card sx={style} variant="outlined">
-        {volume ? (
-          <CardHeader
-            action={
-              isDesktop
-              && volume.averageRating && (
-                <Rating
-                  name="read-only"
-                  value={volume.averageRating}
-                  precision={0.5}
-                  readOnly
-                />
-              )
-            }
-            title={volume.title}
-            subheader={volume.subtitle}
-          />
-        ) : (
-          <Skeleton animation="wave" variant="text" height={40} />
-        )}
+        <CardHeader
+          action={
+            isDesktop
+            && volume?.averageRating && (
+              <Rating
+                name="read-only"
+                value={volume.averageRating}
+                precision={0.5}
+                readOnly
+              />
+            )
+          }
+          title={volume?.title ?? file.FileInfo.Name}
+          subheader={volume?.subtitle}
+        />
+
         <Divider />
         <CardContent>
           {volume ? (
@@ -105,7 +101,6 @@ function FileModal(props: Props) {
           )}
 
           <FilesAccordion currentFile={file} />
-          <FileConversion currentFile={file} />
         </CardContent>
       </Card>
     </Modal>

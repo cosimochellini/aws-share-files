@@ -5,8 +5,12 @@ export class FileInfo {
 
   public CompleteName: string;
 
+  public Parent: string;
+
   constructor(fileName: string) {
-    const fixedFileName = fileName.split('/').pop() as string;
+    const [parent, fixedFileName] = fileName.split('/');
+
+    this.Parent = parent;
 
     this.CompleteName = fixedFileName;
 

@@ -11,7 +11,6 @@ import { useDevice } from '../../hooks/device.hook';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
-import { S3FileGroup } from '../../classes/S3FileGroup';
 import { downloadURI } from '../../utils/downloadHelper';
 import { Delete, Download, ExpandMore } from '../../barrel/mui.icons.barrel';
 import { useFolderStore } from '../../store/files.store';
@@ -19,7 +18,7 @@ import { useFolderStore } from '../../store/files.store';
 import { SendFileViaEmail } from './SendFileViaEmail';
 
 type Props = {
-  currentFile: S3FileGroup;
+  currentFile: S3File;
 };
 
 const downloadFile = async (key: string) => {
@@ -56,7 +55,7 @@ export function FilesAccordion(props: Props) {
   const fileTitle = (file: S3File) => {
     const fileName = isMobile
       ? file.FileInfo.Extension.toUpperCase()
-      : file.FileName;
+      : file.FileInfo.Name;
 
     const size = file.Object.Size ?? 0;
 
@@ -64,49 +63,45 @@ export function FilesAccordion(props: Props) {
   };
 
   return (
-    <>
-      {currentFile.Files.map((file) => (
-        <Accordion
-          variant="outlined"
-          key={file.file.Key}
-          onChange={handleChange(file.file.Key)}
-          TransitionProps={{ unmountOnExit: true }}
-          expanded={file.file.Key === currentExpanded}
+    <Accordion
+      variant="outlined"
+      key={currentFile.Key}
+      onChange={handleChange(currentFile.Key)}
+      TransitionProps={{ unmountOnExit: true }}
+      expanded={currentFile.Key === currentExpanded}
+    >
+      <AccordionSummary
+        id={currentFile.Key}
+        expandIcon={<ExpandMore />}
+        aria-controls="panel1a-content"
+      >
+        <Typography
+          sx={{ width: { xs: '70%', sm: '80%', md: '85%' }, flexShrink: 0 }}
         >
-          <AccordionSummary
-            id={file.file.Key}
-            expandIcon={<ExpandMore />}
-            aria-controls="panel1a-content"
-          >
-            <Typography
-              sx={{ width: { xs: '70%', sm: '80%', md: '85%' }, flexShrink: 0 }}
-            >
-              {fileTitle(file.file)}
-            </Typography>
+          {fileTitle(currentFile)}
+        </Typography>
 
-            <LoadingButton
-              type="icon"
-              iconProps={{ size: 'small', color: 'error', sx: { marginX: 1 } }}
-              icon={<Delete />}
-              clickAction={() => deleteFile(file.file.Key)}
-            />
+        <LoadingButton
+          type="icon"
+          iconProps={{ size: 'small', color: 'error', sx: { marginX: 1 } }}
+          icon={<Delete />}
+          clickAction={() => deleteFile(currentFile.Key)}
+        />
 
-            <LoadingButton
-              type="icon"
-              iconProps={{
-                size: 'small',
-                color: 'success',
-                sx: { marginX: 1 },
-              }}
-              icon={<Download />}
-              clickAction={() => downloadFile(file.file.Key)}
-            />
-          </AccordionSummary>
-          <AccordionDetails>
-            <SendFileViaEmail fileKey={file.file.Key} />
-          </AccordionDetails>
-        </Accordion>
-      ))}
-    </>
+        <LoadingButton
+          type="icon"
+          iconProps={{
+            size: 'small',
+            color: 'success',
+            sx: { marginX: 1 },
+          }}
+          icon={<Download />}
+          clickAction={() => downloadFile(currentFile.Key)}
+        />
+      </AccordionSummary>
+      <AccordionDetails>
+        <SendFileViaEmail fileKey={currentFile.Key} />
+      </AccordionDetails>
+    </Accordion>
   );
 }
