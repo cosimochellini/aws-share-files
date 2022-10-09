@@ -1,5 +1,6 @@
-import { useState } from 'react';
-import type { SelectChangeEvent } from '@mui/material';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 
 import { withDefaultLayout } from '../layouts';
 import { Nullable } from '../src/types/generic';
@@ -34,7 +35,8 @@ import { LoadingButton } from '../src/components/Data/LoadingButton';
 import { bucketFallbackStrategy } from '../src/fallback/bucketFallbackStrategy';
 
 const maxHeight = 48 * 4.5 + 8;
-const stringLength = device.isMobile ? 20 : 40;
+const stringLength = device.isMobile ? 30 : 80;
+
 const fullWidth = {
   minWidth: {
     xs: '100%',
@@ -42,15 +44,21 @@ const fullWidth = {
     md: '70%',
     lg: '60%',
   },
-};
+} as const;
 
 function Upload() {
   const theme = useThemeStore((x) => x.theme);
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
-  const [selectedFile, setSelectedFile] = useState<Nullable<File>>();
+  const [selectedFile, setSelectedFile] = useState<File>();
+  const [updatedName, setUpdatedName] = useState<string>();
 
   const [suggestedVolumes, setSuggestedVolumes] = useState([] as VolumeInfo[]);
   const [selectedVolumeIx, setSelectedVolumeIx] = useState(0);
+
+  const fixedFileName = useMemo(
+    () => updatedName ?? selectedFile?.name,
+    [selectedFile?.name, updatedName],
+  );
 
   const [fileTitle, setFileTitle] = useState('');
   const [fileAuthor, setFileAuthor] = useState('');
@@ -59,6 +67,7 @@ function Upload() {
     const file = event?.files?.[0];
 
     setSelectedFile(file);
+    setUpdatedName(undefined);
 
     if (file) {
       const purgedName = purgeName(file.name);
@@ -70,6 +79,22 @@ function Upload() {
     }
   };
 
+  const suggestionSelectHandler = useCallback(
+    (index: number) => {
+      const volume = suggestedVolumes[index];
+      if (!volume) return;
+
+      const { title } = volume;
+      const author = volume.authors?.[0];
+
+      setSelectedVolumeIx(index);
+
+      if (title) setFileTitle(title);
+      if (author) setFileAuthor(author);
+    },
+    [suggestedVolumes],
+  );
+
   const uploadFile = async () => {
     if (!selectedFile) return;
 
@@ -78,7 +103,7 @@ function Upload() {
       file: selectedFile,
       author: fileAuthor,
       extension: selectedFile.name?.split('.').pop() as string,
-    };
+    } as const;
 
     try {
       await functions.s3.uploadFile(payload);
@@ -88,16 +113,19 @@ function Upload() {
 
     await refreshFolders(true);
   };
-  const suggestionSelectHandler = (e: SelectChangeEvent<number>) => {
-    const ix = e.target.value as number;
-    const volume = suggestedVolumes[ix];
-    const { title } = volume;
-    const author = volume.authors?.[0];
 
-    setSelectedVolumeIx(ix);
-    if (title) setFileTitle(title);
-    if (author) setFileAuthor(author);
-  };
+  useEffect(() => {
+    const purgedName = purgeName(fixedFileName);
+
+    functions.content
+      .findAllContent(purgedName)
+      .then((volumes) => setSuggestedVolumes(volumes))
+      .catch(notification.error);
+  }, [fixedFileName]);
+
+  useEffect(() => {
+    suggestionSelectHandler(0);
+  }, [suggestionSelectHandler, suggestedVolumes]);
 
   return (
     <div>
@@ -124,9 +152,9 @@ function Upload() {
                     <Grid item sx={fullWidth}>
                       <TextField
                         fullWidth
-                        disabled
                         label="File name"
-                        value={selectedFile?.name}
+                        onChange={(e) => setUpdatedName(e.target.value)}
+                        value={fixedFileName}
                       />
                     </Grid>
                     {suggestedVolumes.length > 0 && (
@@ -139,7 +167,7 @@ function Upload() {
                             value={selectedVolumeIx}
                             label="Available suggestions"
                             labelId="suggestions"
-                            onChange={suggestionSelectHandler}
+                            onChange={(e) => suggestionSelectHandler(e.target.value as number)}
                             MenuProps={{
                               PaperProps: { style: { maxHeight, width: 250 } },
                             }}
@@ -154,9 +182,8 @@ function Upload() {
                                 }}
                               >
                                 <Typography variant="subtitle2">
-                                  (
                                   {volume.authors?.[0]}
-                                  )
+                                  {' | '}
                                   {truncateString(volume.title, stringLength)}
                                 </Typography>
                               </MenuItem>

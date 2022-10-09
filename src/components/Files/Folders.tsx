@@ -1,4 +1,4 @@
-import { byValue, byAny } from 'sort-es';
+import { byValue, byString } from 'sort-es';
 import { useMemo, useState } from 'react';
 
 import { Nullable } from '../../types/generic';
@@ -65,7 +65,7 @@ export default function Folders(props: Props) {
     }
     const { orderBy, orderDesc: desc } = configuration;
 
-    return items.sort(byValue(orderBy as 'Key', byAny({ desc })));
+    return items.sort(byValue(orderBy as 'Key', byString({ desc })));
   }, [search, folders, configuration]);
 
   useEffectOnceWhen(() => {
