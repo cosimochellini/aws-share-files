@@ -32,4 +32,4 @@ export type ServiceArguments<T extends Record<string, GenericFunction>> = {
 
 export type BaseResponse<T = unknown> = NextApiResponse<T | { error: string }>;
 
-export type Nullable<T> = T | null | undefined;
+export type Nullable<T> = T | undefined;

@@ -21,7 +21,6 @@ import {
   ListItemIcon,
   Divider,
 } from '../../barrel/mui.barrel';
-import type { Nullable } from '../../types/generic';
 import { Menu, ChevronLeft, ChevronRight } from '../../barrel/mui.icons.barrel';
 
 import { Conversions } from './Conversions';
@@ -76,7 +75,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 
 export function Container({ Component }: { Component: ReactElement }) {
-  const [open, setOpen] = useState(null as Nullable<boolean>);
+  const [open, setOpen] = useState<boolean>();
   const { isMobile, hasWidth } = useDevice();
 
   const initialOpen = useMemo(

@@ -57,9 +57,7 @@ export function FilesAccordion(props: Props) {
       ? file.FileInfo.Extension.toUpperCase()
       : file.FileInfo.Name;
 
-    const size = file.Object.Size ?? 0;
-
-    return `${fileName} (${formatter.fileFormatter(size)})`;
+    return `${fileName} (${formatter.fileFormatter(file.FileSize)})`;
   };
 
   return (

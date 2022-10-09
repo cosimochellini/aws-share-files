@@ -49,7 +49,7 @@ export function Conversions() {
   };
 
   const handleClose = () => {
-    setAnchorEl(null);
+    setAnchorEl(undefined);
   };
 
   const empty = [

@@ -59,7 +59,7 @@ function FilesPage() {
             onSearch={setSelectedFileGroup}
             currentFolder={selectedFolder}
             onClearFolder={() => {
-              setFolderKey('');
+              setFolderKey(undefined);
               setSelectedFolder(undefined);
             }}
           />

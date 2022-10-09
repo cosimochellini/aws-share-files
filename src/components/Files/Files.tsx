@@ -2,7 +2,6 @@ import { byString, byValue } from 'sort-es';
 import { useMemo, useState } from 'react';
 
 import { useEffectOnceWhen } from '../../hooks/once';
-import { Nullable } from '../../types/generic';
 import { S3Folder } from '../../classes/S3Folder';
 import {
   Chip,
@@ -30,8 +29,8 @@ import { S3File } from '../../classes/S3File';
 import { ResultCount } from './ResultCount';
 
 export type Props = {
-  fileKey: Nullable<string>;
-  currentFolder: Nullable<S3Folder>;
+  fileKey?: string;
+  currentFolder?: S3Folder;
   onClearFolder?: () => void;
   setFileKey: (fileKey: string) => void;
   onSearch?: (query: S3File) => void;
@@ -40,7 +39,7 @@ export type Props = {
 const defaultConfiguration = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
   orderDesc: false,
-  orderBy: 'Key',
+  orderBy: 'FileName',
 } as Readonly<PagingConfiguration<S3File>>;
 
 export function Files(props: Props) {
@@ -138,7 +137,8 @@ export function Files(props: Props) {
         configuration={configuration}
         onUpdateConfiguration={setConfiguration}
         availableKeys={[
-          ['Title', 'Key'],
+          ['Title', 'FileName'],
+          ['Author', 'Parent'],
           ['Last update', 'LastModified'],
         ]}
       />

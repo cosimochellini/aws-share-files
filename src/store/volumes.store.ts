@@ -13,7 +13,7 @@ interface VolumesState {
 }
 
 export const useVolumesStore = create<VolumesState>((set, get) => ({
-  volume: null,
+  volume: undefined,
   _cachedVolumes: new Map<string, VolumeInfo>(),
   _cachedVolumesLoading: false,
 
@@ -31,7 +31,7 @@ export const useVolumesStore = create<VolumesState>((set, get) => ({
       return;
     }
 
-    set({ _cachedVolumesLoading: true, volume: null });
+    set({ _cachedVolumesLoading: true, volume: undefined });
 
     const fetchedVolume = await functions.content
       .findFirst(name)
