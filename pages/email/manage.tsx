@@ -28,7 +28,7 @@ function Manage() {
       <h1>Manage Email</h1>
       <Grid container>
         <Grid item xs={12} sm={6}>
-          <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
+          <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
             Your emails
           </Typography>
           <Divider />

@@ -39,7 +39,7 @@ function FilesPage() {
         container
         alignItems="center"
         justifyItems="center"
-        spacing={{ xs: 0, sm: 3 }}
+        spacing={{ xs: 0, sm: 2 }}
       >
         {hasWidth(900) && (
           <Grid {...gridProps}>

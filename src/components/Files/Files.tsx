@@ -144,7 +144,7 @@ export function Files(props: Props) {
       />
       <Paper
         style={{
-          maxHeight: 750,
+          maxHeight: 700,
           overflowY: 'scroll',
           background: 'transparent',
         }}
