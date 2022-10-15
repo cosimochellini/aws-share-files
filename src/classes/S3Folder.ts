@@ -15,24 +15,23 @@ export class S3Folder extends S3BaseContent {
   }
 
   public static Create(items: _Object[]) {
-    const directoryMap = new Map<string | undefined, S3Folder>();
+    const directoryMap: Record<string, S3Folder> = {};
 
     for (const item of items) {
       if (item.Key?.endsWith('/')) continue;
 
       const folderName = item.Key?.split('/')?.[0];
 
-      if (!directoryMap.has(folderName)) {
-        directoryMap.set(folderName, new S3Folder(item));
-      }
+      if (!folderName) continue;
 
-      const folder = directoryMap.get(folderName);
+      // eslint-disable-next-line no-multi-assign
+      const folder = (directoryMap[folderName] ??= new S3Folder(item));
 
       if (!folder) continue;
 
       folder.Files.push(new S3File(item));
     }
 
-    return [...directoryMap.values()];
+    return Object.values(directoryMap);
   }
 }
