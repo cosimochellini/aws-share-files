@@ -9,7 +9,7 @@ import { useEffect, useRef } from 'react';
  * @param callback The callback to fire
  * @param when The condition which needs to be true
  */
-export function useEffectOnceWhen(callback: () => void, when = true): void {
+export function useEffectOnceWhen(callback: () => (void | Promise<void>), when = true): void {
   const hasRunOnceRef = useRef(false);
   const callbackRef = useRef(callback);
   useEffect(() => {

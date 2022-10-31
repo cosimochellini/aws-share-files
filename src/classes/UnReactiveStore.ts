@@ -2,9 +2,9 @@ import { notification } from '../instances/notification';
 import { device } from '../services/device.service';
 
 export class UnReactiveStore<T> {
-  #key: string;
+  readonly #key: string;
 
-  #initialValue: T;
+  readonly #initialValue: T;
 
   constructor(key: string, initialValue: T) {
     this.#key = key;

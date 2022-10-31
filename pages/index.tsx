@@ -6,8 +6,8 @@ import { useEffectOnceWhen } from '../src/hooks/once';
 function Index() {
   const router = useRouter();
 
-  useEffectOnceWhen(() => {
-    router.push('/files');
+  useEffectOnceWhen(async () => {
+    await router.push('/files');
   });
 
   return <div>Loading</div>;

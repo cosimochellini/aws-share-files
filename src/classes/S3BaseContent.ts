@@ -7,7 +7,7 @@ export abstract class S3BaseContent {
 
   public LastModified: Nullable<Date>;
 
-  constructor(object: _Object) {
+  protected constructor(object: _Object) {
     this.Key = object.Key ?? '';
     this.LastModified = object.LastModified;
   }

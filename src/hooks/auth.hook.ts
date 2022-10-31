@@ -7,13 +7,16 @@ export const loginPath = '/api/auth/signin';
 export const useAuth = () => {
   const router = useRouter();
 
-  const onUnauthenticated = useCallback(() => {
+  const onUnauthenticated = useCallback(async () => {
     if (router.pathname === loginPath) return;
 
-    router.push(loginPath);
+    await router.push(loginPath);
   }, [router]);
 
-  const { data: session, status } = useSession({
+  const {
+    data: session,
+    status,
+  } = useSession({
     onUnauthenticated,
     required: true,
   });
@@ -32,5 +35,9 @@ export const useAuth = () => {
     }
   }, [onUnauthenticated, session?.user?.email, status]);
 
-  return { authenticated, session, onUnauthenticated };
+  return {
+    authenticated,
+    session,
+    onUnauthenticated,
+  };
 };

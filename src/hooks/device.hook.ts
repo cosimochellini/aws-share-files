@@ -21,14 +21,15 @@ export const useDevice = () => {
 
   useEffectOnceWhen(() => {
     const handleResize = debounce(() => {
-      setState({ ...device, hasWidth: (x) => device.hasWidth(x) });
+      setState({
+        ...device,
+        hasWidth: (x) => device.hasWidth(x),
+      });
     });
 
     window.addEventListener('resize', () => handleResize());
 
     handleResize();
-
-    return () => window.removeEventListener('resize', () => handleResize());
   });
 
   return state;
