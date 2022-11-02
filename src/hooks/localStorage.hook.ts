@@ -23,7 +23,7 @@ export const useLocalStorage = <T>(key: string, initialValue: T) => {
   // ... persists the new value to localStorage.
   const setValue = (value: T) => {
     try {
-      // Allow value to be a function so we have same API as useState
+      // Allow value to be a function, so we have same API as useState
       const valueToStore = value instanceof Function ? value(storedValue) : value;
       // Save state
       setStoredValue(valueToStore);
