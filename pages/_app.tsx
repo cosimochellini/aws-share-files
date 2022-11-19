@@ -10,7 +10,10 @@ import type { AppPropsWithLayout } from '../src/types';
 function AppGrid(props: AppPropsWithLayout<{ session: Session }>) {
   const {
     Component,
-    pageProps: { session, ...pageProps },
+    pageProps: {
+      session,
+      ...pageProps
+    },
   } = props;
 
   const getLayout = Component.getLayout ?? ((page) => page);
@@ -20,6 +23,8 @@ function AppGrid(props: AppPropsWithLayout<{ session: Session }>) {
       <Head>
         <title>{env.info.appTitle}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="preload" href="api/s3/files.function?" as="fetch" />
+
       </Head>
       <SessionProvider session={session}>
         {getLayout(<Component {...pageProps} />)}
