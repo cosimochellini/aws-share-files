@@ -7,6 +7,7 @@ import { useDevice } from '../src/hooks/device.hook';
 import { Files } from '../src/components/Files/Files';
 import type { S3Folder } from '../src/classes/S3Folder';
 import { useQueryString } from '../src/hooks/query.hook';
+import { useAuth } from '../src/hooks/auth.hook';
 
 const FolderAsync = lazy(() => import('../src/components/Files/Folders'));
 const FileModalAsync = lazy(() => import('../src/components/Files/FileModal'));
@@ -32,6 +33,8 @@ function FilesPage() {
   };
 
   const { hasWidth } = useDevice();
+
+  useAuth();
 
   return (
     <>
