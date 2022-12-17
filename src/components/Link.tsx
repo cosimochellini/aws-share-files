@@ -52,7 +52,6 @@ export type LinkProps = {
   as?: NextLinkProps['as'];
   href: NextLinkProps['href'];
   linkAs?: NextLinkProps['as']; // Useful when the as prop is shallow by styled().
-  noLinkStyle?: boolean;
 } & Omit<NextLinkComposedProps, 'to' | 'linkAs' | 'href'> &
   Omit<MuiLinkProps, 'href'>;
 
@@ -67,7 +66,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
     legacyBehavior,
     linkAs: linkAsProp,
     locale,
-    noLinkStyle,
     prefetch,
     replace,
     role: _, // Link don't have roles.
@@ -83,10 +81,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
   const isExternal = typeof href === 'string' && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
 
   if (isExternal) {
-    if (noLinkStyle) {
-      return <Anchor className={className} href={href} ref={ref} {...other} />;
-    }
-
     return <MuiLink className={className} href={href} ref={ref} {...other} />;
   }
 
@@ -101,10 +95,6 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
     legacyBehavior,
     locale,
   };
-
-  if (noLinkStyle) {
-    return <NextLinkComposed className={className} ref={ref} {...nextjsProps} {...other} />;
-  }
 
   return (
     <MuiLink
