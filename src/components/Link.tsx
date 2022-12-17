@@ -1,89 +1,86 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import clsx from 'clsx';
-import { forwardRef } from 'react';
 import { useRouter } from 'next/router';
 import NextLink, { LinkProps as NextLinkProps } from 'next/link';
+import { styled } from '@mui/material/styles';
+import { forwardRef } from 'react';
 
-import { MuiLinkProps, MuiLink, styled } from '../barrel/mui.barrel';
+import { MuiLink, MuiLinkProps } from '../barrel/mui.barrel';
 
 // Add support for the sx prop for consistency with the other branches.
 const Anchor = styled('a')({});
 
 interface NextLinkComposedProps
-  extends Omit<
-      React.AnchorHTMLAttributes<HTMLAnchorElement>,
-      keyof Omit<NextLinkProps, 'as'>
-    >,
-    Omit<NextLinkProps, 'href' | 'as'> {
+  extends Omit<React.AnchorHTMLAttributes<HTMLAnchorElement>, 'href'>,
+    Omit<NextLinkProps, 'href' | 'as' | 'passHref' | 'onMouseEnter' | 'onClick' | 'onTouchStart'> {
   to: NextLinkProps['href'];
   linkAs?: NextLinkProps['as'];
-  href?: NextLinkProps['href'];
 }
 
-export const NextLinkComposed = forwardRef<
-  HTMLAnchorElement,
-  NextLinkComposedProps
->((props, ref) => {
-  const {
-    to,
-    linkAs,
-    href: _,
-    replace,
-    scroll,
-    shallow,
-    prefetch,
-    locale,
-    ...other
-  } = props;
+export const NextLinkComposed = forwardRef<HTMLAnchorElement, NextLinkComposedProps>(
+  (props, ref) => {
+    const {
+      to,
+      linkAs,
+      replace,
+      scroll,
+      shallow,
+      prefetch,
+      legacyBehavior = true,
+      locale,
+      ...other
+    } = props;
 
-  return (
-    <NextLink
-      href={to}
-      prefetch={prefetch}
-      as={linkAs}
-      replace={replace}
-      scroll={scroll}
-      shallow={shallow}
-      passHref
-      locale={locale}
-    >
-      <Anchor ref={ref} {...other} />
-    </NextLink>
-  );
-});
+    return (
+      <NextLink
+        href={to}
+        prefetch={prefetch}
+        as={linkAs}
+        replace={replace}
+        scroll={scroll}
+        shallow={shallow}
+        passHref
+        locale={locale}
+        legacyBehavior={legacyBehavior}
+      >
+        <Anchor ref={ref} {...other} />
+      </NextLink>
+    );
+  },
+);
 
 export type LinkProps = {
   activeClassName?: string;
   as?: NextLinkProps['as'];
   href: NextLinkProps['href'];
+  linkAs?: NextLinkProps['as']; // Useful when the as prop is shallow by styled().
   noLinkStyle?: boolean;
 } & Omit<NextLinkComposedProps, 'to' | 'linkAs' | 'href'> &
   Omit<MuiLinkProps, 'href'>;
 
 // A styled version of the Next.js Link component:
-// https://nextjs.org/docs/#with-link
-export const Link = forwardRef<HTMLAnchorElement, LinkProps>((
-  props,
-  ref,
-) => {
+// https://nextjs.org/docs/api-reference/next/link
+export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
   const {
     activeClassName = 'active',
-    as: linkAs,
+    as,
     className: classNameProps,
     href,
+    legacyBehavior,
+    linkAs: linkAsProp,
+    locale,
     noLinkStyle,
+    prefetch,
+    replace,
     role: _, // Link don't have roles.
+    scroll,
+    shallow,
     ...other
   } = props;
 
   const router = useRouter();
   const pathname = typeof href === 'string' ? href : href.pathname;
-  const className = clsx(classNameProps, {
-    [activeClassName]: router.pathname === pathname && activeClassName,
-  });
+  const className = `${classNameProps} ${router.pathname === pathname && activeClassName ? activeClassName : ''}`;
 
-  const isExternal = typeof href === 'string'
-    && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
+  const isExternal = typeof href === 'string' && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
 
   if (isExternal) {
     if (noLinkStyle) {
@@ -93,19 +90,28 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((
     return <MuiLink className={className} href={href} ref={ref} {...other} />;
   }
 
+  const linkAs = linkAsProp || as;
+  const nextjsProps = {
+    to: href,
+    linkAs,
+    replace,
+    scroll,
+    shallow,
+    prefetch,
+    legacyBehavior,
+    locale,
+  };
+
   if (noLinkStyle) {
-    return (
-      <NextLinkComposed className={className} ref={ref} to={href} {...other} />
-    );
+    return <NextLinkComposed className={className} ref={ref} {...nextjsProps} {...other} />;
   }
 
   return (
     <MuiLink
       component={NextLinkComposed}
-      linkAs={linkAs}
       className={className}
       ref={ref}
-      to={href}
+      {...nextjsProps}
       {...other}
     />
   );
