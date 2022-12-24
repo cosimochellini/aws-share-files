@@ -1,18 +1,17 @@
 import { useMemo, useState } from 'react';
+import {
+  Grid, List, ListItem, ListItemText,
+  Menu,
+  MenuItem,
+  Typography,
+  ListItemIcon,
+} from '@mui/material';
+import { Mail, Send, Star } from '@mui/icons-material';
 
 import { Nullable } from '../../types/generic';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { notification } from '../../instances/notification';
-import { Mail, Send, Star } from '../../barrel/mui.icons.barrel';
-import {
-  Grid, List, ListItem, ListItemText,
-
-  Menu,
-  MenuItem,
-  Typography,
-  ListItemIcon,
-} from '../../barrel/mui.barrel';
 import { useEmailsStore } from '../../store/emails.store';
 
 type Props = {
@@ -37,7 +36,10 @@ export function SendFileViaEmail(props: Props) {
     if (!selectedEmail) return;
 
     await functions.email
-      .sendFile({ fileKey, to: selectedEmail.email })
+      .sendFile({
+        fileKey,
+        to: selectedEmail.email,
+      })
       .then(() => notification.success('File sent successfully'))
       .catch(notification.error);
   };
@@ -61,7 +63,10 @@ export function SendFileViaEmail(props: Props) {
         container
         alignItems="center"
         justifyContent="center"
-        direction={{ xs: 'column', md: 'row' }}
+        direction={{
+          xs: 'column',
+          md: 'row',
+        }}
         gap={2}
       >
         <Grid item xs={12} md={8}>

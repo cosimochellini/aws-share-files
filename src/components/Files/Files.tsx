@@ -1,8 +1,5 @@
 import { byString, byValue } from 'sort-es';
 import { useMemo, useState } from 'react';
-
-import { useEffectOnceWhen } from '../../hooks/once';
-import { S3Folder } from '../../classes/S3Folder';
 import {
   Chip,
   Paper,
@@ -13,11 +10,14 @@ import {
   ListItemText,
   TextField,
   List,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import { AutoStories, Refresh } from '@mui/icons-material';
+
+import { useEffectOnceWhen } from '../../hooks/once';
+import { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
 import { useQueryString } from '../../hooks/query.hook';
 import { useFolderStore } from '../../store/files.store';
-import { AutoStories, Refresh } from '../../barrel/mui.icons.barrel';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 import { sharedConfiguration } from '../../instances/sharedConfiguration';
 import {

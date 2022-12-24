@@ -1,4 +1,4 @@
-import { createTheme } from '../barrel/mui.barrel';
+import { createTheme } from '@mui/material';
 
 const theme = {
   get dark() {

@@ -1,13 +1,13 @@
 import { useRouter } from 'next/router';
 import { forwardRef, useMemo } from 'react';
-
-import { Link } from '../Link';
 import {
-  styled,
   BottomNavigation,
   BottomNavigationAction,
   Paper,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import { styled } from '@mui/material/styles';
+
+import { Link } from '../Link';
 import { navbarItems, Visibility } from '../../instances/navbar';
 
 export default function ButtonNavigation() {
@@ -29,7 +29,10 @@ export default function ButtonNavigation() {
       <BottomDiv />
       <Paper
         sx={{
-          position: 'fixed', bottom: 0, left: 0, right: 0,
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          right: 0,
         }}
         variant="outlined"
       >

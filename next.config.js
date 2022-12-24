@@ -1,6 +1,7 @@
 // @ts-check
 
-require('dotenv').config();
+require('dotenv')
+  .config();
 
 const { withPWA } = require('./plugins/pwa.plugin');
 const { withWebpack } = require('./plugins/webpack.plugin');
@@ -28,6 +29,17 @@ const nextConfig = {
       },
     ],
   ],
+  modularizeImports: {
+    '@mui/material': {
+      transform: '@mui/material/{{member}}',
+    },
+    '@mui/icons-material': {
+      transform: '@mui/icons-material/{{member}}',
+    },
+  },
+  experimental: {
+    swcMinify: true,
+  },
 };
 
 module.exports = withPWA(nextConfig);

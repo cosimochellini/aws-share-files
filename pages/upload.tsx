@@ -1,15 +1,6 @@
 import {
   useCallback, useEffect, useMemo, useState,
 } from 'react';
-
-import { withDefaultLayout } from '../layouts';
-import { Nullable } from '../src/types/generic';
-import { purgeName } from '../src/utils/purgeName';
-import { functions } from '../src/instances/functions';
-import { device } from '../src/services/device.service';
-import { VolumeInfo } from '../src/types/content.types';
-import { useThemeStore } from '../src/store/theme.store';
-import { useFolderStore } from '../src/store/files.store';
 import {
   MenuItem,
   Select,
@@ -22,15 +13,24 @@ import {
   Grid,
   Typography,
   Card,
-} from '../src/barrel/mui.barrel';
-import { notification } from '../src/instances/notification';
-import { truncateString } from '../src/utils/truncateString';
+} from '@mui/material';
 import {
   Book,
   FileUpload,
   Person,
   UploadFile,
-} from '../src/barrel/mui.icons.barrel';
+} from '@mui/icons-material';
+
+import { withDefaultLayout } from '../layouts';
+import { Nullable } from '../src/types/generic';
+import { purgeName } from '../src/utils/purgeName';
+import { functions } from '../src/instances/functions';
+import { device } from '../src/services/device.service';
+import { VolumeInfo } from '../src/types/content.types';
+import { useThemeStore } from '../src/store/theme.store';
+import { useFolderStore } from '../src/store/files.store';
+import { notification } from '../src/instances/notification';
+import { truncateString } from '../src/utils/truncateString';
 import { LoadingButton } from '../src/components/Data/LoadingButton';
 import { bucketFallbackStrategy } from '../src/fallback/bucketFallbackStrategy';
 

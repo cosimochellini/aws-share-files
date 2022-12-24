@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
+import { Chip, ChipProps, Grid } from '@mui/material';
+import {
+  MenuBook, Person, CalendarToday, Class,
+} from '@mui/icons-material';
 
 import { formatter } from '../../formatters/formatter';
 import { VolumeInfo } from '../../types/content.types';
-import { Chip, ChipProps, Grid } from '../../barrel/mui.barrel';
-import {
-  MenuBook, Person, CalendarToday, Class,
-} from '../../barrel/mui.icons.barrel';
 
 type Props = {
   volume: VolumeInfo;

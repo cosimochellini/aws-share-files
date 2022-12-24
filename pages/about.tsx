@@ -1,4 +1,4 @@
-import { Container } from '../src/barrel/mui.barrel';
+import { Container } from '@mui/material';
 
 export default function About() {
   return (

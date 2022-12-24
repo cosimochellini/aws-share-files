@@ -1,6 +1,4 @@
 import { useState } from 'react';
-
-import { MoreVert } from '../../barrel/mui.icons.barrel';
 import {
   ButtonGroup,
   Box,
@@ -13,7 +11,9 @@ import {
   FormControl,
   IconButton,
   InputLabel,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import { MoreVert } from '@mui/icons-material';
+
 import { Nullable } from '../../types/generic';
 
 const style = {

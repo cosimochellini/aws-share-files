@@ -1,7 +1,5 @@
 import { byValue, byString } from 'sort-es';
 import { useMemo, useState } from 'react';
-
-import { Nullable } from '../../types/generic';
 import {
   Paper,
   ListItem,
@@ -11,13 +9,15 @@ import {
   ListItemAvatar,
   ListItemText,
   List,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import { Folder, Refresh } from '@mui/icons-material';
+
+import { Nullable } from '../../types/generic';
 import { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
 import { useQueryString } from '../../hooks/query.hook';
 import { useFolderStore } from '../../store/files.store';
-import { Folder, Refresh } from '../../barrel/mui.icons.barrel';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 import { sharedConfiguration } from '../../instances/sharedConfiguration';
 import {

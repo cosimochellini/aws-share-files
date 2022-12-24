@@ -1,7 +1,7 @@
 import { lazy, useState, Suspense } from 'react';
+import { Grid } from '@mui/material';
 
 import { withDefaultLayout } from '../layouts';
-import { Grid } from '../src/barrel/mui.barrel';
 import type { S3File } from '../src/classes/S3File';
 import { useDevice } from '../src/hooks/device.hook';
 import { Files } from '../src/components/Files/Files';

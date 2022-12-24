@@ -1,18 +1,18 @@
 import { useState } from 'react';
-
 import {
   Typography,
   Accordion,
   AccordionDetails,
   AccordionSummary,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import { Delete, Download, ExpandMore } from '@mui/icons-material';
+
 import type { S3File } from '../../classes/S3File';
 import { useDevice } from '../../hooks/device.hook';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
 import { downloadURI } from '../../utils/downloadHelper';
-import { Delete, Download, ExpandMore } from '../../barrel/mui.icons.barrel';
 import { useFolderStore } from '../../store/files.store';
 
 import { SendFileViaEmail } from './SendFileViaEmail';

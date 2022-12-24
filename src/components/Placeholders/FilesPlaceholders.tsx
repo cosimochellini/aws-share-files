@@ -1,6 +1,5 @@
 import { memo } from 'react';
-
-import { Skeleton, Typography } from '../../barrel/mui.barrel';
+import { Skeleton, Typography } from '@mui/material';
 
 type Props = {
   count: number;

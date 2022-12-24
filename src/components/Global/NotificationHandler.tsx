@@ -1,7 +1,7 @@
 import { useState } from 'react';
+import { Snackbar, Alert } from '@mui/material';
 
 import { useEffectOnceWhen } from '../../hooks/once';
-import { Snackbar, Alert } from '../../barrel/mui.barrel';
 import { notificationData, notification } from '../../instances/notification';
 
 export default function NotificationHandler() {

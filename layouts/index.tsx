@@ -1,11 +1,12 @@
 import { lazy, ReactElement, Suspense } from 'react';
+import { ThemeProvider } from '@mui/material/styles';
+import { CssBaseline } from '@mui/material';
 
 import { NextPageWithLayout } from '../src/types';
 import { useDevice } from '../src/hooks/device.hook';
 import { useEffectOnceWhen } from '../src/hooks/once';
 import { useThemeStore } from '../src/store/theme.store';
 import { Container } from '../src/components/layouts/Container';
-import { CssBaseline, ThemeProvider } from '../src/barrel/mui.barrel';
 import NotificationHandler from '../src/components/Global/NotificationHandler';
 
 const ButtonNavigation = lazy(

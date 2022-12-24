@@ -1,12 +1,12 @@
 import { useForm } from 'react-hook-form';
-
-import { UserEmail } from '../../types/dynamo.types';
-import { Save } from '../../barrel/mui.icons.barrel';
-import { LoadingButton } from '../Data/LoadingButton';
-import { useEmailsStore } from '../../store/emails.store';
 import {
   Card, CardContent, Checkbox, FormControlLabel, Grid, TextField,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import { Save } from '@mui/icons-material';
+
+import { UserEmail } from '../../types/dynamo.types';
+import { LoadingButton } from '../Data/LoadingButton';
+import { useEmailsStore } from '../../store/emails.store';
 
 export function NewUserEmail() {
   const addEmail = useEmailsStore((x) => x.addEmail);

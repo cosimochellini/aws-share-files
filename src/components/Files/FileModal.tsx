@@ -1,11 +1,4 @@
 import { useEffect } from 'react';
-
-import { ReadMore } from '../Text/ReadMore';
-import { Nullable } from '../../types/generic';
-import { useDevice } from '../../hooks/device.hook';
-import { VolumeChipArray } from '../Data/VolumeChipArray';
-import { useEmailsStoreLoader } from '../../store/emails.store';
-import { useVolumesStore } from '../../store/volumes.store';
 import {
   Card,
   CardContent,
@@ -16,7 +9,14 @@ import {
   Rating,
   Skeleton,
   Avatar,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+
+import { ReadMore } from '../Text/ReadMore';
+import { Nullable } from '../../types/generic';
+import { useDevice } from '../../hooks/device.hook';
+import { VolumeChipArray } from '../Data/VolumeChipArray';
+import { useEmailsStoreLoader } from '../../store/emails.store';
+import { useVolumesStore } from '../../store/volumes.store';
 import type { S3File } from '../../classes/S3File';
 
 import { FilesAccordion } from './FilesAccordion';

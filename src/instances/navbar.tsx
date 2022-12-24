@@ -4,7 +4,7 @@ import {
   Mail,
   Settings,
   Upload,
-} from '../barrel/mui.icons.barrel';
+} from '@mui/icons-material';
 
 export enum Visibility {
   All = 'All',

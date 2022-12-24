@@ -1,4 +1,4 @@
-import { Chip, Grid } from '../../barrel/mui.barrel';
+import { Chip, Grid } from '@mui/material';
 
 type Props = {
   displayedItems: number;

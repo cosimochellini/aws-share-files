@@ -1,6 +1,4 @@
 import { useState } from 'react';
-
-import { useEmailsStoreLoader } from '../../src/store/emails.store';
 import {
   ListItem,
   Grid,
@@ -10,11 +8,13 @@ import {
   Avatar,
   ListItemText,
   ListItemAvatar,
-} from '../../src/barrel/mui.barrel';
+} from '@mui/material';
+import { Email, Star, Delete } from '@mui/icons-material';
+
+import { useEmailsStoreLoader } from '../../src/store/emails.store';
 import { withDefaultLayout } from '../../layouts';
 import { NewUserEmail } from '../../src/components/Form/NewUserEmail';
 import { LoadingButton } from '../../src/components/Data/LoadingButton';
-import { Email, Star, Delete } from '../../src/barrel/mui.icons.barrel';
 import { FilesPlaceholders } from '../../src/components/Placeholders/FilesPlaceholders';
 
 function Manage() {

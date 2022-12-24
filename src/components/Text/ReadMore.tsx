@@ -1,6 +1,6 @@
 import { useState } from 'react';
+import { Link as MuiLink } from '@mui/material';
 
-import { MuiLink } from '../../barrel/mui.barrel';
 import { Nullable } from '../../types/generic';
 
 type Props = {

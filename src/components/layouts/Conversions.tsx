@@ -1,18 +1,4 @@
 import { MouseEvent, useState } from 'react';
-
-import { Nullable } from '../../types/generic';
-import { LoadingButton } from '../Data/LoadingButton';
-import { formatter } from '../../formatters/formatter';
-import { StatusCode } from '../../types/converter.types';
-import { useJobs } from '../../hooks/state/useJobs.state';
-import {
-  ChangeCircleRounded,
-  Delete,
-  CheckCircle,
-  Warning,
-  Refresh,
-} from '../../barrel/mui.icons.barrel';
-import { useConversionsStore } from '../../store/conversions.store';
 import {
   Button,
   Menu,
@@ -21,7 +7,21 @@ import {
   MenuItem,
   Typography,
   IconButton,
-} from '../../barrel/mui.barrel';
+} from '@mui/material';
+import {
+  ChangeCircleRounded,
+  Delete,
+  CheckCircle,
+  Warning,
+  Refresh,
+} from '@mui/icons-material';
+
+import { Nullable } from '../../types/generic';
+import { LoadingButton } from '../Data/LoadingButton';
+import { formatter } from '../../formatters/formatter';
+import { StatusCode } from '../../types/converter.types';
+import { useJobs } from '../../hooks/state/useJobs.state';
+import { useConversionsStore } from '../../store/conversions.store';
 
 function getColor(code: StatusCode) {
   switch (code) {

@@ -1,12 +1,21 @@
+import {
+  Checkbox,
+  FormControlLabel,
+  Grid,
+  ListItem,
+  ListItemIcon,
+  ListItemText,
+  Divider,
+  Link as MuiLink,
+  List,
+} from '@mui/material';
+
 import { withDefaultLayout } from '../layouts';
 import { useAuth } from '../src/hooks/auth.hook';
 import { settings } from '../src/instances/settings';
 import { formatter } from '../src/formatters/formatter';
 import { useThemeStore } from '../src/store/theme.store';
 import { navbarItems, Visibility } from '../src/instances/navbar';
-import {
-  Checkbox, FormControlLabel, Grid, ListItem, ListItemIcon, ListItemText, Divider, MuiLink, List,
-} from '../src/barrel/mui.barrel';
 
 function Settings() {
   const { session } = useAuth();
@@ -23,13 +32,23 @@ function Settings() {
       <Grid
         alignItems="center"
         justifyContent="center"
-        sx={{ maxWidth: { xs: '100%', sm: '90%', md: '80%' } }}
+        sx={{
+          maxWidth: {
+            xs: '100%',
+            sm: '90%',
+            md: '80%',
+          },
+        }}
       >
         <List>
           <Divider />
           {navbarItems
             .filter(({ visibility }) => Visibility.Sidebar === visibility)
-            .map(({ name, redirect, icon }) => (
+            .map(({
+              name,
+              redirect,
+              icon,
+            }) => (
               <div key={name}>
                 <ListItem
                   button

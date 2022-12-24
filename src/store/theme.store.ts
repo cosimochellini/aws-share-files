@@ -1,7 +1,7 @@
 import create from 'zustand';
+import type { Theme } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 
-import type { Theme } from '../barrel/mui.barrel';
-import { createTheme } from '../barrel/mui.barrel';
 import { UnReactiveStore } from '../classes/UnReactiveStore';
 
 export const theme = {
