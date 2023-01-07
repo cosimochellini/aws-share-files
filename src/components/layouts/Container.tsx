@@ -17,6 +17,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { Menu, ChevronLeft, ChevronRight } from '@mui/icons-material';
+import { Roboto } from '@next/font/google';
 
 import { Link } from '../Link';
 import { env } from '../../instances/env';
@@ -24,7 +25,6 @@ import { useDevice } from '../../hooks/device.hook';
 import { navbarItems, Visibility } from '../../instances/navbar';
 
 import { Conversions } from './Conversions';
-import { Roboto } from '@next/font/google';
 
 const drawerWidth = 240;
 
