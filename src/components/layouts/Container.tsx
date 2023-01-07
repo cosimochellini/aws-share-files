@@ -24,6 +24,7 @@ import { useDevice } from '../../hooks/device.hook';
 import { navbarItems, Visibility } from '../../instances/navbar';
 
 import { Conversions } from './Conversions';
+import { Roboto } from '@next/font/google';
 
 const drawerWidth = 240;
 
@@ -74,6 +75,13 @@ const DrawerHeader = styled('div')(({ theme }) => ({
   justifyContent: 'flex-end',
 }));
 
+const robotoFont = Roboto({
+  display: 'swap',
+  subsets: ['latin'],
+  preload: true,
+  weight: ['300', '400', '500'],
+});
+
 export function Container({ Component }: { Component: ReactElement }) {
   const [open, setOpen] = useState<boolean>();
   const { isMobile, hasWidth } = useDevice();
@@ -90,7 +98,7 @@ export function Container({ Component }: { Component: ReactElement }) {
   const handleDrawerClose = () => setOpen(false);
 
   return (
-    <Box sx={{ display: 'flex', border: 0, borderRadius: 16 }}>
+    <Box sx={{ display: 'flex', border: 0, borderRadius: 16 }} className={robotoFont.className}>
       <CssBaseline />
       {/* @ts-ignore */}
       <MyAppBar position="fixed" open={isOpen}>
