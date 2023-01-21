@@ -37,9 +37,6 @@ const nextConfig = {
       transform: '@mui/icons-material/{{member}}',
     },
   },
-  experimental: {
-    swcMinify: true,
-  },
 };
 
 module.exports = withPWA(nextConfig);
