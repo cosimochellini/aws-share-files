@@ -2285,10 +2285,12 @@
     prop-types "^15.8.1"
     react-is "^18.2.0"
 
-"@next-auth/dynamodb-adapter@^1.2.0":
-  version "1.2.0"
-  resolved "https://registry.yarnpkg.com/@next-auth/dynamodb-adapter/-/dynamodb-adapter-1.2.0.tgz#9f1b94478c6f71947d3d8001aae1b9db1521388b"
-  integrity sha512-KM9N9D7pe/uJUqaSXuN9cLWGuJVnZXhSgaqhoRE5KZ1q6eDrq1VF8r11KfhB3VQjoGf2e2o7O9OqqXatqt9kSg==
+"@next-auth/dynamodb-adapter@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@next-auth/dynamodb-adapter/-/dynamodb-adapter-3.0.1.tgz#ea42e50fe8a7b84f93e6a17684ca135eddc9a532"
+  integrity sha512-F6QoASFzwYEkT4IOZOxCIXJln5gnCw8QaBtwdeLRY6SMMe6wGBymUVZKYOwgtypyQhlAAm6opmRiXMLnLrPHxQ==
+  dependencies:
+    uuid "^9.0.0"
 
 "@next/env@13.2.1":
   version "13.2.1"
@@ -5616,6 +5618,11 @@ uuid@^8.3.2:
   version "8.3.2"
   resolved "https://registry.yarnpkg.com/uuid/-/uuid-8.3.2.tgz#80d5b5ced271bb9af6c445f21a1a04c606cefbe2"
   integrity sha512-+NYs2QeMWy+GWFOEm9xnn6HCDp0l7QBD7ml8zLUmJ+93Q5NF0NocErnwkTkXVFNiX3/fpC6afS8Dhb/gz7R7eg==
+
+uuid@^9.0.0:
+  version "9.0.0"
+  resolved "https://registry.yarnpkg.com/uuid/-/uuid-9.0.0.tgz#592f550650024a38ceb0c562f2f6aa435761efb5"
+  integrity sha512-MXcSTerfPa4uqyzStbRoTgt5XIe3x5+42+q1sDuy3R5MDk66URdLMOZe5aPX/SQd+kuYAh0FdP/pO28IkQyTeg==
 
 v8-compile-cache-lib@^3.0.1:
   version "3.0.1"

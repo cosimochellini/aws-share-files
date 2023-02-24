@@ -1,6 +1,6 @@
 {
   "name": "aws-share-files",
-  "version": "0.17.7",
+  "version": "0.17.8",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -20,7 +20,7 @@
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.9",
     "@mui/material": "^5.11.10",
-    "@next-auth/dynamodb-adapter": "^1.2.0",
+    "@next-auth/dynamodb-adapter": "^3.0.1",
     "formidable": "^2.1.1",
     "mitt": "^3.0.0",
     "next": "13.2.1",
