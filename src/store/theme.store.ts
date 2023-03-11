@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 import type { Theme } from '@mui/material/styles';
 import { createTheme } from '@mui/material/styles';
 

@@ -1,4 +1,4 @@
-import crate from 'zustand';
+import { create } from 'zustand';
 import { byBoolean, byValue } from 'sort-es';
 
 import { UserEmail } from '../types/dynamo.types';
@@ -20,12 +20,15 @@ interface EmailsStore {
   deleteEmail: (email: UserEmail) => Promise<void>;
 }
 
-const store = crate<EmailsStore>((set, get) => ({
+const store = create<EmailsStore>((set, get) => ({
   emails: [],
   loading: false,
 
   loadEmails: async (force = false) => {
-    const { emails, loading } = get();
+    const {
+      emails,
+      loading,
+    } = get();
 
     if ((emails?.length || loading) && !force) return;
 

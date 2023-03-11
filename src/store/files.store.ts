@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 import { S3Folder } from '../classes/S3Folder';
 import { functions } from '../instances/functions';
