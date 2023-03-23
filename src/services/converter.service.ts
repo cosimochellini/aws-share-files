@@ -1,7 +1,7 @@
 import { env } from '../instances/env';
-import { ServiceArguments, ServiceMapper } from '../types/generic';
+import type { ServiceArguments, ServiceMapper } from '../types/generic';
 import { notification } from '../instances/notification';
-import { ConversionRequest, ConverterResponse } from '../types/converter.types';
+import type { ConversionRequest, ConverterResponse } from '../types/converter.types';
 
 const { baseUrl, apiKey, header } = env.converter;
 const {

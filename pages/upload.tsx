@@ -20,13 +20,14 @@ import {
   Person,
   UploadFile,
 } from '@mui/icons-material';
+import type { GetStaticProps } from 'next';
 
 import { withDefaultLayout } from '../layouts';
-import { Nullable } from '../src/types/generic';
+import type { Nullable } from '../src/types/generic';
 import { purgeName } from '../src/utils/purgeName';
 import { functions } from '../src/instances/functions';
 import { device } from '../src/services/device.service';
-import { VolumeInfo } from '../src/types/content.types';
+import type { VolumeInfo } from '../src/types/content.types';
 import { useThemeStore } from '../src/store/theme.store';
 import { useFolderStore } from '../src/store/files.store';
 import { notification } from '../src/instances/notification';
@@ -46,7 +47,9 @@ const fullWidth = {
   },
 } as const;
 
-function Upload() {
+export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
+
+const Upload = () => {
   const theme = useThemeStore((x) => x.theme);
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
   const [selectedFile, setSelectedFile] = useState<File>();
@@ -82,7 +85,6 @@ function Upload() {
   const suggestionSelectHandler = useCallback(
     (index: number) => {
       const volume = suggestedVolumes[index];
-      if (!volume) return;
 
       const { title } = volume;
       const author = volume.authors?.[0];
@@ -102,13 +104,13 @@ function Upload() {
       name: fileTitle,
       file: selectedFile,
       author: fileAuthor,
-      extension: selectedFile.name?.split('.').pop() as string,
+      extension: selectedFile.name.split('.').pop() as string,
     } as const;
 
     try {
       await functions.s3.uploadFile(payload);
     } catch (e) {
-      await bucketFallbackStrategy(({ bucket }) => bucket.uploadFile(payload));
+      await bucketFallbackStrategy((bucket) => bucket.uploadFile(payload));
     }
 
     await refreshFolders(true);
@@ -251,6 +253,6 @@ function Upload() {
       </Grid>
     </div>
   );
-}
+};
 
 export default withDefaultLayout(Upload);

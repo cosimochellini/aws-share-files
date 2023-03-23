@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 
-import { Nullable } from '../types/generic';
-import { VolumeInfo } from '../types/content.types';
+import type { Nullable } from '../types/generic';
+import type { VolumeInfo } from '../types/content.types';
 import { functions } from '../instances/functions';
 import { notification } from '../instances/notification';
 

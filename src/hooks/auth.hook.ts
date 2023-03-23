@@ -24,13 +24,13 @@ export const useAuth = () => {
   const authenticated = useMemo(() => {
     if (status === 'loading') return true;
 
-    return session?.user?.email;
+    return session.user?.email;
   }, [session?.user?.email, status]);
 
   useEffect(() => {
     if (status === 'loading') return;
 
-    if (!session?.user?.email) {
+    if (!session.user?.email) {
       onUnauthenticated();
     }
   }, [onUnauthenticated, session?.user?.email, status]);

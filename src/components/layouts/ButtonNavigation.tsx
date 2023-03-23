@@ -1,23 +1,17 @@
 import { useRouter } from 'next/router';
 import { forwardRef, useMemo } from 'react';
-import {
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper,
-} from '@mui/material';
+import { BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
 import { Link } from '../Link';
 import { navbarItems, Visibility } from '../../instances/navbar';
 
-export default function ButtonNavigation() {
+const ButtonNavigation = () => {
   const router = useRouter();
   const currentRoute = useMemo(() => {
     const { pathname } = router;
 
-    const index = navbarItems.findIndex((item) => item.redirect === pathname) ?? 0;
-
-    return index;
+    return navbarItems.findIndex((item) => item.redirect === pathname);
   }, [router]);
 
   const BottomDiv = styled('div')({
@@ -59,4 +53,6 @@ export default function ButtonNavigation() {
       </Paper>
     </>
   );
-}
+};
+
+export default ButtonNavigation;

@@ -1,7 +1,8 @@
-import { promises as fs } from 'fs';
+import type { NextApiRequest } from 'next';
+import type { Fields, Files } from 'formidable';
+import { IncomingForm } from 'formidable';
 
-import { NextApiRequest } from 'next';
-import { IncomingForm, Fields, Files } from 'formidable';
+import { promises as fs } from 'fs';
 
 type FormPromise = { fields: Fields; files: Files };
 

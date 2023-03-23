@@ -1,13 +1,15 @@
 import React, { useMemo, useState } from 'react';
+import type {
+  ButtonProps,
+  IconButtonProps,
+} from '@mui/material';
 import {
   Button,
-  ButtonProps,
   IconButton,
-  IconButtonProps,
 } from '@mui/material';
 import { Error, Refresh } from '@mui/icons-material';
 
-import { Nullable } from '../../types/generic';
+import type { Nullable } from '../../types/generic';
 import { notification } from '../../instances/notification';
 
 type Props = {
@@ -19,7 +21,7 @@ type Props = {
   clickAction: (event: React.SyntheticEvent) => Promise<unknown>;
 };
 
-export function LoadingButton(props: Props) {
+export const LoadingButton = (props: Props) => {
   const {
     type = 'button', buttonProps, icon, iconProps, clickAction, text,
   } = props;
@@ -85,4 +87,4 @@ export function LoadingButton(props: Props) {
       {currentIcon}
     </IconButton>
   );
-}
+};

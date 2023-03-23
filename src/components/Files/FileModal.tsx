@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 import { ReadMore } from '../Text/ReadMore';
-import { Nullable } from '../../types/generic';
+import type { Nullable } from '../../types/generic';
 import { useDevice } from '../../hooks/device.hook';
 import { VolumeChipArray } from '../Data/VolumeChipArray';
 import { useEmailsStoreLoader } from '../../store/emails.store';
@@ -45,7 +45,7 @@ const style = {
   },
 } as const;
 
-function FileModal(props: Props) {
+const FileModal = (props: Props) => {
   const { file, onClose } = props;
 
   const open = !!file;
@@ -118,7 +118,7 @@ function FileModal(props: Props) {
       </Card>
     </Modal>
   );
-}
+};
 
 export { FileModal };
 export default FileModal;

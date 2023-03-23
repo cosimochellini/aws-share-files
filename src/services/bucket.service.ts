@@ -7,7 +7,7 @@ import {
 import { env } from '../instances/env';
 import { s3Client } from '../instances/aws';
 import { S3Folder } from '../classes/S3Folder';
-import { ServiceArguments, ServiceMapper } from '../types/generic';
+import type { ServiceArguments, ServiceMapper } from '../types/generic';
 
 export type UploadPayload = {
   name: string;

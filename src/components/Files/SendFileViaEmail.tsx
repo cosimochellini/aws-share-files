@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import { Mail, Send, Star } from '@mui/icons-material';
 
-import { Nullable } from '../../types/generic';
+import type { Nullable } from '../../types/generic';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { notification } from '../../instances/notification';
@@ -18,14 +18,14 @@ type Props = {
   fileKey: string;
 };
 
-export function SendFileViaEmail(props: Props) {
+export const SendFileViaEmail = (props: Props) => {
   const { fileKey } = props;
   const emails = useEmailsStore((x) => x.emails);
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<Nullable<number>>();
   const selectedEmail = useMemo(
-    () => emails?.[selectedIndex ?? 0],
+    () => emails[selectedIndex ?? 0],
     [emails, selectedIndex],
   );
 
@@ -33,7 +33,6 @@ export function SendFileViaEmail(props: Props) {
 
   const sendFile = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    if (!selectedEmail) return;
 
     await functions.email
       .sendFile({
@@ -81,15 +80,15 @@ export function SendFileViaEmail(props: Props) {
           >
             <ListItem onClick={handleClickListItem}>
               <ListItemIcon>
-                {selectedEmail?.default ? (
+                {selectedEmail.default ? (
                   <Star fontSize="small" color="warning" />
                 ) : (
                   <Mail fontSize="small" />
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={selectedEmail?.description}
-                secondary={selectedEmail?.email}
+                primary={selectedEmail.description}
+                secondary={selectedEmail.email}
               />
             </ListItem>
           </List>
@@ -99,7 +98,7 @@ export function SendFileViaEmail(props: Props) {
             onClose={handleClose}
             MenuListProps={{ role: 'listbox' }}
           >
-            {(emails ?? []).map((email, index) => (
+            {(emails).map((email, index) => (
               <MenuItem
                 key={email.email}
                 value={email.email}
@@ -142,4 +141,4 @@ export function SendFileViaEmail(props: Props) {
       </Grid>
     </>
   );
-}
+};

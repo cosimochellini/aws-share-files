@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { Link as MuiLink } from '@mui/material';
 
-import { Nullable } from '../../types/generic';
+import type { Nullable } from '../../types/generic';
 
 type Props = {
   text: Nullable<string>;
   maxLength?: number;
 };
 
-export function ReadMore(props: Props) {
+export const ReadMore = (props: Props) => {
   const { text, maxLength = 250 } = props;
   const [isExpanded, setIsExpanded] = useState(false);
   if (!text) return null;
@@ -26,4 +26,4 @@ export function ReadMore(props: Props) {
       )}
     </>
   );
-}
+};

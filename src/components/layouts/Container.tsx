@@ -1,5 +1,6 @@
+import type { ReactElement } from 'react';
 import {
-  useState, forwardRef, useMemo, ReactElement,
+  useState, forwardRef, useMemo,
 } from 'react';
 import {
   Box,
@@ -82,7 +83,7 @@ const robotoFont = Roboto({
   weight: ['300', '400', '500'],
 });
 
-export function Container({ Component }: { Component: ReactElement }) {
+export const Container = ({ Component }: { Component: ReactElement }) => {
   const [open, setOpen] = useState<boolean>();
   const { isMobile, hasWidth } = useDevice();
 
@@ -184,4 +185,4 @@ export function Container({ Component }: { Component: ReactElement }) {
       </Main>
     </Box>
   );
-}
+};

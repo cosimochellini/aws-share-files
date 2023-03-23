@@ -28,7 +28,7 @@ const downloadFile = async (key: string) => {
   downloadURI(signedUrl, fileName as string);
 };
 
-export function FilesAccordion(props: Props) {
+export const FilesAccordion = (props: Props) => {
   const { currentFile } = props;
 
   const refreshFolders = useFolderStore((x) => x.refreshFolders);
@@ -102,4 +102,4 @@ export function FilesAccordion(props: Props) {
       </AccordionDetails>
     </Accordion>
   );
-}
+};

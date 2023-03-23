@@ -17,7 +17,7 @@ import { NewUserEmail } from '../../src/components/Form/NewUserEmail';
 import { LoadingButton } from '../../src/components/Data/LoadingButton';
 import { FilesPlaceholders } from '../../src/components/Placeholders/FilesPlaceholders';
 
-function Manage() {
+const Manage = () => {
   const useEmailsStore = useEmailsStoreLoader();
   const emails = useEmailsStore((x) => x.emails);
   const [indexActive, setIndexActive] = useState(-1);
@@ -33,7 +33,7 @@ function Manage() {
           </Typography>
           <Divider />
           <List>
-            {!emails?.length ? (
+            {!emails.length ? (
               <FilesPlaceholders count={3} />
             ) : (
               emails.map((email, i) => (
@@ -78,6 +78,6 @@ function Manage() {
       </Grid>
     </>
   );
-}
+};
 
 export default withDefaultLayout(Manage);

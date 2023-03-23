@@ -1,5 +1,6 @@
 import { lazy, useState, Suspense } from 'react';
 import { Grid } from '@mui/material';
+import type { GetStaticProps } from 'next';
 
 import { withDefaultLayout } from '../layouts';
 import type { S3File } from '../src/classes/S3File';
@@ -20,7 +21,9 @@ const gridProps = {
   item: true,
 };
 
-function FilesPage() {
+export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
+
+const FilesPage = () => {
   const [fileKey, setFileKey] = useQueryString('fileKey');
   const [folderKey, setFolderKey] = useQueryString('folderKey');
 
@@ -75,6 +78,6 @@ function FilesPage() {
       )}
     </>
   );
-}
+};
 
 export default withDefaultLayout(FilesPage);

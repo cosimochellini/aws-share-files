@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { MoreVert } from '@mui/icons-material';
 
-import { Nullable } from '../../types/generic';
+import type { Nullable } from '../../types/generic';
 
 const style = {
   p: 4,
@@ -47,9 +47,13 @@ export type PagingConfiguration<T> = {
   orderDesc: boolean;
 };
 
+// eslint-disable-next-line react/function-component-definition
 export function FileListConfiguration<T>(props: Props<T>) {
   const {
-    availableKeys, configuration, title, onUpdateConfiguration,
+    availableKeys,
+    configuration,
+    title,
+    onUpdateConfiguration,
   } = props;
   const [open, setOpen] = useState(false);
 

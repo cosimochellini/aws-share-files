@@ -1,11 +1,12 @@
 import { useMemo } from 'react';
-import { Chip, ChipProps, Grid } from '@mui/material';
+import type { ChipProps } from '@mui/material';
+import { Chip, Grid } from '@mui/material';
 import {
   MenuBook, Person, CalendarToday, Class,
 } from '@mui/icons-material';
 
 import { formatter } from '../../formatters/formatter';
-import { VolumeInfo } from '../../types/content.types';
+import type { VolumeInfo } from '../../types/content.types';
 
 type Props = {
   volume: VolumeInfo;
@@ -56,7 +57,7 @@ const chipsFactory = (volume: VolumeInfo) => {
   ];
 };
 
-export function VolumeChipArray(props: Props) {
+export const VolumeChipArray = (props: Props) => {
   const { volume } = props;
 
   const chips = useMemo(() => chipsFactory(volume), [volume]);
@@ -76,4 +77,4 @@ export function VolumeChipArray(props: Props) {
       ))}
     </Grid>
   );
-}
+};

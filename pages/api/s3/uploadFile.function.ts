@@ -1,6 +1,7 @@
 import { fileHandler } from '../../../src/utils/api/fileHandler';
 import { defaultBehavior } from '../../../src/utils/api/composable';
-import { bucket, UploadPayload } from '../../../src/services/bucket.service';
+import type { UploadPayload } from '../../../src/services/bucket.service';
+import { bucket } from '../../../src/services/bucket.service';
 
 export default defaultBehavior(async (req) => {
   const { body, getFile } = await fileHandler<UploadPayload>(req);

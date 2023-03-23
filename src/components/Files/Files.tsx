@@ -14,17 +14,17 @@ import {
 import { AutoStories, Refresh } from '@mui/icons-material';
 
 import { useEffectOnceWhen } from '../../hooks/once';
-import { S3Folder } from '../../classes/S3Folder';
+import type { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
 import { useQueryString } from '../../hooks/query.hook';
 import { useFolderStore } from '../../store/files.store';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 import { sharedConfiguration } from '../../instances/sharedConfiguration';
+import type { PagingConfiguration } from '../Configurations/FileListConfiguration';
 import {
-  PagingConfiguration,
   FileListConfiguration,
 } from '../Configurations/FileListConfiguration';
-import { S3File } from '../../classes/S3File';
+import type { S3File } from '../../classes/S3File';
 
 import { ResultCount } from './ResultCount';
 
@@ -42,7 +42,7 @@ const defaultConfiguration = {
   orderBy: 'FileName',
 } as Readonly<PagingConfiguration<S3File>>;
 
-export function Files(props: Props) {
+export const Files = (props: Props) => {
   const {
     currentFolder, onClearFolder, onSearch, fileKey, setFileKey,
   } = props;
@@ -66,7 +66,7 @@ export function Files(props: Props) {
 
     onSearch?.(file);
 
-    setFileKey(file?.Key ?? '');
+    setFileKey(file.Key);
     setSelectedIndex(index);
   };
 
@@ -78,11 +78,11 @@ export function Files(props: Props) {
     if (search) {
       const searchLower = search.trim().toLowerCase();
 
-      items = items.filter((i) => i.Key?.toLowerCase().includes(searchLower));
+      items = items.filter((i) => i.Key.toLowerCase().includes(searchLower));
     }
 
     if (currentFolder) {
-      items = items.filter((i) => i.FileInfo.Parent?.includes(currentFolder.FolderName));
+      items = items.filter((i) => i.FileInfo.Parent.includes(currentFolder.FolderName));
     }
 
     const { orderBy, orderDesc: desc } = configuration;
@@ -91,13 +91,13 @@ export function Files(props: Props) {
   }, [search, folders, currentFolder, configuration]);
 
   useEffectOnceWhen(() => {
-    if (fileKey && displayedItems?.length) {
+    if (fileKey && displayedItems.length) {
       const index = displayedItems.findIndex((i) => i.Key === fileKey);
 
       if (index < 0) return;
       handleSelectedFile(index);
     }
-  }, displayedItems?.length > 0);
+  }, displayedItems.length > 0);
 
   return (
     <>
@@ -190,4 +190,4 @@ export function Files(props: Props) {
       </Paper>
     </>
   );
-}
+};

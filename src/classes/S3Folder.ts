@@ -1,4 +1,4 @@
-import { _Object } from '@aws-sdk/client-s3';
+import type { _Object } from '@aws-sdk/client-s3';
 
 import { S3File } from './S3File';
 import { S3BaseContent } from './S3BaseContent';
@@ -15,7 +15,7 @@ export class S3Folder extends S3BaseContent {
   }
 
   public static Create(items: _Object[]) {
-    const directoryMap: Record<string, S3Folder> = {};
+    const directoryMap = new Map<string, S3Folder>();
 
     for (const item of items) {
       if (item.Key?.endsWith('/')) continue;
@@ -24,10 +24,8 @@ export class S3Folder extends S3BaseContent {
 
       if (!folderName) continue;
 
-      // eslint-disable-next-line no-multi-assign
-      const folder = (directoryMap[folderName] ??= new S3Folder(item));
-
-      if (!folder) continue;
+      const folder = (directoryMap.has(folderName)
+        ? directoryMap.get(folderName) : new S3Folder(item)) as S3Folder;
 
       folder.Files.push(new S3File(item));
     }

@@ -7,7 +7,7 @@ type Props = {
   onClick?: () => void;
 };
 
-export function ResultCount(props: Props) {
+export const ResultCount = (props: Props) => {
   const {
     displayedItems, totalItems, displayName, onClick,
   } = props;
@@ -22,4 +22,4 @@ export function ResultCount(props: Props) {
       />
     </Grid>
   ) : null;
-}
+};

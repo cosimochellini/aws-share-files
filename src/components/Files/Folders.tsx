@@ -12,16 +12,16 @@ import {
 } from '@mui/material';
 import { Folder, Refresh } from '@mui/icons-material';
 
-import { Nullable } from '../../types/generic';
-import { S3Folder } from '../../classes/S3Folder';
+import type { Nullable } from '../../types/generic';
+import type { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
 import { useQueryString } from '../../hooks/query.hook';
 import { useFolderStore } from '../../store/files.store';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 import { sharedConfiguration } from '../../instances/sharedConfiguration';
+import type { PagingConfiguration } from '../Configurations/FileListConfiguration';
 import {
-  PagingConfiguration,
   FileListConfiguration,
 } from '../Configurations/FileListConfiguration';
 import { useEffectOnceWhen } from '../../hooks/once';
@@ -40,7 +40,7 @@ type Props = {
   onSearch: (query: S3Folder) => void;
 };
 
-export default function Folders(props: Props) {
+const Folders = (props: Props) => {
   const [hoveredItem, setHoveredItem] = useState(0);
   const { folders, refreshFolders } = useFolderStore();
   const [search, setSearch] = useQueryString('folderSearch');
@@ -52,7 +52,7 @@ export default function Folders(props: Props) {
   const handleCLick = (index: number) => {
     const folder = displayedItems[index];
     onSearch(folder);
-    setFolderKey(folder?.Key ?? '');
+    setFolderKey(folder.Key);
   };
 
   const displayedItems = useMemo(() => {
@@ -61,7 +61,7 @@ export default function Folders(props: Props) {
     if (search) {
       const searchLower = search.toLowerCase();
 
-      items = items.filter((i) => i.Key?.toLocaleLowerCase().includes(searchLower));
+      items = items.filter((i) => i.Key.toLocaleLowerCase().includes(searchLower));
     }
     const { orderBy, orderDesc: desc } = configuration;
 
@@ -78,7 +78,7 @@ export default function Folders(props: Props) {
 
       onSearch(folder);
     }
-  }, displayedItems?.length > 0);
+  }, displayedItems.length > 0);
 
   return (
     <>
@@ -162,4 +162,6 @@ export default function Folders(props: Props) {
       </Paper>
     </>
   );
-}
+};
+
+export default Folders;

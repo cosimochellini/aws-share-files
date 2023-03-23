@@ -1,4 +1,4 @@
-import { UserEmail } from '../../../src/types/dynamo.types';
+import type { UserEmail } from '../../../src/types/dynamo.types';
 import { defaultBehavior } from '../../../src/utils/api/composable';
 import { userEmails } from '../../../src/services/userEmails.service';
 

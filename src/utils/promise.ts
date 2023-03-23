@@ -1,4 +1,4 @@
-import { GenericFunction, Nullable } from '../types/generic';
+import type { GenericFunction, Nullable } from '../types/generic';
 
 import { noop } from './noop';
 

@@ -1,7 +1,7 @@
 import { env } from '../instances/env';
 import { FileInfo } from '../classes/FileInfo';
 import { transporter } from '../instances/transporter';
-import { ServiceArguments, ServiceMapper } from '../types/generic';
+import type { ServiceArguments, ServiceMapper } from '../types/generic';
 
 import { bucket } from './bucket.service';
 

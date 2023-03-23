@@ -1,9 +1,12 @@
 import { useRouter } from 'next/router';
+import type { GetStaticProps } from 'next';
 
 import { withDefaultLayout } from '../layouts';
 import { useEffectOnceWhen } from '../src/hooks/once';
 
-function Index() {
+export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
+
+const Index = () => {
   const router = useRouter();
 
   useEffectOnceWhen(async () => {
@@ -11,6 +14,6 @@ function Index() {
   });
 
   return <div>Loading</div>;
-}
+};
 
 export default withDefaultLayout(Index);

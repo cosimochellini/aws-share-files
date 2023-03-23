@@ -4,11 +4,11 @@ import {
 } from '@mui/material';
 import { Save } from '@mui/icons-material';
 
-import { UserEmail } from '../../types/dynamo.types';
+import type { UserEmail } from '../../types/dynamo.types';
 import { LoadingButton } from '../Data/LoadingButton';
 import { useEmailsStore } from '../../store/emails.store';
 
-export function NewUserEmail() {
+export const NewUserEmail = () => {
   const addEmail = useEmailsStore((x) => x.addEmail);
 
   const { register, handleSubmit, reset } = useForm<UserEmail>();
@@ -67,4 +67,4 @@ export function NewUserEmail() {
       </Grid>
     </Grid>
   );
-}
+};

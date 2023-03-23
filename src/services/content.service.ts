@@ -1,7 +1,7 @@
 import { env } from '../instances/env';
-import { ServiceArguments, ServiceMapper } from '../types/generic';
+import type { ServiceArguments, ServiceMapper } from '../types/generic';
 import { notification } from '../instances/notification';
-import { ContentResponse } from '../types/content.types';
+import type { ContentResponse } from '../types/content.types';
 
 const contentApiCaller = <T>(section: string, query = {}) => {
   const url = env.content.baseUrl + section;

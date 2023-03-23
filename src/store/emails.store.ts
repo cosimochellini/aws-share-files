@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { byBoolean, byValue } from 'sort-es';
 
-import { UserEmail } from '../types/dynamo.types';
+import type { UserEmail } from '../types/dynamo.types';
 import { functions } from '../instances/functions';
 import { notification } from '../instances/notification';
 import { useEffectOnceWhen } from '../hooks/once';
@@ -30,7 +30,7 @@ const store = create<EmailsStore>((set, get) => ({
       loading,
     } = get();
 
-    if ((emails?.length || loading) && !force) return;
+    if ((emails.length || loading) && !force) return;
 
     set({ loading: true });
 

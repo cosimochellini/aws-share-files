@@ -1,6 +1,6 @@
 {
   "name": "aws-share-files",
-  "version": "0.17.9",
+  "version": "0.18.0",
   "private": false,
   "license": "MIT",
   "scripts": {

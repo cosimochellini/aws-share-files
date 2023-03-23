@@ -1,7 +1,7 @@
 import { randomId } from '../utils/random';
 import { dynamoDbClient } from '../instances/aws';
-import { UserEmail } from '../types/dynamo.types';
-import { ServiceArguments, ServiceMapper } from '../types/generic';
+import type { UserEmail } from '../types/dynamo.types';
+import type { ServiceArguments, ServiceMapper } from '../types/generic';
 
 const TableName = 'user-email';
 

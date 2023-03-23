@@ -1,11 +1,9 @@
 import { device } from '../services/device.service';
-import { Nullable } from '../types/generic';
+import type { Nullable } from '../types/generic';
 
 import { debounce } from './callbacks';
 
-const cache: Record<string, URLSearchParams> = {
-  '': new URLSearchParams(''),
-};
+const cache = new Map<string, URLSearchParams>();
 
 const purgeString = (str: string) => str
   .replace(/[^=&]+=(&|$)/g, '')
@@ -13,11 +11,11 @@ const purgeString = (str: string) => str
   .replace(/^&/, '');
 
 const getSearchParams = (search: string | undefined = '') => {
-  if (cache[search]) return cache[search];
+  if (cache.has(search)) return cache.get(search) as URLSearchParams;
 
   const currentQuery = new URLSearchParams(purgeString(search));
 
-  cache[search] = currentQuery;
+  cache.set(search, currentQuery);
 
   return currentQuery;
 };
@@ -27,7 +25,11 @@ export const setQueryStringWithoutPageReload = debounce((qsValue: string) => {
 
   if (!window) return;
 
-  const { protocol, host, pathname } = window.location;
+  const {
+    protocol,
+    host,
+    pathname,
+  } = window.location;
 
   const path = `${protocol}//${host}${pathname}?${qsValue}`;
 
@@ -48,4 +50,5 @@ export const setQueryStringValue = (
 export const getQueryStringValue = (
   key: string,
   queryString = device.window?.location.search,
-) => getSearchParams(queryString).get(key);
+) => getSearchParams(queryString)
+  .get(key);

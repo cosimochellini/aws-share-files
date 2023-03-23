@@ -1,4 +1,4 @@
-import { GenericFunction } from '../types/generic';
+import type { GenericFunction } from '../types/generic';
 
 export function debounce<T>(
   func: (...args: T[]) => unknown,

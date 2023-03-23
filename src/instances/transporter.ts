@@ -9,7 +9,7 @@ const { email } = env;
 const transporter = nodemailer.createTransport(email);
 
 try {
-  transporter.verify?.()?.catch?.(notification.error);
+  transporter.verify().catch(notification.error);
 } catch (error) {
   notification.error(error);
 }

@@ -9,6 +9,7 @@ import {
   Link as MuiLink,
   List,
 } from '@mui/material';
+import type { GetStaticProps } from 'next';
 
 import { withDefaultLayout } from '../layouts';
 import { useAuth } from '../src/hooks/auth.hook';
@@ -17,7 +18,9 @@ import { formatter } from '../src/formatters/formatter';
 import { useThemeStore } from '../src/store/theme.store';
 import { navbarItems, Visibility } from '../src/instances/navbar';
 
-function Settings() {
+export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
+
+const Settings = () => {
   const { session } = useAuth();
 
   const [dark, theme, toggleTheme] = useThemeStore((x) => [
@@ -100,6 +103,6 @@ function Settings() {
       </Grid>
     </>
   );
-}
+};
 
 export default withDefaultLayout(Settings);

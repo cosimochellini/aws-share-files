@@ -2,9 +2,10 @@ import { useState } from 'react';
 import { Snackbar, Alert } from '@mui/material';
 
 import { useEffectOnceWhen } from '../../hooks/once';
-import { notificationData, notification } from '../../instances/notification';
+import type { notificationData } from '../../instances/notification';
+import { notification } from '../../instances/notification';
 
-export default function NotificationHandler() {
+const NotificationHandler = () => {
   const [open, setOpen] = useState(false);
   const [data, setData] = useState({} as notificationData);
 
@@ -38,4 +39,6 @@ export default function NotificationHandler() {
       </Snackbar>
     </div>
   );
-}
+};
+
+export default NotificationHandler;

@@ -7,7 +7,7 @@ import { SessionProvider } from 'next-auth/react';
 import { env } from '../src/instances/env';
 import type { AppPropsWithLayout } from '../src/types';
 
-function AppGrid(props: AppPropsWithLayout<{ session: Session }>) {
+const AppGrid = (props: AppPropsWithLayout<{ session: Session }>) => {
   const {
     Component,
     pageProps: {
@@ -31,6 +31,6 @@ function AppGrid(props: AppPropsWithLayout<{ session: Session }>) {
       </SessionProvider>
     </>
   );
-}
+};
 
 export default AppGrid;

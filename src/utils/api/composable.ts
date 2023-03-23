@@ -1,5 +1,5 @@
-import { Session } from 'next-auth';
-import { NextApiRequest } from 'next';
+import type { Session } from 'next-auth';
+import type { NextApiRequest } from 'next';
 import { getSession } from 'next-auth/react';
 
 import { env } from '../../instances/env';
@@ -16,7 +16,7 @@ export const defaultBehavior = <T>(
 ) => async (req: NextApiRequest, res: BaseResponse) => {
     let currentSession: Session | null = null;
     try {
-      if (options?.shouldAuthenticate) {
+      if (options.shouldAuthenticate) {
         const session = await getSession({ req });
 
         if (!session) {

@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { S3Folder } from '../classes/S3Folder';
+import type { S3Folder } from '../classes/S3Folder';
 import { functions } from '../instances/functions';
 import { notification } from '../instances/notification';
 

@@ -1,4 +1,5 @@
-import { MouseEvent, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useState } from 'react';
 import {
   Button,
   Menu,
@@ -16,7 +17,7 @@ import {
   Refresh,
 } from '@mui/icons-material';
 
-import { Nullable } from '../../types/generic';
+import type { Nullable } from '../../types/generic';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
 import { StatusCode } from '../../types/converter.types';
@@ -37,7 +38,7 @@ function getColor(code: StatusCode) {
   }
 }
 
-export function Conversions() {
+export const Conversions = () => {
   const { jobs } = useJobs();
   const removeConversion = useConversionsStore((s) => s.removeConversion);
 
@@ -90,19 +91,19 @@ export function Conversions() {
 
               <Typography
                 variant="body2"
-                color={getColor(job.status?.code)}
+                color={getColor(job.status.code)}
                 style={{ flex: 1 }}
               >
-                {job.conversion?.[0]?.output_target?.[0]?.parameters?.file
+                {job.conversion[0]?.output_target?.[0]?.parameters?.file
                   ?.split('/')
                   .at(-1) ?? 'Unknown'}
               </Typography>
               <IconButton>
-                {job.status?.code === StatusCode.failed ? (
+                {job.status.code === StatusCode.failed ? (
                   <Warning color="warning" />
                 ) : null}
 
-                {job.status?.code === StatusCode.completed ? (
+                {job.status.code === StatusCode.completed ? (
                   <CheckCircle color="success" />
                 ) : (
                   <Refresh color="secondary" className="spin" />
@@ -120,4 +121,4 @@ export function Conversions() {
       </Menu>
     </div>
   );
-}
+};

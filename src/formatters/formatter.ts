@@ -1,4 +1,4 @@
-import { Nullable } from '../types/generic';
+import type { Nullable } from '../types/generic';
 
 type datable = Nullable<string | Date>;
 
