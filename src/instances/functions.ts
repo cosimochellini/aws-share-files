@@ -54,7 +54,7 @@ export const functions = {
       return caller<converterTypes['convertFile']>('converter/convert.function', { file, target });
     },
   },
-};
+} as const;
 
 export type FunctionTypes = ServiceMapper<typeof functions>;
 export type AwaitedFunctionTypes = AwaitedServiceMapper<FunctionTypes>;

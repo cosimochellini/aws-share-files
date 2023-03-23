@@ -1,4 +1,4 @@
-const withRedirects = async function () {
+const withRedirects = async function redirects() {
   return [
     {
       source: '/',
@@ -10,7 +10,7 @@ const withRedirects = async function () {
       destination: '/files',
       permanent: false,
     },
-  ]
-}
+  ];
+};
 
-module.exports = { withRedirects }
+module.exports = { withRedirects };

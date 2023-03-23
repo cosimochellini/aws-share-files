@@ -12,14 +12,14 @@
     "run-scripts": "ts-node --skip-project ./script.runner.node.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.294.0",
-    "@aws-sdk/client-s3": "^3.294.0",
-    "@aws-sdk/lib-dynamodb": "^3.294.0",
-    "@aws-sdk/s3-request-presigner": "^3.294.0",
+    "@aws-sdk/client-dynamodb": "^3.298.0",
+    "@aws-sdk/client-s3": "^3.298.0",
+    "@aws-sdk/lib-dynamodb": "^3.298.0",
+    "@aws-sdk/s3-request-presigner": "^3.298.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.13",
+    "@mui/material": "^5.11.14",
     "@next-auth/dynamodb-adapter": "^3.0.1",
     "formidable": "^2.1.1",
     "mitt": "^3.0.0",
@@ -34,13 +34,13 @@
     "zustand": "^4.3.6"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.292.0",
+    "@aws-sdk/types": "^3.296.0",
     "@types/formidable": "^2.0.4",
-    "@types/node": "18.15.3",
+    "@types/node": "18.15.5",
     "@types/nodemailer": "^6.4.7",
     "@types/react": "18.0.28",
-    "@typescript-eslint/eslint-plugin": "^5.55.0",
-    "@typescript-eslint/parser": "^5.55.0",
+    "@typescript-eslint/eslint-plugin": "^5.56.0",
+    "@typescript-eslint/parser": "^5.56.0",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.36.0",
@@ -48,7 +48,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "13.2.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^3.6.1",
+    "type-fest": "^3.7.0",
     "typescript": "5.0.2"
   }
 }

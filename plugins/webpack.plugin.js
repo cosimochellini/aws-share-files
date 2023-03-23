@@ -1,8 +1,9 @@
-const path = require('path')
-const Dotenv = require('dotenv-webpack')
+const path = require('path');
+
+const Dotenv = require('dotenv-webpack');
 
 const withWebpack = (config) => {
-  config.plugins = config.plugins || []
+  config.plugins = config.plugins || [];
 
   config.plugins = [
     ...config.plugins,
@@ -10,11 +11,11 @@ const withWebpack = (config) => {
     // Read the .env file
     new Dotenv({
       path: path.join(__dirname, '.env'),
-      systemvars: true
-    })
-  ]
+      systemvars: true,
+    }),
+  ];
 
-  return config
-}
+  return config;
+};
 
-module.exports = { withWebpack }
+module.exports = { withWebpack };
