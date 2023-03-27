@@ -48,7 +48,7 @@
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "13.2.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^3.7.0",
+    "type-fest": "^3.7.1",
     "typescript": "5.0.2"
   }
 }
