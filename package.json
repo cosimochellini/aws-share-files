@@ -12,14 +12,14 @@
     "run-scripts": "ts-node --skip-project ./script.runner.node.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.299.0",
-    "@aws-sdk/client-s3": "^3.299.0",
-    "@aws-sdk/lib-dynamodb": "^3.299.0",
-    "@aws-sdk/s3-request-presigner": "^3.299.0",
+    "@aws-sdk/client-dynamodb": "^3.303.0",
+    "@aws-sdk/client-s3": "^3.304.0",
+    "@aws-sdk/lib-dynamodb": "^3.303.0",
+    "@aws-sdk/s3-request-presigner": "^3.304.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.11",
-    "@mui/material": "^5.11.14",
+    "@mui/material": "^5.11.15",
     "@next-auth/dynamodb-adapter": "^3.0.1",
     "formidable": "^2.1.1",
     "mitt": "^3.0.0",
@@ -29,26 +29,26 @@
     "nodemailer": "^6.9.1",
     "react": "18.2.0",
     "react-dom": "18.2.0",
-    "react-hook-form": "^7.43.8",
+    "react-hook-form": "^7.43.9",
     "sort-es": "^1.6.7",
-    "zustand": "^4.3.6"
+    "zustand": "^4.3.7"
   },
   "devDependencies": {
-    "@aws-sdk/types": "^3.296.0",
+    "@aws-sdk/types": "^3.303.0",
     "@types/formidable": "^2.0.4",
-    "@types/node": "18.15.10",
+    "@types/node": "18.15.11",
     "@types/nodemailer": "^6.4.7",
-    "@types/react": "18.0.29",
-    "@typescript-eslint/eslint-plugin": "^5.56.0",
-    "@typescript-eslint/parser": "^5.56.0",
+    "@types/react": "18.0.31",
+    "@typescript-eslint/eslint-plugin": "^5.57.0",
+    "@typescript-eslint/parser": "^5.57.0",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
-    "eslint": "^8.36.0",
+    "eslint": "^8.37.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "13.2.4",
     "ts-node": "^10.9.1",
-    "type-fest": "^3.7.1",
-    "typescript": "5.0.2"
+    "type-fest": "^3.7.2",
+    "typescript": "5.0.3"
   }
 }
