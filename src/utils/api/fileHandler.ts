@@ -11,7 +11,10 @@ export async function fileHandler<T>(req: NextApiRequest) {
     new IncomingForm().parse(req, (err, fields, files) => {
       if (err) reject(err);
 
-      resolve({ fields, files });
+      resolve({
+        fields,
+        files,
+      });
     });
   });
 
@@ -23,9 +26,7 @@ export async function fileHandler<T>(req: NextApiRequest) {
 
       if (Array.isArray(file)) throw new Error('file is an array');
 
-      const buffer = await fs.readFile(file.filepath as string);
-
-      return buffer;
+      return fs.readFile(file?.filepath as string);
     },
   };
 }

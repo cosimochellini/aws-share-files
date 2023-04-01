@@ -34,6 +34,8 @@ export const SendFileViaEmail = (props: Props) => {
   const sendFile = async (event: React.SyntheticEvent) => {
     event.preventDefault();
 
+    if (!selectedEmail) return;
+
     await functions.email
       .sendFile({
         fileKey,
@@ -80,15 +82,15 @@ export const SendFileViaEmail = (props: Props) => {
           >
             <ListItem onClick={handleClickListItem}>
               <ListItemIcon>
-                {selectedEmail.default ? (
+                {selectedEmail?.default ? (
                   <Star fontSize="small" color="warning" />
                 ) : (
                   <Mail fontSize="small" />
                 )}
               </ListItemIcon>
               <ListItemText
-                primary={selectedEmail.description}
-                secondary={selectedEmail.email}
+                primary={selectedEmail?.description}
+                secondary={selectedEmail?.email}
               />
             </ListItem>
           </List>

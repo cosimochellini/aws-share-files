@@ -50,7 +50,7 @@
     ],
     "@typescript-eslint/consistent-type-imports": "error",
     "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-unnecessary-condition": 2,
+//    "@typescript-eslint/no-unnecessary-condition": 2,
     "@typescript-eslint/no-extra-non-null-assertion": "error",
     "@typescript-eslint/ban-ts-comment": "warn",
     "jsx-a11y/anchor-is-valid": "warn",

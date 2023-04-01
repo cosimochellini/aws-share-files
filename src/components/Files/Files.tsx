@@ -44,11 +44,19 @@ const defaultConfiguration = {
 
 export const Files = (props: Props) => {
   const {
-    currentFolder, onClearFolder, onSearch, fileKey, setFileKey,
+    currentFolder,
+    onClearFolder,
+    onSearch,
+    fileKey,
+    setFileKey,
   } = props;
 
   const [search, setSearch] = useQueryString('fileSearch');
-  const { folders, loadFolders, refreshFolders } = useFolderStore();
+  const {
+    folders,
+    loadFolders,
+    refreshFolders,
+  } = useFolderStore();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [configuration, setConfiguration] = useState(defaultConfiguration);
@@ -64,6 +72,8 @@ export const Files = (props: Props) => {
   const handleSelectedFile = (index: number) => {
     const file = displayedItems[index];
 
+    if (!file) return;
+
     onSearch?.(file);
 
     setFileKey(file.Key);
@@ -76,16 +86,21 @@ export const Files = (props: Props) => {
     let items = folders?.flatMap((item) => item.Files) ?? [];
 
     if (search) {
-      const searchLower = search.trim().toLowerCase();
+      const searchLower = search.trim()
+        .toLowerCase();
 
-      items = items.filter((i) => i.Key.toLowerCase().includes(searchLower));
+      items = items.filter((i) => i.Key.toLowerCase()
+        .includes(searchLower));
     }
 
     if (currentFolder) {
       items = items.filter((i) => i.FileInfo.Parent.includes(currentFolder.FolderName));
     }
 
-    const { orderBy, orderDesc: desc } = configuration;
+    const {
+      orderBy,
+      orderDesc: desc,
+    } = configuration;
 
     return items.sort(byValue(orderBy as 'Key', byString({ desc })));
   }, [search, folders, currentFolder, configuration]);
@@ -107,7 +122,10 @@ export const Files = (props: Props) => {
         label="Search for a file"
         type="search"
         sx={{
-          width: { xs: '88%', md: '88%' },
+          width: {
+            xs: '88%',
+            md: '88%',
+          },
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
@@ -151,31 +169,35 @@ export const Files = (props: Props) => {
       >
         <List
           sx={{
-            width: { xs: '100%', md: '90%' },
+            width: {
+              xs: '100%',
+              md: '90%',
+            },
           }}
         >
           {!folders ? (
             <FilesPlaceholders count={configuration.size} />
           ) : (
-            displayedItems.slice(0, configuration.size).map((file, i) => (
-              <ListItem
-                key={file.Key}
-                sx={{ borderRadius: 6 }}
-                selected={selectedIndex === i}
-                onClick={() => handleSelectedFile(i)}
-                onMouseEnter={() => setSelectedIndex(i)}
-              >
-                <ListItemAvatar>
-                  <Avatar>
-                    <AutoStories />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={file.FileInfo.Name}
-                  secondary={file.FileInfo.Parent}
-                />
-              </ListItem>
-            ))
+            displayedItems.slice(0, configuration.size)
+              .map((file, i) => (
+                <ListItem
+                  key={file.Key}
+                  sx={{ borderRadius: 6 }}
+                  selected={selectedIndex === i}
+                  onClick={() => handleSelectedFile(i)}
+                  onMouseEnter={() => setSelectedIndex(i)}
+                >
+                  <ListItemAvatar>
+                    <Avatar>
+                      <AutoStories />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={file.FileInfo.Name}
+                    secondary={file.FileInfo.Parent}
+                  />
+                </ListItem>
+              ))
           )}
         </List>
         <ResultCount

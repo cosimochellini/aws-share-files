@@ -85,6 +85,7 @@ const Upload = () => {
   const suggestionSelectHandler = useCallback(
     (index: number) => {
       const volume = suggestedVolumes[index];
+      if (!volume) return;
 
       const { title } = volume;
       const author = volume.authors?.[0];

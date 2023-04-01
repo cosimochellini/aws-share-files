@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "ES2022",
+    "target": "ESNext",
     "lib": [
       "dom",
       "dom.iterable",
@@ -18,7 +18,9 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "strictNullChecks": true
+    "strictNullChecks": true,
+    "noUncheckedIndexedAccess": true,
+    "noImplicitAny": true
   },
   "include": [
     "next-env.d.ts",
@@ -26,7 +28,7 @@
     "**/*.tsx",
     "./src/**/*.ts",
     "./scripts/**/*.ts",
-    "plugins/pwa.plugin.js",
+    "plugins/pwa.plugin.js"
   ],
   "exclude": [
     "node_modules"

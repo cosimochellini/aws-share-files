@@ -11,7 +11,7 @@ export class S3Folder extends S3BaseContent {
   constructor(folder: _Object) {
     super(folder);
 
-    [this.FolderName] = this.Key.split('/');
+    [this.FolderName] = this.Key.split('/') as [string];
   }
 
   withFile(file: _Object) {

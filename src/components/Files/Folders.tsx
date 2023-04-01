@@ -42,15 +42,25 @@ type Props = {
 
 const Folders = (props: Props) => {
   const [hoveredItem, setHoveredItem] = useState(0);
-  const { folders, refreshFolders } = useFolderStore();
+  const {
+    folders,
+    refreshFolders,
+  } = useFolderStore();
   const [search, setSearch] = useQueryString('folderSearch');
 
   const [configuration, setConfiguration] = useState(defaultConfiguration);
 
-  const { onSearch, setFolderKey, folderKey } = props;
+  const {
+    onSearch,
+    setFolderKey,
+    folderKey,
+  } = props;
 
   const handleCLick = (index: number) => {
     const folder = displayedItems[index];
+
+    if (!folder) return;
+
     onSearch(folder);
     setFolderKey(folder.Key);
   };
@@ -61,9 +71,13 @@ const Folders = (props: Props) => {
     if (search) {
       const searchLower = search.toLowerCase();
 
-      items = items.filter((i) => i.Key.toLocaleLowerCase().includes(searchLower));
+      items = items.filter((i) => i.Key.toLocaleLowerCase()
+        .includes(searchLower));
     }
-    const { orderBy, orderDesc: desc } = configuration;
+    const {
+      orderBy,
+      orderDesc: desc,
+    } = configuration;
 
     return items.sort(byValue(orderBy as 'Key', byString({ desc })));
   }, [search, folders, configuration]);
@@ -75,6 +89,8 @@ const Folders = (props: Props) => {
       if (index < 0) return;
 
       const folder = displayedItems[index];
+
+      if (!folder) return;
 
       onSearch(folder);
     }
@@ -88,7 +104,10 @@ const Folders = (props: Props) => {
         value={search}
         label="Search for author"
         sx={{
-          width: { xs: '88%', md: '88%' },
+          width: {
+            xs: '88%',
+            md: '88%',
+          },
         }}
         onChange={(e) => setSearch(e.target.value)}
         InputProps={{
@@ -121,33 +140,37 @@ const Folders = (props: Props) => {
       >
         <List
           sx={{
-            width: { xs: '100%', sm: '90%' },
+            width: {
+              xs: '100%',
+              sm: '90%',
+            },
           }}
         >
           {!folders ? (
             <FilesPlaceholders count={configuration.size} />
           ) : (
-            displayedItems.slice(0, configuration.size).map((item, i) => (
-              <ListItem
-                key={item.Key}
-                sx={{ borderRadius: 6 }}
-                selected={hoveredItem === i}
-                onClick={() => handleCLick(i)}
-                onMouseEnter={(_) => setHoveredItem(i)}
-              >
-                <ListItemAvatar key={item.Key}>
-                  <Avatar key={item.Key}>
-                    <Folder key={item.Key} />
-                  </Avatar>
-                </ListItemAvatar>
-                <ListItemText
-                  primary={item.FolderName}
-                  secondary={`edited: ${formatter.dateFormatter(
-                    item.LastModified,
-                  )}`}
-                />
-              </ListItem>
-            ))
+            displayedItems.slice(0, configuration.size)
+              .map((item, i) => (
+                <ListItem
+                  key={item.Key}
+                  sx={{ borderRadius: 6 }}
+                  selected={hoveredItem === i}
+                  onClick={() => handleCLick(i)}
+                  onMouseEnter={(_) => setHoveredItem(i)}
+                >
+                  <ListItemAvatar key={item.Key}>
+                    <Avatar key={item.Key}>
+                      <Folder key={item.Key} />
+                    </Avatar>
+                  </ListItemAvatar>
+                  <ListItemText
+                    primary={item.FolderName}
+                    secondary={`edited: ${formatter.dateFormatter(
+                      item.LastModified,
+                    )}`}
+                  />
+                </ListItem>
+              ))
           )}
         </List>
         <ResultCount
