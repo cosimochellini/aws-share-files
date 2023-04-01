@@ -14,22 +14,32 @@ export class S3Folder extends S3BaseContent {
     [this.FolderName] = this.Key.split('/');
   }
 
+  withFile(file: _Object) {
+    this.Files.push(new S3File(file));
+
+    return this;
+  }
+
   public static Create(items: _Object[]) {
     const directoryMap = new Map<string, S3Folder>();
 
     for (const item of items) {
+      // eslint-disable-next-line no-continue
       if (item.Key?.endsWith('/')) continue;
 
       const folderName = item.Key?.split('/')?.[0];
 
+      // eslint-disable-next-line no-continue
       if (!folderName) continue;
 
-      const folder = (directoryMap.has(folderName)
-        ? directoryMap.get(folderName) : new S3Folder(item)) as S3Folder;
-
-      folder.Files.push(new S3File(item));
+      if (directoryMap.has(folderName)) {
+        directoryMap.get(folderName)
+          ?.withFile(item);
+      } else {
+        directoryMap.set(folderName, new S3Folder(item).withFile(item));
+      }
     }
 
-    return Object.values(directoryMap);
+    return Array.from(directoryMap.values());
   }
 }
