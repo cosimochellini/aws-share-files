@@ -1,8 +1,9 @@
-import { lazy, ReactElement, Suspense } from 'react';
+import type { ReactElement } from 'react';
+import { lazy, Suspense } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 
-import { NextPageWithLayout } from '../src/types';
+import type { NextPageWithLayout } from '../src/types';
 import { useDevice } from '../src/hooks/device.hook';
 import { useEffectOnceWhen } from '../src/hooks/once';
 import { useThemeStore } from '../src/store/theme.store';
@@ -17,7 +18,7 @@ interface DefaultLayout {
   children: ReactElement;
 }
 
-export function Layout({ children }: DefaultLayout) {
+export const Layout = ({ children }: DefaultLayout) => {
   const { isMobile } = useDevice();
 
   const [theme, checkTheme] = useThemeStore((x) => [x.theme, x.checkTheme]);
@@ -36,7 +37,7 @@ export function Layout({ children }: DefaultLayout) {
       <NotificationHandler />
     </ThemeProvider>
   );
-}
+};
 
 export const withDefaultLayout = <T extends NextPageWithLayout>(Page: T) => {
   // eslint-disable-next-line no-param-reassign
