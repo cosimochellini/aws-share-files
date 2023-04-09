@@ -1,6 +1,6 @@
 {
   "name": "aws-share-files",
-  "version": "0.18.1",
+  "version": "0.19.0",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -12,10 +12,10 @@
     "run-scripts": "ts-node --skip-project ./script.runner.node.ts"
   },
   "dependencies": {
-    "@aws-sdk/client-dynamodb": "^3.306.0",
-    "@aws-sdk/client-s3": "^3.306.0",
-    "@aws-sdk/lib-dynamodb": "^3.306.0",
-    "@aws-sdk/s3-request-presigner": "^3.306.0",
+    "@aws-sdk/client-dynamodb": "^3.309.0",
+    "@aws-sdk/client-s3": "^3.309.0",
+    "@aws-sdk/lib-dynamodb": "^3.309.0",
+    "@aws-sdk/s3-request-presigner": "^3.309.0",
     "@emotion/react": "^11.10.6",
     "@emotion/styled": "^11.10.6",
     "@mui/icons-material": "^5.11.16",
@@ -24,7 +24,7 @@
     "formidable": "^2.1.1",
     "mitt": "^3.0.0",
     "next": "13.3.0",
-    "next-auth": "^4.21.1",
+    "next-auth": "^4.22.0",
     "next-pwa": "^5.6.0",
     "nodemailer": "^6.9.1",
     "react": "18.2.0",
@@ -43,12 +43,12 @@
     "@typescript-eslint/parser": "^5.57.1",
     "dotenv": "^16.0.3",
     "dotenv-webpack": "^8.0.1",
-    "eslint": "^8.37.0",
+    "eslint": "^8.38.0",
     "eslint-config-airbnb": "^19.0.4",
     "eslint-config-airbnb-typescript": "^17.0.0",
     "eslint-config-next": "13.3.0",
     "ts-node": "^10.9.1",
     "type-fest": "^3.8.0",
-    "typescript": "5.0.3"
+    "typescript": "5.0.4"
   }
 }
