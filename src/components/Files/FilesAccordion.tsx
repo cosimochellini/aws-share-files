@@ -13,7 +13,7 @@ import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
 import { downloadURI } from '../../utils/downloadHelper';
-import { useFolderStore } from '../../store/files.store';
+import { useRefreshFolders } from '../../store/files.store';
 
 import { SendFileViaEmail } from './SendFileViaEmail';
 
@@ -23,15 +23,14 @@ type Props = {
 
 const downloadFile = async (key: string) => {
   const signedUrl = await functions.s3.shareableUrl({ key });
-  const fileName = key.split('/').at(-1);
+  const fileName = key.split('/')
+    .at(-1);
 
   downloadURI(signedUrl, fileName as string);
 };
 
-export const FilesAccordion = (props: Props) => {
-  const { currentFile } = props;
-
-  const refreshFolders = useFolderStore((x) => x.refreshFolders);
+export const FilesAccordion = ({ currentFile }: Props) => {
+  const refreshFolders = useRefreshFolders();
 
   const { isMobile } = useDevice();
 
@@ -74,14 +73,25 @@ export const FilesAccordion = (props: Props) => {
         aria-controls="panel1a-content"
       >
         <Typography
-          sx={{ width: { xs: '70%', sm: '80%', md: '85%' }, flexShrink: 0 }}
+          sx={{
+            width: {
+              xs: '70%',
+              sm: '80%',
+              md: '85%',
+            },
+            flexShrink: 0,
+          }}
         >
           {fileTitle(currentFile)}
         </Typography>
 
         <LoadingButton
           type="icon"
-          iconProps={{ size: 'small', color: 'error', sx: { marginX: 1 } }}
+          iconProps={{
+            size: 'small',
+            color: 'error',
+            sx: { marginX: 1 },
+          }}
           icon={<Delete />}
           clickAction={() => deleteFile(currentFile.Key)}
         />

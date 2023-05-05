@@ -17,7 +17,6 @@ import type { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
 import { formatter } from '../../formatters/formatter';
 import { useQueryString } from '../../hooks/query.hook';
-import { useFolderStore } from '../../store/files.store';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 import { sharedConfiguration } from '../../instances/sharedConfiguration';
 import type { PagingConfiguration } from '../Configurations/FileListConfiguration';
@@ -25,6 +24,7 @@ import {
   FileListConfiguration,
 } from '../Configurations/FileListConfiguration';
 import { useEffectOnceWhen } from '../../hooks/once';
+import { useFolders, useRefreshFolders } from '../../store/files.store';
 
 import { ResultCount } from './ResultCount';
 
@@ -44,8 +44,10 @@ const Folders = (props: Props) => {
   const [hoveredItem, setHoveredItem] = useState(0);
   const {
     folders,
-    refreshFolders,
-  } = useFolderStore();
+    initialized,
+  } = useFolders();
+
+  const refreshFolders = useRefreshFolders();
   const [search, setSearch] = useQueryString('folderSearch');
 
   const [configuration, setConfiguration] = useState(defaultConfiguration);
@@ -146,7 +148,7 @@ const Folders = (props: Props) => {
             },
           }}
         >
-          {!folders ? (
+          {!initialized ? (
             <FilesPlaceholders count={configuration.size} />
           ) : (
             displayedItems.slice(0, configuration.size)

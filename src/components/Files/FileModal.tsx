@@ -16,8 +16,9 @@ import type { Nullable } from '../../types/generic';
 import { useDevice } from '../../hooks/device.hook';
 import { VolumeChipArray } from '../Data/VolumeChipArray';
 import { useEmailsStoreLoader } from '../../store/emails.store';
-import { useVolumesStore } from '../../store/volumes.store';
+import { useVolumeGetter } from '../../store/volumes.store';
 import type { S3File } from '../../classes/S3File';
+import { notification } from '../../instances/notification';
 
 import { FilesAccordion } from './FilesAccordion';
 
@@ -46,20 +47,29 @@ const style = {
 } as const;
 
 const FileModal = (props: Props) => {
-  const { file, onClose } = props;
+  const {
+    file,
+    onClose,
+  } = props;
 
   const open = !!file;
   const { isDesktop } = useDevice();
   const _ = useEmailsStoreLoader();
 
-  const [volume, getVolume] = useVolumesStore((x) => [x.volume, x.getVolume]);
+  const {
+    volume,
+    getVolume,
+  } = useVolumeGetter();
 
   const handleClose = () => {
     onClose();
   };
 
   useEffect(() => {
-    if (file) getVolume(file.FileInfo.Name);
+    if (file) {
+      getVolume(file.FileInfo.Name)
+        .catch(notification.error);
+    }
   }, [file, getVolume]);
 
   return (
@@ -75,7 +85,10 @@ const FileModal = (props: Props) => {
             volume ? (
               <Avatar
                 src={volume.imageLinks.thumbnail}
-                sx={{ width: 56, height: 56 }}
+                sx={{
+                  width: 56,
+                  height: 56,
+                }}
                 alt={volume.title}
               />
             ) : null

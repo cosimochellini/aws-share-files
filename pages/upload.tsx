@@ -29,7 +29,7 @@ import { functions } from '../src/instances/functions';
 import { device } from '../src/services/device.service';
 import type { VolumeInfo } from '../src/types/content.types';
 import { useThemeStore } from '../src/store/theme.store';
-import { useFolderStore } from '../src/store/files.store';
+import { useRefreshFolders } from '../src/store/files.store';
 import { notification } from '../src/instances/notification';
 import { truncateString } from '../src/utils/truncateString';
 import { LoadingButton } from '../src/components/Data/LoadingButton';
@@ -51,7 +51,7 @@ export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStati
 
 const Upload = () => {
   const theme = useThemeStore((x) => x.theme);
-  const refreshFolders = useFolderStore((x) => x.refreshFolders);
+  const refreshFolders = useRefreshFolders();
   const [selectedFile, setSelectedFile] = useState<File>();
   const [updatedName, setUpdatedName] = useState<string>();
 

@@ -17,7 +17,7 @@ import { useEffectOnceWhen } from '../../hooks/once';
 import type { S3Folder } from '../../classes/S3Folder';
 import { LoadingButton } from '../Data/LoadingButton';
 import { useQueryString } from '../../hooks/query.hook';
-import { useFolderStore } from '../../store/files.store';
+import { useFolders, useRefreshFolders } from '../../store/files.store';
 import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 import { sharedConfiguration } from '../../instances/sharedConfiguration';
 import type { PagingConfiguration } from '../Configurations/FileListConfiguration';
@@ -54,9 +54,10 @@ export const Files = (props: Props) => {
   const [search, setSearch] = useQueryString('fileSearch');
   const {
     folders,
-    loadFolders,
-    refreshFolders,
-  } = useFolderStore();
+    initialized,
+  } = useFolders();
+
+  const refreshFolders = useRefreshFolders();
 
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [configuration, setConfiguration] = useState(defaultConfiguration);
@@ -64,10 +65,6 @@ export const Files = (props: Props) => {
   const handleDeleteAuthor = () => {
     onClearFolder?.();
   };
-
-  useEffectOnceWhen(() => {
-    loadFolders();
-  });
 
   const handleSelectedFile = (index: number) => {
     const file = displayedItems[index];
@@ -112,7 +109,7 @@ export const Files = (props: Props) => {
       if (index < 0) return;
       handleSelectedFile(index);
     }
-  }, displayedItems.length > 0);
+  }, initialized);
 
   return (
     <>
@@ -175,7 +172,7 @@ export const Files = (props: Props) => {
             },
           }}
         >
-          {!folders ? (
+          {!initialized ? (
             <FilesPlaceholders count={configuration.size} />
           ) : (
             displayedItems.slice(0, configuration.size)
