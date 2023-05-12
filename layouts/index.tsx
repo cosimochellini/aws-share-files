@@ -1,7 +1,8 @@
 import type { ReactElement } from 'react';
-import { lazy, Suspense } from 'react';
+import { Suspense } from 'react';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import dynamic from 'next/dynamic';
 
 import type { NextPageWithLayout } from '../src/types';
 import { useDevice } from '../src/hooks/device.hook';
@@ -10,7 +11,7 @@ import { useThemeStore } from '../src/store/theme.store';
 import { Container } from '../src/components/layouts/Container';
 import NotificationHandler from '../src/components/Global/NotificationHandler';
 
-const ButtonNavigation = lazy(
+const ButtonNavigation = dynamic(
   () => import('../src/components/layouts/ButtonNavigation'),
 );
 

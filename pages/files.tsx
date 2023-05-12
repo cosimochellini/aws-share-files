@@ -1,6 +1,7 @@
-import { lazy, useState, Suspense } from 'react';
+import { useState, Suspense } from 'react';
 import { Grid } from '@mui/material';
 import type { GetStaticProps } from 'next';
+import dynamic from 'next/dynamic';
 
 import { withDefaultLayout } from '../layouts';
 import type { S3File } from '../src/classes/S3File';
@@ -9,11 +10,16 @@ import { Files } from '../src/components/Files/Files';
 import type { S3Folder } from '../src/classes/S3Folder';
 import { useQueryString } from '../src/hooks/query.hook';
 import { useAuth } from '../src/hooks/auth.hook';
+import Folders from '../src/components/Files/Folders';
 
-const FolderAsync = lazy(() => import('../src/components/Files/Folders'));
-const FileModalAsync = lazy(() => import('../src/components/Files/FileModal'));
+const FileModalAsync = dynamic(() => import('../src/components/Files/FileModal'));
 
-const sx = { minHeight: { xs: 0, sm: 800 } };
+const sx = {
+  minHeight: {
+    xs: 0,
+    sm: 800,
+  },
+};
 const gridProps = {
   sx,
   md: 6,
@@ -21,7 +27,7 @@ const gridProps = {
   item: true,
 };
 
-export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
+export const getStaticProps = (async (_) => ({ props: {} })) satisfies GetStaticProps;
 
 const FilesPage = () => {
   const [fileKey, setFileKey] = useQueryString('fileKey');
@@ -45,17 +51,18 @@ const FilesPage = () => {
         container
         alignItems="center"
         justifyItems="center"
-        spacing={{ xs: 0, sm: 2 }}
+        spacing={{
+          xs: 0,
+          sm: 2,
+        }}
       >
         {hasWidth(900) && (
           <Grid {...gridProps}>
-            <Suspense fallback={null}>
-              <FolderAsync
-                folderKey={folderKey}
-                setFolderKey={setFolderKey}
-                onSearch={setSelectedFolder}
-              />
-            </Suspense>
+            <Folders
+              folderKey={folderKey}
+              setFolderKey={setFolderKey}
+              onSearch={setSelectedFolder}
+            />
           </Grid>
         )}
         <Grid {...gridProps}>

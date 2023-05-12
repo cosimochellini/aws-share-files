@@ -28,7 +28,7 @@ import type { S3File } from '../../classes/S3File';
 
 import { ResultCount } from './ResultCount';
 
-export type Props = {
+export type FilesProps = {
   fileKey?: string;
   currentFolder?: S3Folder;
   onClearFolder?: () => void;
@@ -36,21 +36,19 @@ export type Props = {
   onSearch?: (query: S3File) => void;
 };
 
-const defaultConfiguration = {
+const defaultConfiguration: PagingConfiguration<S3File> = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
   orderDesc: false,
   orderBy: 'FileName',
-} as Readonly<PagingConfiguration<S3File>>;
+};
 
-export const Files = (props: Props) => {
-  const {
-    currentFolder,
-    onClearFolder,
-    onSearch,
-    fileKey,
-    setFileKey,
-  } = props;
-
+export const Files = ({
+  fileKey,
+  setFileKey,
+  onSearch,
+  onClearFolder,
+  currentFolder,
+}: FilesProps) => {
   const [search, setSearch] = useQueryString('fileSearch');
   const {
     folders,
@@ -175,7 +173,9 @@ export const Files = (props: Props) => {
           {!initialized ? (
             <FilesPlaceholders count={configuration.size} />
           ) : (
-            displayedItems.slice(0, configuration.size)
+            displayedItems
+              .concat()
+              .slice(0, configuration.size)
               .map((file, i) => (
                 <ListItem
                   key={file.Key}
