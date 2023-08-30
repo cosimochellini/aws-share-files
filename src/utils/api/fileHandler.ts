@@ -22,7 +22,9 @@ export async function fileHandler<T>(req: NextApiRequest) {
     form,
     body: form.fields as unknown as T,
     async getFile() {
-      const { file } = form.files;
+      const file = form.files[0]?.[0];
+
+      if (!file) throw new Error('file is undefined');
 
       if (Array.isArray(file)) throw new Error('file is an array');
 

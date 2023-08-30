@@ -7,9 +7,11 @@ export default defaultBehavior(async (req) => {
   const { body, getFile } = await fileHandler<UploadPayload>(req);
 
   const file = await getFile();
-  const data = await bucket.uploadFile({ ...body, file });
 
-  return data;
+  return bucket.uploadFile({
+    ...body,
+    file,
+  });
 });
 
 export const config = {
