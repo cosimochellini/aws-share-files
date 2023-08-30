@@ -5269,10 +5269,10 @@ slash@^3.0.0:
   resolved "https://registry.yarnpkg.com/slash/-/slash-3.0.0.tgz#6539be870c165adbd5240220dbe361f1bc4d4634"
   integrity sha512-g9Q1haeby36OSStwb4ntCGGGaKsaVSjQ68fBxoQcutl5fS1vuY18H3wSt3jFyFtrkx+Kz0V1G85A4MyAdDMi2Q==
 
-sort-es@^1.6.16:
-  version "1.6.16"
-  resolved "https://registry.yarnpkg.com/sort-es/-/sort-es-1.6.16.tgz#b04765ec94975830cf62bdfdb67706e218635652"
-  integrity sha512-VC23lxD8Nz3L4+V1qTAiW3aKUksSheA8J5jbgyH//efifnrX4Bd7N9VlwZM7yrSOUmb0xHKmfS7jRXZ/bI5Wlg==
+sort-es@^1.7.0:
+  version "1.7.0"
+  resolved "https://registry.yarnpkg.com/sort-es/-/sort-es-1.7.0.tgz#227a283ed6936d0a7152772b4bda4dfa973b5e4b"
+  integrity sha512-SPz0LEZJHYuplImJ7KBW2m7UfpktyzBTP4YB6I/RFt8BVtpv9PnbyGmdcUkSqkQIJLfmrbXZ6HGt+4M86EQBOw==
 
 source-list-map@^2.0.0:
   version "2.0.1"

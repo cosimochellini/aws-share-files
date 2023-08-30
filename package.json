@@ -1,6 +1,6 @@
 {
   "name": "aws-share-files",
-  "version": "0.20.3",
+  "version": "0.20.4",
   "private": false,
   "license": "MIT",
   "scripts": {
@@ -30,7 +30,7 @@
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.45.4",
-    "sort-es": "^1.6.16",
+    "sort-es": "^1.7.0",
     "zustand": "^4.4.1"
   },
   "devDependencies": {
