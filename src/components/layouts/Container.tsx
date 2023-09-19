@@ -31,8 +31,7 @@ const drawerWidth = 240;
 
 const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
-  /* @ts-ignore */
-})(({ theme, open }) => ({
+})<{open:boolean}>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
@@ -49,10 +48,9 @@ const Main = styled('main', {
   }),
 }));
 
-const MyAppBar = styled(AppBar, {
-  shouldForwardProp: (prop) => prop !== 'open',
-  /* @ts-ignore */
-})(({ theme, open }) => ({
+const MyAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' })<{
+  open: boolean
+}>(({ theme, open }) => ({
   transition: theme.transitions.create(['margin', 'width'], {
     easing: theme.transitions.easing.sharp,
     duration: theme.transitions.duration.leavingScreen,
@@ -67,7 +65,7 @@ const MyAppBar = styled(AppBar, {
   }),
 }));
 
-const DrawerHeader = styled('div')(({ theme }) => ({
+const DrawerHeader = styled('div')<{open:boolean}>(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
@@ -85,7 +83,10 @@ const robotoFont = Roboto({
 
 export const Container = ({ Component }: { Component: ReactElement }) => {
   const [open, setOpen] = useState<boolean>();
-  const { isMobile, hasWidth } = useDevice();
+  const {
+    isMobile,
+    hasWidth,
+  } = useDevice();
 
   const initialOpen = useMemo(
     () => !isMobile && hasWidth(1200),
@@ -99,9 +100,15 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
   const handleDrawerClose = () => setOpen(false);
 
   return (
-    <Box sx={{ display: 'flex', border: 0, borderRadius: 16 }} className={robotoFont.className}>
+    <Box
+      sx={{
+        display: 'flex',
+        border: 0,
+        borderRadius: 16,
+      }}
+      className={robotoFont.className}
+    >
       <CssBaseline />
-      {/* @ts-ignore */}
       <MyAppBar position="fixed" open={isOpen}>
         <Toolbar>
           {!isMobile && (
@@ -134,7 +141,7 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
         anchor="left"
         open={isOpen}
       >
-        {/* @ts-ignore */}
+
         <DrawerHeader open={isOpen}>
           <IconButton onClick={handleDrawerClose}>
             {isOpen ? <ChevronLeft /> : <ChevronRight />}
@@ -144,7 +151,11 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
         <List>
           {navbarItems
             .filter((x) => Visibility.All === x.visibility)
-            .map(({ name, redirect, icon }) => (
+            .map(({
+              name,
+              redirect,
+              icon,
+            }) => (
               <ListItem
                 key={name}
                 button
@@ -178,9 +189,8 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
         </List>
         <Divider />
       </Drawer>
-      {/* @ts-ignore */}
       <Main open={isOpen}>
-        <DrawerHeader />
+        <DrawerHeader open={isOpen} />
         {Component}
       </Main>
     </Box>
