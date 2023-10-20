@@ -1,25 +1,19 @@
 import React, { useMemo, useState } from 'react';
-import type {
-  ButtonProps,
-  IconButtonProps,
-} from '@mui/material';
-import {
-  Button,
-  IconButton,
-} from '@mui/material';
+import type { ButtonProps, IconButtonProps } from '@mui/material';
+import { Button, IconButton } from '@mui/material';
 import { Error, Refresh } from '@mui/icons-material';
 
 import type { Nullable } from '../../types/generic';
 import { notification } from '../../instances/notification';
 
 type Props = {
-  type?: Nullable<'button' | 'icon'>;
-  text?: Nullable<string>;
-  icon: Nullable<JSX.Element>;
-  buttonProps?: Nullable<ButtonProps>;
-  iconProps?: Nullable<IconButtonProps>;
-  clickAction: (event: React.SyntheticEvent) => Promise<unknown>;
-};
+  type?: Nullable<'button' | 'icon'>
+  text?: Nullable<string>
+  icon: Nullable<JSX.Element>
+  buttonProps?: Nullable<ButtonProps>
+  iconProps?: Nullable<IconButtonProps>
+  clickAction: (event: React.SyntheticEvent) => Promise<unknown>
+}
 
 export const LoadingButton = (props: Props) => {
   const {
@@ -42,7 +36,7 @@ export const LoadingButton = (props: Props) => {
 
     if (error) return <Error />;
 
-    return icon;
+    return icon ?? <Refresh className="spin" />;
   }, [loading, error, icon]);
 
   const disabled = useMemo(() => {
@@ -69,21 +63,11 @@ export const LoadingButton = (props: Props) => {
   };
 
   return type === 'button' ? (
-    <Button
-      endIcon={currentIcon}
-      disabled={disabled}
-      onClick={handleClick}
-      {...buttonProps}
-    >
+    <Button endIcon={currentIcon} disabled={disabled} onClick={handleClick} {...buttonProps}>
       {text}
     </Button>
   ) : (
-    <IconButton
-      color={color}
-      disabled={disabled}
-      onClick={handleClick}
-      {...iconProps}
-    >
+    <IconButton color={color} disabled={disabled} onClick={handleClick} {...iconProps}>
       {currentIcon}
     </IconButton>
   );

@@ -15,10 +15,7 @@ import {
   Card,
 } from '@mui/material';
 import {
-  Book,
-  FileUpload,
-  Person,
-  UploadFile,
+  Book, FileUpload, Person, UploadFile,
 } from '@mui/icons-material';
 import type { GetStaticProps } from 'next';
 
@@ -47,7 +44,7 @@ const fullWidth = {
   },
 } as const;
 
-export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
+export const getStaticProps = (async (_) => ({ props: {} })) satisfies GetStaticProps;
 
 const Upload = () => {
   const theme = useThemeStore((x) => x.theme);
@@ -59,7 +56,7 @@ const Upload = () => {
   const [selectedVolumeIx, setSelectedVolumeIx] = useState(0);
 
   const fixedFileName = useMemo(
-    () => updatedName ?? selectedFile?.name,
+    () => updatedName ?? selectedFile?.name ?? '',
     [selectedFile?.name, updatedName],
   );
 
@@ -133,12 +130,7 @@ const Upload = () => {
   return (
     <div>
       <h1>Upload</h1>
-      <Grid
-        container
-        direction="column"
-        alignItems="center"
-        justifyContent="center"
-      >
+      <Grid container direction="column" alignItems="center" justifyContent="center">
         <Grid item xs={3} sx={fullWidth}>
           <Card variant="elevation">
             <CardHeader title="Upload a new file" />
@@ -163,9 +155,7 @@ const Upload = () => {
                     {suggestedVolumes.length > 0 && (
                       <Grid item sx={fullWidth}>
                         <FormControl fullWidth>
-                          <InputLabel id="suggestions">
-                            Available suggestions
-                          </InputLabel>
+                          <InputLabel id="suggestions">Available suggestions</InputLabel>
                           <Select
                             value={selectedVolumeIx}
                             label="Available suggestions"
@@ -180,8 +170,7 @@ const Upload = () => {
                                 value={index}
                                 key={volume.title}
                                 style={{
-                                  fontWeight:
-                                    theme.typography.fontWeightRegular,
+                                  fontWeight: theme.typography.fontWeightRegular,
                                 }}
                               >
                                 <Typography variant="subtitle2">
@@ -220,17 +209,9 @@ const Upload = () => {
                   </>
                 )}
                 <Grid item>
-                  <Button
-                    variant="contained"
-                    component="label"
-                    endIcon={<UploadFile />}
-                  >
+                  <Button variant="contained" component="label" endIcon={<UploadFile />}>
                     {selectedFile ? 'Change file' : 'Select file'}
-                    <input
-                      hidden
-                      type="file"
-                      onChange={(e) => changeHandler(e.target)}
-                    />
+                    <input hidden type="file" onChange={(e) => changeHandler(e.target)} />
                   </Button>
                   {selectedFile && fileAuthor && fileTitle ? (
                     <LoadingButton
