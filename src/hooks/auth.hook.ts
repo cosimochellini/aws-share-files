@@ -13,10 +13,7 @@ export const useAuth = () => {
     await router.push(loginPath);
   }, [router]);
 
-  const {
-    data: session,
-    status,
-  } = useSession({
+  const { data: session, status } = useSession({
     onUnauthenticated,
     required: true,
   });
@@ -24,7 +21,7 @@ export const useAuth = () => {
   const authenticated = useMemo(() => {
     if (status === 'loading') return true;
 
-    return session.user?.email;
+    return !!session.user?.email;
   }, [session?.user?.email, status]);
 
   useEffect(() => {

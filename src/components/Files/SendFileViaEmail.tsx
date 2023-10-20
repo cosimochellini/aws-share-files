@@ -1,6 +1,9 @@
 import { useMemo, useState } from 'react';
 import {
-  Grid, List, ListItem, ListItemText,
+  Grid,
+  List,
+  ListItem,
+  ListItemText,
   Menu,
   MenuItem,
   Typography,
@@ -15,8 +18,8 @@ import { notification } from '../../instances/notification';
 import { useEmailsStore } from '../../store/emails.store';
 
 type Props = {
-  fileKey: string;
-};
+  fileKey: string
+}
 
 export const SendFileViaEmail = (props: Props) => {
   const { fileKey } = props;
@@ -24,10 +27,7 @@ export const SendFileViaEmail = (props: Props) => {
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [selectedIndex, setSelectedIndex] = useState<Nullable<number>>();
-  const selectedEmail = useMemo(
-    () => emails[selectedIndex ?? 0],
-    [emails, selectedIndex],
-  );
+  const selectedEmail = useMemo(() => emails[selectedIndex ?? 0] ?? null, [emails, selectedIndex]);
 
   const open = Boolean(anchorEl);
 
@@ -88,10 +88,7 @@ export const SendFileViaEmail = (props: Props) => {
                   <Mail fontSize="small" />
                 )}
               </ListItemIcon>
-              <ListItemText
-                primary={selectedEmail?.description}
-                secondary={selectedEmail?.email}
-              />
+              <ListItemText primary={selectedEmail?.description} secondary={selectedEmail?.email} />
             </ListItem>
           </List>
           <Menu
@@ -100,7 +97,7 @@ export const SendFileViaEmail = (props: Props) => {
             onClose={handleClose}
             MenuListProps={{ role: 'listbox' }}
           >
-            {(emails).map((email, index) => (
+            {emails.map((email, index) => (
               <MenuItem
                 key={email.email}
                 value={email.email}
@@ -114,9 +111,7 @@ export const SendFileViaEmail = (props: Props) => {
                     <Mail fontSize="small" />
                   )}
                 </ListItemIcon>
-                <ListItemText sx={{ margin: 1 }}>
-                  {email.description}
-                </ListItemText>
+                <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
                 <Typography
                   variant="subtitle2"
                   color="text.secondary"
