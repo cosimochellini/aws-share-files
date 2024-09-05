@@ -1,26 +1,24 @@
-import { useState } from 'react';
+import { Delete, Email, Star } from '@mui/icons-material';
 import {
-  ListItem,
+  Avatar,
+  Divider,
   Grid,
   List,
-  Divider,
-  Typography,
-  Avatar,
-  ListItemText,
+  ListItem,
   ListItemAvatar,
+  ListItemText,
+  Typography,
 } from '@mui/material';
-import { Email, Star, Delete } from '@mui/icons-material';
 
-import { useEmailsStoreLoader } from '../../src/store/emails.store';
 import { withDefaultLayout } from '../../layouts';
-import { NewUserEmail } from '../../src/components/Form/NewUserEmail';
 import { LoadingButton } from '../../src/components/Data/LoadingButton';
+import { NewUserEmail } from '../../src/components/Form/NewUserEmail';
 import { FilesPlaceholders } from '../../src/components/Placeholders/FilesPlaceholders';
+import { useEmailsStoreLoader } from '../../src/store/emails.store';
 
 const Manage = () => {
   const useEmailsStore = useEmailsStoreLoader();
   const emails = useEmailsStore((x) => x.emails);
-  const [indexActive, setIndexActive] = useState(-1);
   const deleteEmail = useEmailsStore((x) => x.deleteEmail);
 
   return (
@@ -36,11 +34,9 @@ const Manage = () => {
             {!emails.length ? (
               <FilesPlaceholders count={3} />
             ) : (
-              emails.map((email, i) => (
+              emails.map((email) => (
                 <div key={email.pk}>
                   <ListItem
-                    selected={indexActive === i}
-                    onMouseEnter={() => setIndexActive(i)}
                     secondaryAction={(
                       <LoadingButton
                         type="icon"
@@ -54,14 +50,9 @@ const Manage = () => {
                     )}
                   >
                     <ListItemAvatar>
-                      <Avatar>
-                        {email.default ? <Star color="warning" /> : <Email />}
-                      </Avatar>
+                      <Avatar>{email.default ? <Star color="warning" /> : <Email />}</Avatar>
                     </ListItemAvatar>
-                    <ListItemText
-                      secondary={email.email}
-                      primary={email.description}
-                    />
+                    <ListItemText secondary={email.email} primary={email.description} />
                   </ListItem>
                   <Divider />
                 </div>

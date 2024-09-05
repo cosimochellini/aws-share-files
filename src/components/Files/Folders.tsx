@@ -41,7 +41,6 @@ type Props = {
 };
 
 const Folders = (props: Props) => {
-  const [hoveredItem, setHoveredItem] = useState(0);
   const {
     folders,
     initialized,
@@ -156,9 +155,7 @@ const Folders = (props: Props) => {
                 <ListItem
                   key={item.Key}
                   sx={{ borderRadius: 6 }}
-                  selected={hoveredItem === i}
                   onClick={() => handleCLick(i)}
-                  onMouseEnter={(_) => setHoveredItem(i)}
                 >
                   <ListItemAvatar key={item.Key}>
                     <Avatar key={item.Key}>

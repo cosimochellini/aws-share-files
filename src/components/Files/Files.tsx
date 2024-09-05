@@ -1,40 +1,38 @@
-import { byString, byValue } from 'sort-es';
-import { useMemo, useState } from 'react';
+import { AutoStories, Refresh } from '@mui/icons-material';
 import {
-  Chip,
-  Paper,
   Avatar,
+  Chip,
   InputAdornment,
+  List,
   ListItem,
   ListItemAvatar,
   ListItemText,
+  Paper,
   TextField,
-  List,
 } from '@mui/material';
-import { AutoStories, Refresh } from '@mui/icons-material';
+import { useMemo, useState } from 'react';
+import { byString, byValue } from 'sort-es';
 
-import { useEffectOnceWhen } from '../../hooks/once';
-import type { S3Folder } from '../../classes/S3Folder';
-import { LoadingButton } from '../Data/LoadingButton';
-import { useQueryString } from '../../hooks/query.hook';
-import { useFolders, useRefreshFolders } from '../../store/files.store';
-import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
-import { sharedConfiguration } from '../../instances/sharedConfiguration';
-import type { PagingConfiguration } from '../Configurations/FileListConfiguration';
-import {
-  FileListConfiguration,
-} from '../Configurations/FileListConfiguration';
 import type { S3File } from '../../classes/S3File';
+import type { S3Folder } from '../../classes/S3Folder';
+import { useEffectOnceWhen } from '../../hooks/once';
+import { useQueryString } from '../../hooks/query.hook';
+import { sharedConfiguration } from '../../instances/sharedConfiguration';
+import { useFolders, useRefreshFolders } from '../../store/files.store';
+import type { PagingConfiguration } from '../Configurations/FileListConfiguration';
+import { FileListConfiguration } from '../Configurations/FileListConfiguration';
+import { LoadingButton } from '../Data/LoadingButton';
+import { FilesPlaceholders } from '../Placeholders/FilesPlaceholders';
 
 import { ResultCount } from './ResultCount';
 
 export type FilesProps = {
-  fileKey?: string;
-  currentFolder?: S3Folder;
-  onClearFolder?: () => void;
-  setFileKey: (fileKey: string) => void;
-  onSearch?: (query: S3File) => void;
-};
+  fileKey?: string
+  currentFolder?: S3Folder
+  onClearFolder?: () => void
+  setFileKey: (fileKey: string) => void
+  onSearch?: (query: S3File) => void
+}
 
 const defaultConfiguration: PagingConfiguration<S3File> = {
   size: sharedConfiguration.itemsConfiguration.maxCount,
@@ -50,14 +48,10 @@ export const Files = ({
   currentFolder,
 }: FilesProps) => {
   const [search, setSearch] = useQueryString('fileSearch');
-  const {
-    folders,
-    initialized,
-  } = useFolders();
+  const { folders, initialized } = useFolders();
 
   const refreshFolders = useRefreshFolders();
 
-  const [selectedIndex, setSelectedIndex] = useState(0);
   const [configuration, setConfiguration] = useState(defaultConfiguration);
 
   const handleDeleteAuthor = () => {
@@ -72,30 +66,22 @@ export const Files = ({
     onSearch?.(file);
 
     setFileKey(file.Key);
-    setSelectedIndex(index);
   };
 
   const displayedItems = useMemo(() => {
-    setSelectedIndex(0);
-
     let items = folders?.flatMap((item) => item.Files) ?? [];
 
     if (search) {
-      const searchLower = search.trim()
-        .toLowerCase();
+      const searchLower = search.trim().toLowerCase();
 
-      items = items.filter((i) => i.Key.toLowerCase()
-        .includes(searchLower));
+      items = items.filter((i) => i.Key.toLowerCase().includes(searchLower));
     }
 
     if (currentFolder) {
       items = items.filter((i) => i.FileInfo.Parent.includes(currentFolder.FolderName));
     }
 
-    const {
-      orderBy,
-      orderDesc: desc,
-    } = configuration;
+    const { orderBy, orderDesc: desc } = configuration;
 
     return items.sort(byValue(orderBy as 'Key', byString({ desc })));
   }, [search, folders, currentFolder, configuration]);
@@ -180,19 +166,14 @@ export const Files = ({
                 <ListItem
                   key={file.Key}
                   sx={{ borderRadius: 6 }}
-                  selected={selectedIndex === i}
                   onClick={() => handleSelectedFile(i)}
-                  onMouseEnter={() => setSelectedIndex(i)}
                 >
                   <ListItemAvatar>
                     <Avatar>
                       <AutoStories />
                     </Avatar>
                   </ListItemAvatar>
-                  <ListItemText
-                    primary={file.FileInfo.Name}
-                    secondary={file.FileInfo.Parent}
-                  />
+                  <ListItemText primary={file.FileInfo.Name} secondary={file.FileInfo.Parent} />
                 </ListItem>
               ))
           )}

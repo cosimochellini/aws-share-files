@@ -1,7 +1,5 @@
 import type { ReactElement } from 'react';
-import {
-  useState, forwardRef, useMemo,
-} from 'react';
+import { useState, forwardRef, useMemo } from 'react';
 import {
   Box,
   Drawer,
@@ -31,7 +29,7 @@ const drawerWidth = 240;
 
 const Main = styled('main', {
   shouldForwardProp: (prop) => prop !== 'open',
-})<{open:boolean}>(({ theme, open }) => ({
+})<{ open: boolean }>(({ theme, open }) => ({
   flexGrow: 1,
   padding: theme.spacing(3),
   transition: theme.transitions.create('margin', {
@@ -65,7 +63,7 @@ const MyAppBar = styled(AppBar, { shouldForwardProp: (prop) => prop !== 'open' }
   }),
 }));
 
-const DrawerHeader = styled('div')<{open:boolean}>(({ theme }) => ({
+const DrawerHeader = styled('div')<{ open: boolean }>(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',
   padding: theme.spacing(0, 1),
@@ -83,15 +81,9 @@ const robotoFont = Roboto({
 
 export const Container = ({ Component }: { Component: ReactElement }) => {
   const [open, setOpen] = useState<boolean>();
-  const {
-    isMobile,
-    hasWidth,
-  } = useDevice();
+  const { isMobile, hasWidth } = useDevice();
 
-  const initialOpen = useMemo(
-    () => !isMobile && hasWidth(1200),
-    [isMobile, hasWidth],
-  );
+  const initialOpen = useMemo(() => !isMobile && hasWidth(1200), [isMobile, hasWidth]);
 
   const isOpen = useMemo(() => open ?? initialOpen, [open, initialOpen]);
 
@@ -141,7 +133,6 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
         anchor="left"
         open={isOpen}
       >
-
         <DrawerHeader open={isOpen}>
           <IconButton onClick={handleDrawerClose}>
             {isOpen ? <ChevronLeft /> : <ChevronRight />}
@@ -151,14 +142,9 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
         <List>
           {navbarItems
             .filter((x) => Visibility.All === x.visibility)
-            .map(({
-              name,
-              redirect,
-              icon,
-            }) => (
+            .map(({ name, redirect, icon }) => (
               <ListItem
                 key={name}
-                button
                 // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
                 component={forwardRef((prop, _) => (
                   <Link key={name} href={redirect} {...prop} />
@@ -176,7 +162,6 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
             .map(({ name, redirect, icon }) => (
               <ListItem
                 key={name}
-                button
                 // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
                 component={forwardRef((prop, _) => (
                   <Link key={name} href={redirect} {...prop} />
