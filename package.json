@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "next lint",
     "increase": "npm --no-git-tag-version version patch",
-    "run-scripts": "ts-node --skip-project ./script.runner.node.ts"
+    "run-scripts": "node --experimental-strip-types ./script.runner.node.ts"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.670.0",
