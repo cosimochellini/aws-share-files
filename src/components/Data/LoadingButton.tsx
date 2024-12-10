@@ -1,10 +1,11 @@
-import React, { useMemo, useState } from 'react';
+import { Error, Refresh } from '@mui/icons-material';
 import type { ButtonProps, IconButtonProps } from '@mui/material';
 import { Button, IconButton } from '@mui/material';
-import { Error, Refresh } from '@mui/icons-material';
+import type { JSX } from 'react';
+import React, { useMemo, useState } from 'react';
 
-import type { Nullable } from '../../types/generic';
 import { notification } from '../../instances/notification';
+import type { Nullable } from '../../types/generic';
 
 type Props = {
   type?: Nullable<'button' | 'icon'>
