@@ -1,20 +1,16 @@
-import {
-  PutObjectCommand,
-  DeleteObjectCommand,
-  ListObjectsV2Command,
-} from '@aws-sdk/client-s3';
+import { DeleteObjectCommand, ListObjectsV2Command, PutObjectCommand } from '@aws-sdk/client-s3';
 
-import { env } from '../instances/env';
-import { s3Client } from '../instances/aws';
 import { S3Folder } from '../classes/S3Folder';
+import { s3Client } from '../instances/aws';
+import { env } from '../instances/env';
 import type { ServiceArguments, ServiceMapper } from '../types/generic';
 
 export type UploadPayload = {
-  name: string;
-  author: string;
-  extension: string;
-  file: File | Buffer;
-};
+  name: string
+  author: string
+  extension: string
+  file: File | Buffer
+}
 
 export const bucket = {
   async getAllFiles() {
@@ -44,7 +40,7 @@ export const bucket = {
       Bucket: env.aws.bucket,
     });
 
-    return s3Client.send(command);
+    return await s3Client.send(command);
   },
 
   async createFolder(folderName: string) {
@@ -81,6 +77,6 @@ export const bucket = {
   },
 };
 
-export type bucketTypes = ServiceMapper<typeof bucket>;
+export type bucketTypes = ServiceMapper<typeof bucket>
 
-export type bucketArgs = ServiceArguments<typeof bucket>;
+export type bucketArgs = ServiceArguments<typeof bucket>
