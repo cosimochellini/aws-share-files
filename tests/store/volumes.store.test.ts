@@ -170,7 +170,7 @@ describe('volumes.store', () => {
       expect(readPersisted().cachedVolumes).toEqual({ cached, fetched });
     });
 
-    it('leaves the store loading forever when the fetch resolves falsy', async () => {
+    it('clears the loading flag when the fetch resolves falsy, so later lookups still run', async () => {
       const { findFirst, useVolumeGetter } = await loadStore();
 
       findFirst.mockResolvedValue(undefined);
@@ -187,19 +187,37 @@ describe('volumes.store', () => {
       const persisted = readPersisted();
 
       expect(persisted.cachedVolumes).toEqual({});
-      // KNOWN BUG: `volumeLoading` is only reset inside the `if (fetchedVolume)` branch,
-      // so an empty result leaves the store stuck in the loading state and every later
-      // getVolume() call returns early.
-      expect(persisted.volumeLoading).toBe(true);
+      expect(persisted.volumeLoading).toBe(false);
 
+      // a different name is looked up again, the loading flag no longer wedges the store
       await act(async () => {
         await result.current.getVolume('another');
+      });
+
+      expect(findFirst).toHaveBeenCalledTimes(2);
+      expect(findFirst).toHaveBeenNthCalledWith(2, 'another');
+      expect(readPersisted().volumeLoading).toBe(false);
+    });
+
+    it('does not look the same missing name up twice', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      findFirst.mockResolvedValue(undefined);
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      await act(async () => {
+        await result.current.getVolume('missing');
+      });
+
+      await act(async () => {
+        await result.current.getVolume('missing');
       });
 
       expect(findFirst).toHaveBeenCalledTimes(1);
     });
 
-    it('notifies and stays loading when the fetch rejects', async () => {
+    it('notifies and clears the loading flag when the fetch rejects', async () => {
       const { findFirst, notification, useVolumeGetter } = await loadStore();
 
       const error = new Error('content api is down');
@@ -215,9 +233,7 @@ describe('volumes.store', () => {
 
       expect(errorSpy).toHaveBeenCalledWith(error);
       expect(result.current.volume).toBeUndefined();
-      // KNOWN BUG: same stuck-loading branch as above, the catch swallows the error and
-      // `volumeLoading` is never restored to false.
-      expect(readPersisted().volumeLoading).toBe(true);
+      expect(readPersisted().volumeLoading).toBe(false);
     });
   });
 });

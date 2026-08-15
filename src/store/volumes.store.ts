@@ -21,6 +21,10 @@ const defaultState: VolumesState = {
 
 const useStore = create(persist<VolumesState>(() => defaultState, { name: 'LS_VOLUMES' }));
 
+// names the content API has no volume for: retrying them would loop, since callers
+// re-run getVolume on every store update
+const missingVolumes = new Set<string>();
+
 export const useVolumeGetter = () => {
   const state = useStore();
 
@@ -29,6 +33,8 @@ export const useVolumeGetter = () => {
     const set = useStore.setState;
 
     if (state.volumeLoading) return;
+
+    if (missingVolumes.has(name)) return;
 
     const cachedVolume = state.cachedVolumes[name];
 
@@ -48,16 +54,21 @@ export const useVolumeGetter = () => {
       .findFirst(name)
       .catch(notification.error);
 
-    if (fetchedVolume) {
-      set({
-        volume: fetchedVolume,
-        volumeLoading: false,
-        cachedVolumes: {
-          ...state.cachedVolumes,
-          [name]: fetchedVolume,
-        },
-      });
+    if (!fetchedVolume) {
+      missingVolumes.add(name);
+
+      set({ volumeLoading: false });
+      return;
     }
+
+    set({
+      volume: fetchedVolume,
+      volumeLoading: false,
+      cachedVolumes: {
+        ...state.cachedVolumes,
+        [name]: fetchedVolume,
+      },
+    });
   }, [state]);
 
   return {

@@ -94,40 +94,48 @@ describe('fileFormatter', () => {
 });
 
 describe('relativeFormatter', () => {
-  // KNOWN BUG: relativeFormatter returns the *range key* ('seconds', 'minutes', ...)
-  // instead of the formatted relative string. Array.prototype.find expects a boolean
-  // predicate, but the callback returns `rtf.format(...)` — a non-empty, always truthy
-  // string — so `find` stops at the very first range whose size is smaller than the
-  // elapsed time (always 'seconds' for anything more than one second away) and yields
-  // that key. The tests below pin the CURRENT behaviour, they do not describe the
-  // intended one. Fixing formatter.ts is out of scope here.
-
-  it('returns "seconds" for a date five minutes in the past', () => {
-    expect(formatter.relativeFormatter(new Date(now.getTime() - 5 * 60 * 1000))).toBe('seconds');
+  it('formats a date five minutes in the past', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() - 5 * 60 * 1000)))
+      .toBe('5 minutes ago');
   });
 
-  it('returns "seconds" for a date two hours in the future', () => {
-    expect(formatter.relativeFormatter(new Date(now.getTime() + 2 * 60 * 60 * 1000))).toBe('seconds');
+  it('formats a date three hours in the future', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() + 3 * 60 * 60 * 1000)))
+      .toBe('in 3 hours');
   });
 
-  it('returns "seconds" for a date years away, instead of "years"', () => {
-    expect(formatter.relativeFormatter(new Date(2020, 0, 1))).toBe('seconds');
+  it('picks the largest matching unit, not the smallest', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() - 60 * 24 * 60 * 60 * 1000)))
+      .toBe('2 months ago');
   });
 
-  it('returns undefined for a date less than a second away', () => {
-    expect(formatter.relativeFormatter(new Date(now.getTime() + 500))).toBeUndefined();
-  });
-
-  it('returns undefined for the current instant, the default of a nullish date', () => {
-    expect(formatter.relativeFormatter(nullDate)).toBeUndefined();
-    expect(formatter.relativeFormatter(undefined)).toBeUndefined();
-  });
-
-  it('returns undefined for a date exactly one second away, because the check is strict', () => {
-    expect(formatter.relativeFormatter(new Date(now.getTime() + 1000))).toBeUndefined();
+  it('formats a date years away in years', () => {
+    expect(formatter.relativeFormatter(new Date(2020, 0, 1))).toBe('4 years ago');
   });
 
   it('accepts an ISO string as well', () => {
-    expect(formatter.relativeFormatter('2020-01-01T00:00:00')).toBe('seconds');
+    expect(formatter.relativeFormatter('2020-01-01T00:00:00')).toBe('4 years ago');
+  });
+
+  it('formats a date just past the one second boundary in seconds', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() - 1500))).toBe('1 second ago');
+  });
+
+  it('falls back to zero seconds for the current instant, the default of a nullish date', () => {
+    expect(formatter.relativeFormatter(nullDate)).toBe('in 0 seconds');
+    expect(formatter.relativeFormatter(undefined)).toBe('in 0 seconds');
+  });
+
+  it('falls back to zero seconds for a date less than a second away', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() + 500))).toBe('in 0 seconds');
+  });
+
+  it('still reports zero seconds exactly one second away, because the check is strict', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() + 1000))).toBe('in 0 seconds');
+  });
+
+  it('drops to the next unit down at an exact unit boundary', () => {
+    expect(formatter.relativeFormatter(new Date(now.getTime() - 24 * 60 * 60 * 1000)))
+      .toBe('24 hours ago');
   });
 });

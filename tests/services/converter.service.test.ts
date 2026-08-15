@@ -96,14 +96,11 @@ describe('converter.convertFile', () => {
       .toBe('author/my.book.v2.epub');
   });
 
-  // KNOWN BUG: replaceExtension does `file.slice(0, file.lastIndexOf('.'))`. With no dot in
-  // the name lastIndexOf returns -1, so slice(0, -1) silently drops the final character of
-  // the file name instead of just appending the extension. Pinning the current behaviour.
-  it('drops the last character when the file name has no extension', async () => {
+  it('appends the extension when the file name has none', async () => {
     await converter.convertFile({ file: 'author/book', target: 'pdf' });
 
     expect(lastPostBody().conversion[0]?.output_target[0]?.parameters.file)
-      .toBe('author/boo.pdf');
+      .toBe('author/book.pdf');
   });
 });
 
@@ -112,28 +109,34 @@ describe('converter API failures', () => {
     vi.spyOn(notification, 'error').mockImplementation(() => {});
   });
 
-  it('routes a failed status request to notification.error and resolves undefined', async () => {
-    fetchMock.mockRejectedValue(new Error('status unreachable'));
+  it('routes a failed status request to notification.error and rethrows it', async () => {
+    const error = new Error('status unreachable');
 
-    await expect(converter.getConversionStatus('job-1')).resolves.toBeUndefined();
+    fetchMock.mockRejectedValue(error);
 
-    expect(notification.error).toHaveBeenCalledWith(new Error('status unreachable'));
+    await expect(converter.getConversionStatus('job-1')).rejects.toBe(error);
+
+    expect(notification.error).toHaveBeenCalledWith(error);
   });
 
-  it('routes a failed conversion request to notification.error and resolves undefined', async () => {
-    fetchMock.mockRejectedValue(new Error('convert unreachable'));
+  it('routes a failed conversion request to notification.error and rethrows it', async () => {
+    const error = new Error('convert unreachable');
+
+    fetchMock.mockRejectedValue(error);
 
     await expect(converter.convertFile({ file: 'author/book.docx', target: 'pdf' }))
-      .resolves.toBeUndefined();
+      .rejects.toBe(error);
 
-    expect(notification.error).toHaveBeenCalledWith(new Error('convert unreachable'));
+    expect(notification.error).toHaveBeenCalledWith(error);
   });
 
-  it('routes a json() parse failure to notification.error as well', async () => {
-    fetchMock.mockResolvedValue({ json: () => Promise.reject(new Error('bad payload')) });
+  it('rethrows a json() parse failure as well', async () => {
+    const error = new Error('bad payload');
 
-    await expect(converter.getConversionStatus('job-1')).resolves.toBeUndefined();
+    fetchMock.mockResolvedValue({ json: () => Promise.reject(error) });
 
-    expect(notification.error).toHaveBeenCalledWith(new Error('bad payload'));
+    await expect(converter.getConversionStatus('job-1')).rejects.toBe(error);
+
+    expect(notification.error).toHaveBeenCalledWith(error);
   });
 });

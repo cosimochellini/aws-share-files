@@ -71,32 +71,32 @@ describe('content.findAllContent', () => {
 });
 
 describe('content API failures', () => {
+  const networkError = new Error('network down');
+
   beforeEach(() => {
-    fetchMock.mockRejectedValue(new Error('network down'));
+    fetchMock.mockRejectedValue(networkError);
     vi.spyOn(notification, 'error').mockImplementation(() => {});
   });
 
-  // KNOWN BUG: contentApiCaller ends with `.catch(notification.error)`, which swallows the
-  // rejection and resolves with `undefined` instead of re-throwing. The callers then read
-  // `.items` off that `undefined`, so the reported failure is a TypeError about `items`
-  // rather than the original network error. Pinning the current behaviour.
-  it('reports the failure to notification.error and then blows up reading .items', async () => {
-    await expect(content.findFirstContent('dune')).rejects.toThrowError(TypeError);
+  it('reports the failure to notification.error and rethrows the original error', async () => {
+    await expect(content.findFirstContent('dune')).rejects.toBe(networkError);
 
-    expect(notification.error).toHaveBeenCalledWith(new Error('network down'));
+    expect(notification.error).toHaveBeenCalledWith(networkError);
   });
 
   it('behaves identically for findAllContent', async () => {
-    await expect(content.findAllContent('dune')).rejects.toThrowError(TypeError);
+    await expect(content.findAllContent('dune')).rejects.toBe(networkError);
 
-    expect(notification.error).toHaveBeenCalledWith(new Error('network down'));
+    expect(notification.error).toHaveBeenCalledWith(networkError);
   });
 
-  it('also swallows a json() parse failure the same way', async () => {
-    fetchMock.mockResolvedValue({ json: () => Promise.reject(new Error('invalid json')) });
+  it('rethrows a json() parse failure the same way', async () => {
+    const parseError = new Error('invalid json');
 
-    await expect(content.findAllContent('dune')).rejects.toThrowError(TypeError);
+    fetchMock.mockResolvedValue({ json: () => Promise.reject(parseError) });
 
-    expect(notification.error).toHaveBeenCalledWith(new Error('invalid json'));
+    await expect(content.findAllContent('dune')).rejects.toBe(parseError);
+
+    expect(notification.error).toHaveBeenCalledWith(parseError);
   });
 });

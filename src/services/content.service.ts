@@ -8,7 +8,11 @@ const contentApiCaller = <T>(section: string, query = {}) => {
 
   return fetch(`${url}?${new URLSearchParams(query).toString()}`)
     .then((res) => res.json())
-    .catch(notification.error) as Promise<T>;
+    .catch((error: unknown) => {
+      notification.error(error);
+
+      throw error;
+    }) as Promise<T>;
 };
 
 export const content = {

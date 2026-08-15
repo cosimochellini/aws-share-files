@@ -15,13 +15,21 @@ const credentials = {
   secretaccesskey: secretAccessKey,
 };
 
-const replaceExtension = (file: string, ext: string) => `${file.slice(0, file.lastIndexOf('.'))}.${ext}`;
+const replaceExtension = (file: string, ext: string) => {
+  const dotIndex = file.lastIndexOf('.');
+
+  return `${dotIndex === -1 ? file : file.slice(0, dotIndex)}.${ext}`;
+};
 
 const converterApiCaller = <T>(section: string, query = {}) => {
   const url = `${baseUrl + section}?${new URLSearchParams(query).toString()}`;
   return fetch(url, { headers })
     .then((res) => res.json())
-    .catch(notification.error) as Promise<T>;
+    .catch((error: unknown) => {
+      notification.error(error);
+
+      throw error;
+    }) as Promise<T>;
 };
 
 converterApiCaller.post = <T>(section: string, body = {}) => {
@@ -33,7 +41,11 @@ converterApiCaller.post = <T>(section: string, body = {}) => {
     body: JSON.stringify(body),
   })
     .then((res) => res.json())
-    .catch(notification.error) as Promise<T>;
+    .catch((error: unknown) => {
+      notification.error(error);
+
+      throw error;
+    }) as Promise<T>;
 };
 
 export type fileConverter = {
