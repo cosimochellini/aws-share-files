@@ -117,13 +117,42 @@ yarn start
 ```bash
 # Run ESLint
 yarn lint
+
+# Run the TypeScript compiler in check-only mode
+yarn typecheck
 ```
+
+### Testing
+
+The project uses [Vitest](https://vitest.dev/) with a `jsdom` environment and
+[Testing Library](https://testing-library.com/) for hooks.
+
+```bash
+# Run the suite once
+yarn test
+
+# Re-run on change
+yarn test:watch
+
+# Run with coverage (fails below the threshold)
+yarn test:cov
+```
+
+Tests live in the top-level `tests/` directory, mirroring the source layout. `tests/setup.ts`
+populates the environment variables that `src/instances/env.ts` reads at import time, mocks
+`nodemailer` so no SMTP connection is attempted, and polyfills `window.matchMedia`.
+
+`yarn test:cov` enforces a **80% global threshold on lines, statements, functions and branches**
+across the application's logic layer — `src/utils`, `src/classes`, `src/services`,
+`src/formatters`, `src/store`, `src/hooks`, `src/instances`, `src/fallback` and `pages/api`.
+React components and pages are outside the coverage scope.
 
 ## Application Structure
 
 - `/pages` - Next.js pages and API routes
 - `/pages/api` - Serverless API endpoints
 - `/src` - Core application logic
+- `/tests` - Vitest suite, mirroring the source layout
 - `/public` - Static assets
 - `/styles` - CSS and styling
 
