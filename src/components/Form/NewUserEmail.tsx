@@ -22,12 +22,12 @@ export const NewUserEmail = () => {
       alignItems="center"
       justifyContent="center"
     >
-      <Grid item>
+      <Grid>
         <Card variant="outlined" sx={{ maxWidth: '30rem' }}>
           <CardContent>
             <form onSubmit={onSubmit}>
               <Grid container gap={2}>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     label="Email"
                     type="email"
@@ -36,7 +36,7 @@ export const NewUserEmail = () => {
                     {...register('email')}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <TextField
                     type="email"
                     fullWidth
@@ -46,13 +46,13 @@ export const NewUserEmail = () => {
                   />
                 </Grid>
 
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <FormControlLabel
                     label="Default"
                     control={<Checkbox {...register('default')} />}
                   />
                 </Grid>
-                <Grid item xs={6}>
+                <Grid size={6}>
                   <LoadingButton
                     text="save"
                     icon={<Save />}

@@ -71,7 +71,7 @@ export const VolumeChipArray = (props: Props) => {
       sx={{ paddingBottom: 2 }}
     >
       {chips.map((chip) => (
-        <Grid key={chip.label} item>
+        <Grid key={chip.label}>
           <Chip key={chip.label} {...chip} variant="outlined" />
         </Grid>
       ))}

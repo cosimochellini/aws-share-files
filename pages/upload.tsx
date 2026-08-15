@@ -1,36 +1,36 @@
 import {
-  useCallback, useEffect, useMemo, useState,
-} from 'react';
-import {
-  MenuItem,
-  Select,
-  CardHeader,
-  TextField,
-  Button,
-  CardContent,
-  FormControl,
-  InputLabel,
-  Grid,
-  Typography,
-  Card,
-} from '@mui/material';
-import {
   Book, FileUpload, Person, UploadFile,
 } from '@mui/icons-material';
+import {
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  FormControl,
+  Grid,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+  Typography,
+} from '@mui/material';
 import type { GetStaticProps } from 'next';
+import {
+  useCallback, useEffect, useMemo, useState,
+} from 'react';
 
 import { withDefaultLayout } from '../layouts';
-import type { Nullable } from '../src/types/generic';
-import { purgeName } from '../src/utils/purgeName';
-import { functions } from '../src/instances/functions';
-import { device } from '../src/services/device.service';
-import type { VolumeInfo } from '../src/types/content.types';
-import { useThemeStore } from '../src/store/theme.store';
-import { useRefreshFolders } from '../src/store/files.store';
-import { notification } from '../src/instances/notification';
-import { truncateString } from '../src/utils/truncateString';
 import { LoadingButton } from '../src/components/Data/LoadingButton';
 import { bucketFallbackStrategy } from '../src/fallback/bucketFallbackStrategy';
+import { functions } from '../src/instances/functions';
+import { notification } from '../src/instances/notification';
+import { device } from '../src/services/device.service';
+import { useRefreshFolders } from '../src/store/files.store';
+import { useThemeStore } from '../src/store/theme.store';
+import type { VolumeInfo } from '../src/types/content.types';
+import type { Nullable } from '../src/types/generic';
+import { purgeName } from '../src/utils/purgeName';
+import { truncateString } from '../src/utils/truncateString';
 
 const maxHeight = 48 * 4.5 + 8;
 const stringLength = device.isMobile ? 30 : 80;
@@ -107,7 +107,7 @@ const Upload = () => {
 
     try {
       await functions.s3.uploadFile(payload);
-    } catch (e) {
+    } catch {
       await bucketFallbackStrategy((bucket) => bucket.uploadFile(payload));
     }
 
@@ -115,6 +115,8 @@ const Upload = () => {
   };
 
   useEffect(() => {
+    if (!fixedFileName) return;
+
     const purgedName = purgeName(fixedFileName);
 
     functions.content
@@ -131,7 +133,7 @@ const Upload = () => {
     <div>
       <h1>Upload</h1>
       <Grid container direction="column" alignItems="center" justifyContent="center">
-        <Grid item xs={3} sx={fullWidth}>
+        <Grid size={{ xs: 3 }} sx={fullWidth}>
           <Card variant="elevation">
             <CardHeader title="Upload a new file" />
             <CardContent>
@@ -144,7 +146,7 @@ const Upload = () => {
               >
                 {selectedFile && (
                   <>
-                    <Grid item sx={fullWidth}>
+                    <Grid sx={fullWidth}>
                       <TextField
                         fullWidth
                         label="File name"
@@ -153,7 +155,7 @@ const Upload = () => {
                       />
                     </Grid>
                     {suggestedVolumes.length > 0 && (
-                      <Grid item sx={fullWidth}>
+                      <Grid sx={fullWidth}>
                         <FormControl fullWidth>
                           <InputLabel id="suggestions">Available suggestions</InputLabel>
                           <Select
@@ -184,7 +186,7 @@ const Upload = () => {
                         </FormControl>
                       </Grid>
                     )}
-                    <Grid item sx={fullWidth}>
+                    <Grid sx={fullWidth}>
                       <TextField
                         fullWidth
                         label="Author"
@@ -195,7 +197,7 @@ const Upload = () => {
                         }}
                       />
                     </Grid>
-                    <Grid item sx={fullWidth}>
+                    <Grid sx={fullWidth}>
                       <TextField
                         fullWidth
                         label="Title"
@@ -208,12 +210,12 @@ const Upload = () => {
                     </Grid>
                   </>
                 )}
-                <Grid item>
+                <Grid>
                   <Button variant="contained" component="label" endIcon={<UploadFile />}>
                     {selectedFile ? 'Change file' : 'Select file'}
                     <input hidden type="file" onChange={(e) => changeHandler(e.target)} />
                   </Button>
-                  {selectedFile && fileAuthor && fileTitle ? (
+                  {selectedFile && fileAuthor && fileTitle && (
                     <LoadingButton
                       text="Upload"
                       icon={<FileUpload />}
@@ -226,7 +228,7 @@ const Upload = () => {
                         sx: { marginLeft: 2 },
                       }}
                     />
-                  ) : null}
+                  )}
                 </Grid>
               </Grid>
             </CardContent>

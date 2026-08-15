@@ -108,7 +108,7 @@ export function FileListConfiguration<T>(props: Props<T>) {
           </FormControl>
 
           <FormControl fullWidth sx={{ mt: 3 }}>
-            <Grid item xs={12} style={{ textAlign: 'center' }}>
+            <Grid style={{ textAlign: 'center' }} size={12}>
               <ButtonGroup
                 variant="outlined"
                 aria-label="outlined primary button group"

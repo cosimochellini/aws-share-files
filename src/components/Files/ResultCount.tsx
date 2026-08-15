@@ -15,7 +15,7 @@ export const ResultCount = (props: Props) => {
   const shouldDisplayItems = displayedItems < totalItems;
 
   return shouldDisplayItems ? (
-    <Grid item xs={12} style={{ textAlign: 'center' }} onClick={onClick}>
+    <Grid style={{ textAlign: 'center' }} onClick={onClick} size={12}>
       <Chip
         label={`${remainingItems} ${displayName} remaining...`}
         variant="outlined"

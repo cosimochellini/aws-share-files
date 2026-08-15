@@ -70,7 +70,12 @@ export const SendFileViaEmail = (props: Props) => {
         }}
         gap={2}
       >
-        <Grid item xs={12} md={8}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 8,
+          }}
+        >
           <List
             component="nav"
             sx={{
@@ -124,7 +129,12 @@ export const SendFileViaEmail = (props: Props) => {
             ))}
           </Menu>
         </Grid>
-        <Grid item xs={12} md={3}>
+        <Grid
+          size={{
+            xs: 12,
+            md: 3,
+          }}
+        >
           <LoadingButton
             clickAction={sendFile}
             icon={<Send />}
