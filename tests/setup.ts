@@ -39,19 +39,34 @@ export const testEnv = {
 
 Object.assign(process.env, testEnv);
 
+const TEST_MESSAGE_ID = 'test-message-id';
+
 /**
  * src/instances/transporter.ts calls nodemailer.createTransport(...).verify() at module
  * scope, which would attempt a real SMTP handshake during the test run. Mocked globally
  * so no test can accidentally reach the network.
+ *
+ * The transport is a single hoisted object rather than one built inside the factory:
+ * `restoreMocks` strips mock implementations before every test, so the implementations
+ * have to be re-applied in the beforeEach below. Holding a stable reference is what
+ * makes that possible — src/instances/transporter.ts captures the object once at import
+ * time and keeps it for the lifetime of the module.
  */
-vi.mock('nodemailer', () => {
-  const createTransport = vi.fn(() => ({
-    verify: vi.fn().mockResolvedValue(true),
-    sendMail: vi.fn().mockResolvedValue({ messageId: 'test-message-id' }),
-  }));
+const nodemailerMock = vi.hoisted(() => {
+  const transport = {
+    verify: vi.fn(),
+    sendMail: vi.fn(),
+  };
 
-  return { default: { createTransport }, createTransport };
+  return { transport, createTransport: vi.fn(() => transport) };
 });
+
+vi.mock('nodemailer', () => ({
+  // src/instances/transporter.ts uses a default import; next-auth's email provider
+  // imports a named createTransport. Both shapes have to be present.
+  default: { createTransport: nodemailerMock.createTransport },
+  createTransport: nodemailerMock.createTransport,
+}));
 
 // jsdom does not implement matchMedia, which src/services/device.service.ts relies on.
 const matchMediaMock = (query: string): MediaQueryList => ({
@@ -66,6 +81,13 @@ const matchMediaMock = (query: string): MediaQueryList => ({
 } as unknown as MediaQueryList);
 
 beforeEach(() => {
+  // restoreMocks has already stripped these by the time this runs, so re-apply them
+  // on every test. Without this the transport silently returns undefined from the
+  // second test of each file onwards.
+  nodemailerMock.createTransport.mockReturnValue(nodemailerMock.transport);
+  nodemailerMock.transport.verify.mockResolvedValue(true);
+  nodemailerMock.transport.sendMail.mockResolvedValue({ messageId: TEST_MESSAGE_ID });
+
   vi.stubGlobal('matchMedia', vi.fn(matchMediaMock));
   window.matchMedia = vi.fn(matchMediaMock);
 
