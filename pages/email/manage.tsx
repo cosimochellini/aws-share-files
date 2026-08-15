@@ -25,7 +25,7 @@ const Manage = () => {
     <>
       <h1>Manage Email</h1>
       <Grid container>
-        <Grid item xs={12} sm={6}>
+        <Grid size={{ xs: 12, sm: 6 }}>
           <Typography sx={{ mt: 2, mb: 2 }} variant="h6" component="div">
             Your emails
           </Typography>
@@ -60,7 +60,7 @@ const Manage = () => {
             )}
           </List>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid size={{ xs: 12, md: 6 }}>
           <Typography sx={{ mt: 4, mb: 2 }} variant="h6" component="div">
             Add new email
           </Typography>

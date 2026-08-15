@@ -64,7 +64,7 @@ const Settings = () => {
         control={<Checkbox checked={dark} onChange={toggleTheme} key={theme.palette.mode} />}
       />
       <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
-        <Grid item xs={12}>
+        <Grid size={{ xs: 12 }}>
           <p>
             version:
             {settings.version}

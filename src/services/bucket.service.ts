@@ -40,7 +40,7 @@ export const bucket = {
       Bucket: env.aws.bucket,
     });
 
-    return await s3Client.send(command);
+    return s3Client.send(command);
   },
 
   async createFolder(folderName: string) {

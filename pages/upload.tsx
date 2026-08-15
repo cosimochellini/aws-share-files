@@ -133,7 +133,7 @@ const Upload = () => {
     <div>
       <h1>Upload</h1>
       <Grid container direction="column" alignItems="center" justifyContent="center">
-        <Grid item xs={3} sx={fullWidth}>
+        <Grid size={{ xs: 3 }} sx={fullWidth}>
           <Card variant="elevation">
             <CardHeader title="Upload a new file" />
             <CardContent>
@@ -146,7 +146,7 @@ const Upload = () => {
               >
                 {selectedFile && (
                   <>
-                    <Grid item sx={fullWidth}>
+                    <Grid sx={fullWidth}>
                       <TextField
                         fullWidth
                         label="File name"
@@ -155,7 +155,7 @@ const Upload = () => {
                       />
                     </Grid>
                     {suggestedVolumes.length > 0 && (
-                      <Grid item sx={fullWidth}>
+                      <Grid sx={fullWidth}>
                         <FormControl fullWidth>
                           <InputLabel id="suggestions">Available suggestions</InputLabel>
                           <Select
@@ -186,7 +186,7 @@ const Upload = () => {
                         </FormControl>
                       </Grid>
                     )}
-                    <Grid item sx={fullWidth}>
+                    <Grid sx={fullWidth}>
                       <TextField
                         fullWidth
                         label="Author"
@@ -197,7 +197,7 @@ const Upload = () => {
                         }}
                       />
                     </Grid>
-                    <Grid item sx={fullWidth}>
+                    <Grid sx={fullWidth}>
                       <TextField
                         fullWidth
                         label="Title"
@@ -210,7 +210,7 @@ const Upload = () => {
                     </Grid>
                   </>
                 )}
-                <Grid item>
+                <Grid>
                   <Button variant="contained" component="label" endIcon={<UploadFile />}>
                     {selectedFile ? 'Change file' : 'Select file'}
                     <input hidden type="file" onChange={(e) => changeHandler(e.target)} />
