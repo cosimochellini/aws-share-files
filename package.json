@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint pages src",
     "increase": "npm --no-git-tag-version version patch",
-    "run-scripts": "node --experimental-strip-types ./script.runner.node.ts",
+    "run-scripts": "node --disable-warning=MODULE_TYPELESS_PACKAGE_JSON --experimental-strip-types ./script.runner.node.ts",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
