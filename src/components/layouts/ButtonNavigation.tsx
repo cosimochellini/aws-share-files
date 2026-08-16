@@ -31,9 +31,8 @@ const ButtonNavigation = () => {
         variant="outlined"
       >
         <BottomNavigation showLabels value={currentRoute}>
-          {navbarItems
-            .filter((x) => [Visibility.All, Visibility.BottomBar].includes(x.visibility))
-            .map((item) => (
+          {navbarItems.flatMap((item) => (
+            [Visibility.All, Visibility.BottomBar].includes(item.visibility) ? [(
               <BottomNavigationAction
                 // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
                 component={forwardRef<HTMLAnchorElement>((prop, ref) => (
@@ -48,7 +47,7 @@ const ButtonNavigation = () => {
                 label={item.name}
                 icon={item.icon}
               />
-            ))}
+            )] : []))}
         </BottomNavigation>
       </Paper>
     </>

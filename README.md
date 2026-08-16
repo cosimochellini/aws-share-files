@@ -122,6 +122,30 @@ yarn lint
 yarn typecheck
 ```
 
+### Static Analysis
+
+Two extra analysers run over the whole codebase, both configured so that every
+rule they support reports as an error:
+
+- [**react-doctor**](https://react.doctor) (`doctor.config.jsonc`) — React and
+  Next.js correctness: state and effects, performance, accessibility, security.
+- [**fallow**](https://docs.fallow.tools) (`.fallowrc.jsonc`) — dead code,
+  unused exports and dependencies, circular imports, duplication, complexity.
+
+```bash
+# React / Next.js analysis
+yarn doctor
+
+# Dead code, cycles, duplication, complexity
+yarn fallow
+
+# The full gate: lint + typecheck + test + doctor + fallow
+yarn verify
+```
+
+Fix the code rather than lowering a rule. The few exceptions already present in
+both config files are commented with the reason they exist.
+
 ### Testing
 
 The project uses [Vitest](https://vitest.dev/) with a `jsdom` environment and

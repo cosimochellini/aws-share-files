@@ -4,12 +4,11 @@ import { describe, expect, it } from 'vitest';
 import { Visibility, navbarItems } from '../../src/instances/navbar';
 
 describe('Visibility', () => {
-  it('exposes the four placement options', () => {
+  it('exposes the three placement options', () => {
     expect(Visibility).toEqual({
       All: 'All',
       Sidebar: 'Sidebar',
       BottomBar: 'BottomBar',
-      Disabled: 'Disabled',
     });
   });
 });

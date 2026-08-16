@@ -1,5 +1,4 @@
 import { caller } from '../utils/functionCaller';
-import type { AwaitedServiceMapper, ServiceMapper } from '../types/generic';
 import type { emailArguments, emailTypes } from '../services/email.service';
 import type { contentArgs, contentTypes } from '../services/content.service';
 import type { bucketArgs, bucketTypes } from '../services/bucket.service';
@@ -55,6 +54,3 @@ export const functions = {
     },
   },
 } as const;
-
-export type FunctionTypes = ServiceMapper<typeof functions>;
-export type AwaitedFunctionTypes = AwaitedServiceMapper<FunctionTypes>;

@@ -22,7 +22,7 @@ import { notification } from '../../instances/notification';
 
 import { FilesAccordion } from './FilesAccordion';
 
-type Props = {
+export type FileModalProps = {
   file: Nullable<S3File>;
   onClose: () => void;
 };
@@ -46,7 +46,64 @@ const style = {
   },
 } as const;
 
-const FileModal = (props: Props) => {
+type ModalVolume = ReturnType<typeof useVolumeGetter>['volume'];
+
+const volumeTitle = (volume: ModalVolume, file: Nullable<S3File>) => (
+  volume?.title ?? file?.FileInfo.Name
+);
+
+const volumeSubtitle = (volume: ModalVolume, file: Nullable<S3File>) => (
+  volume?.subtitle ?? file?.FileInfo.CompleteName
+);
+
+const VolumeAvatar = ({ volume }: { volume: ModalVolume }) => (
+  volume ? (
+    <Avatar
+      src={volume.imageLinks.thumbnail}
+      sx={{ width: 56, height: 56 }}
+      alt={volume.title}
+    />
+  ) : null
+);
+
+const VolumeRating = ({ rating }: { rating: Nullable<number> }) => (
+  rating ? <Rating name="read-only" value={rating} precision={0.5} readOnly /> : null
+);
+
+const VolumeSummary = ({ volume }: { volume: ModalVolume }) => (
+  volume ? (
+    <>
+      <VolumeChipArray volume={volume} />
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ marginBottom: 3 }}
+        align="justify"
+      >
+        <ReadMore text={volume.description} />
+      </Typography>
+    </>
+  ) : (
+    <Skeleton animation="wave" variant="text" />
+  )
+);
+
+type FileModalHeaderProps = {
+  volume: ModalVolume;
+  file: Nullable<S3File>;
+  showRating: boolean;
+};
+
+const FileModalHeader = ({ volume, file, showRating }: FileModalHeaderProps) => (
+  <CardHeader
+    avatar={<VolumeAvatar volume={volume} />}
+    action={showRating ? <VolumeRating rating={volume?.averageRating} /> : null}
+    title={volumeTitle(volume, file)}
+    subheader={volume?.subtitle}
+  />
+);
+
+const FileModal = (props: FileModalProps) => {
   const {
     file,
     onClose,
@@ -76,55 +133,15 @@ const FileModal = (props: Props) => {
     <Modal
       open={open}
       onClose={handleClose}
-      aria-labelledby={volume?.title ?? file?.FileInfo.Name}
-      aria-describedby={volume?.subtitle ?? file?.FileInfo.CompleteName}
+      aria-labelledby={volumeTitle(volume, file)}
+      aria-describedby={volumeSubtitle(volume, file)}
     >
       <Card sx={style} variant="outlined">
-        <CardHeader
-          avatar={
-            volume ? (
-              <Avatar
-                src={volume.imageLinks.thumbnail}
-                sx={{
-                  width: 56,
-                  height: 56,
-                }}
-                alt={volume.title}
-              />
-            ) : null
-          }
-          action={
-            isDesktop
-            && volume?.averageRating && (
-              <Rating
-                name="read-only"
-                value={volume.averageRating}
-                precision={0.5}
-                readOnly
-              />
-            )
-          }
-          title={volume?.title ?? file?.FileInfo.Name}
-          subheader={volume?.subtitle}
-        />
+        <FileModalHeader volume={volume} file={file} showRating={isDesktop} />
 
         <Divider />
         <CardContent>
-          {volume ? (
-            <>
-              <VolumeChipArray volume={volume} />
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ marginBottom: 3 }}
-                align="justify"
-              >
-                <ReadMore text={volume.description} />
-              </Typography>
-            </>
-          ) : (
-            <Skeleton animation="wave" variant="text" />
-          )}
+          <VolumeSummary volume={volume} />
 
           {file && <FilesAccordion currentFile={file} />}
         </CardContent>
@@ -133,5 +150,4 @@ const FileModal = (props: Props) => {
   );
 };
 
-export { FileModal };
 export default FileModal;

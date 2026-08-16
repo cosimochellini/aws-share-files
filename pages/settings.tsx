@@ -41,21 +41,21 @@ const Settings = () => {
       >
         <List>
           <Divider />
-          {navbarItems
-            .filter(({ visibility }) => Visibility.Sidebar === visibility)
-            .map(({ name, redirect, icon }) => (
-              <div key={name}>
-                <ListItem
-                  button
-                  // eslint-disable-next-line react/no-unstable-nested-components
-                  component={(prop) => <MuiLink key={name} href={redirect} {...prop} />}
-                >
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText primary={name} />
-                </ListItem>
-                <Divider />
-              </div>
-            ))}
+          {navbarItems.flatMap(({
+            name, redirect, icon, visibility,
+          }) => (Visibility.Sidebar === visibility ? [(
+            <div key={name}>
+              <ListItem
+                button
+                // eslint-disable-next-line react/no-unstable-nested-components
+                component={(prop) => <MuiLink key={name} href={redirect} {...prop} />}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+              <Divider />
+            </div>
+          )] : []))}
         </List>
       </Grid>
 

@@ -1,7 +1,7 @@
 import { env } from '../instances/env';
 import type { ServiceArguments, ServiceMapper } from '../types/generic';
-import { notification } from '../instances/notification';
 import type { ConversionRequest, ConverterResponse } from '../types/converter.types';
+import { jsonOrThrow, reportAndRethrow } from '../utils/apiResponse';
 
 const { baseUrl, apiKey, header } = env.converter;
 const {
@@ -29,17 +29,8 @@ const replaceExtension = (file: string, ext: string) => {
 const converterApiCaller = <T>(section: string, query = {}) => {
   const url = `${baseUrl + section}?${new URLSearchParams(query).toString()}`;
   return fetch(url, { headers })
-    .then((res) => {
-      // fetch only rejects on a transport failure, so an error status has to be raised here
-      if (!res.ok) throw new Error(`the converter API answered ${section} with ${res.status}`);
-
-      return res.json();
-    })
-    .catch((error: unknown) => {
-      notification.error(error);
-
-      throw error;
-    }) as Promise<T>;
+    .then(jsonOrThrow('converter', section))
+    .catch(reportAndRethrow) as Promise<T>;
 };
 
 converterApiCaller.post = <T>(section: string, body = {}) => {
@@ -50,19 +41,11 @@ converterApiCaller.post = <T>(section: string, body = {}) => {
     method: 'POST',
     body: JSON.stringify(body),
   })
-    .then((res) => {
-      if (!res.ok) throw new Error(`the converter API answered ${section} with ${res.status}`);
-
-      return res.json();
-    })
-    .catch((error: unknown) => {
-      notification.error(error);
-
-      throw error;
-    }) as Promise<T>;
+    .then(jsonOrThrow('converter', section))
+    .catch(reportAndRethrow) as Promise<T>;
 };
 
-export type fileConverter = {
+type fileConverter = {
   file: string;
   target: string;
 };
