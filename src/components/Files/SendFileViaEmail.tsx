@@ -12,16 +12,39 @@ import {
 import { Mail, Send, Star } from '@mui/icons-material';
 
 import type { Nullable } from '../../types/generic';
+import type { UserEmail } from '../../types/dynamo.types';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { notification } from '../../instances/notification';
 import { useEmailsStore } from '../../store/emails.store';
 
-type Props = {
+export type SendFileViaEmailProps = {
   fileKey: string
 }
 
-export const SendFileViaEmail = (props: Props) => {
+const EmailIcon = ({ isDefault }: { isDefault?: boolean }) => (
+  isDefault ? <Star fontSize="small" color="warning" /> : <Mail fontSize="small" />
+);
+
+type EmailMenuItemProps = {
+  email: UserEmail;
+  selected: boolean;
+  onSelect: () => void;
+};
+
+const EmailMenuItem = ({ email, selected, onSelect }: EmailMenuItemProps) => (
+  <MenuItem value={email.email} selected={selected} onClick={onSelect}>
+    <ListItemIcon>
+      <EmailIcon isDefault={email.default} />
+    </ListItemIcon>
+    <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
+    <Typography variant="subtitle2" color="text.secondary" fontSize="small" sx={{ margin: 1 }}>
+      {`(${email.email})`}
+    </Typography>
+  </MenuItem>
+);
+
+export const SendFileViaEmail = (props: SendFileViaEmailProps) => {
   const { fileKey } = props;
   const emails = useEmailsStore((x) => x.emails);
 
@@ -87,11 +110,7 @@ export const SendFileViaEmail = (props: Props) => {
           >
             <ListItem onClick={handleClickListItem}>
               <ListItemIcon>
-                {selectedEmail?.default ? (
-                  <Star fontSize="small" color="warning" />
-                ) : (
-                  <Mail fontSize="small" />
-                )}
+                <EmailIcon isDefault={selectedEmail?.default} />
               </ListItemIcon>
               <ListItemText primary={selectedEmail?.description} secondary={selectedEmail?.email} />
             </ListItem>
@@ -103,29 +122,12 @@ export const SendFileViaEmail = (props: Props) => {
             MenuListProps={{ role: 'listbox' }}
           >
             {emails.map((email, index) => (
-              <MenuItem
+              <EmailMenuItem
                 key={email.email}
-                value={email.email}
+                email={email}
                 selected={index === selectedIndex}
-                onClick={() => handleMenuItemClick(index)}
-              >
-                <ListItemIcon>
-                  {email.default ? (
-                    <Star fontSize="small" color="warning" />
-                  ) : (
-                    <Mail fontSize="small" />
-                  )}
-                </ListItemIcon>
-                <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
-                <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  fontSize="small"
-                  sx={{ margin: 1 }}
-                >
-                  {`(${email.email})`}
-                </Typography>
-              </MenuItem>
+                onSelect={() => handleMenuItemClick(index)}
+              />
             ))}
           </Menu>
         </Grid>

@@ -7,7 +7,7 @@ import React, { useMemo, useState } from 'react';
 import { notification } from '../../instances/notification';
 import type { Nullable } from '../../types/generic';
 
-type Props = {
+export type LoadingButtonProps = {
   type?: Nullable<'button' | 'icon'>
   text?: Nullable<string>
   icon: Nullable<JSX.Element>
@@ -16,7 +16,22 @@ type Props = {
   clickAction: (event: React.SyntheticEvent) => Promise<unknown>
 }
 
-export const LoadingButton = (props: Props) => {
+type ResolvedColor = ButtonProps['color'] | IconButtonProps['color'];
+
+const explicitColor = (
+  buttonProps: LoadingButtonProps['buttonProps'],
+  iconProps: LoadingButtonProps['iconProps'],
+): ResolvedColor => buttonProps?.color ?? iconProps?.color;
+
+const resolveColor = (loading: boolean, error: unknown, fallback: ResolvedColor) => {
+  if (loading) return 'info';
+
+  if (error) return 'error';
+
+  return fallback ?? 'primary';
+};
+
+export const LoadingButton = (props: LoadingButtonProps) => {
   const {
     type = 'button', buttonProps, icon, iconProps, clickAction, text,
   } = props;
@@ -24,13 +39,10 @@ export const LoadingButton = (props: Props) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
 
-  const color = useMemo(() => {
-    if (loading) return 'info';
-
-    if (error) return 'error';
-
-    return buttonProps?.color ?? iconProps?.color ?? 'primary';
-  }, [loading, error, buttonProps?.color, iconProps?.color]);
+  const color = useMemo(
+    () => resolveColor(loading, error, explicitColor(buttonProps, iconProps)),
+    [loading, error, buttonProps, iconProps],
+  );
 
   const currentIcon = useMemo(() => {
     if (loading) return <Refresh className="spin" />;
