@@ -16,7 +16,7 @@
     "moduleResolution": "bundler",
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "incremental": true,
     "strictNullChecks": true,
     "noUncheckedIndexedAccess": true,
@@ -27,8 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     "./src/**/*.ts",
-    "./scripts/**/*.ts",
-    "plugins/pwa.plugin.js"
+    "./scripts/**/*.ts"
   ],
   "exclude": [
     "node_modules"

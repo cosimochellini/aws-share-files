@@ -5,11 +5,13 @@
   // `yarn fallow`. Findings are meant to be fixed in the source; the handful of
   // exceptions in this file are each justified inline.
 
-  // The Next.js plugin already discovers pages/, pages/api/ and next.config.js.
+  // The Next.js plugin already discovers pages/ and pages/api/.
   // script.runner.node.ts is discovered through the package.json "run-scripts"
   // script. What it cannot see is the runner's `await import(path.join('./scripts/', file))`,
   // whose target is a computed string, so the scripts it loads are declared here.
-  "entry": ["scripts/*.ts"],
+  // src/sw.ts is listed because @serwist/next compiles it as a separate service-worker
+  // bundle rather than importing it from application code.
+  "entry": ["scripts/*.ts", "src/sw.ts"],
   "dynamicallyLoaded": ["scripts/*.ts"],
 
   "ignorePatterns": [
@@ -26,6 +28,10 @@
     // fails without them.
     "@emotion/react",
     "@emotion/styled",
+    // Used only from next.config.mjs. fallow's Next plugin looks for next.config.js,
+    // so it reads the .mjs as an ordinary module and concludes the import is not
+    // production code.
+    "@serwist/next",
     // Named as strings inside eslint.config.mjs -- either in the FlatCompat
     // `extends` list or pulled in as peer plugins by eslint-config-airbnb --
     // so fallow cannot resolve them back to the owning package.

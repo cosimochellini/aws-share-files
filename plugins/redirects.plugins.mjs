@@ -1,4 +1,4 @@
-const withRedirects = async function redirects() {
+export const withRedirects = async function redirects() {
   return [
     {
       source: '/',
@@ -12,5 +12,3 @@ const withRedirects = async function redirects() {
     },
   ];
 };
-
-module.exports = { withRedirects };
