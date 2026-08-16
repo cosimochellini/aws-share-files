@@ -3,9 +3,14 @@
   "version": "0.20.18",
   "private": false,
   "license": "MIT",
+  "packageManager": "pnpm@11.22.0",
+  "engines": {
+    "node": ">=24",
+    "pnpm": ">=11"
+  },
   "scripts": {
-    "dev": "yarn increase && next dev --webpack -p 6969",
-    "build": "yarn run-scripts && next build --webpack",
+    "dev": "pnpm run increase && next dev --webpack -p 6969",
+    "build": "pnpm run run-scripts && next build --webpack",
     "start": "next start",
     "lint": "eslint pages src",
     "increase": "npm --no-git-tag-version version patch",
@@ -14,9 +19,9 @@
     "test:watch": "vitest",
     "test:cov": "vitest run --coverage",
     "typecheck": "tsc --noEmit",
-    "doctor": "react-doctor . --yes --no-telemetry",
+    "react-doctor": "react-doctor . --yes --no-telemetry",
     "fallow": "fallow --format compact --fail-on-issues",
-    "verify": "yarn lint && yarn typecheck && yarn test && yarn doctor && yarn fallow"
+    "verify": "pnpm run lint && pnpm run typecheck && pnpm run test && pnpm run react-doctor && pnpm run fallow"
   },
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.1111.0",
@@ -69,8 +74,5 @@
     "type-fest": "^5.8.0",
     "typescript": "6.0.3",
     "vitest": "^4.1.10"
-  },
-  "resolutions": {
-    "@types/minimatch": "5.1.2"
   }
 }

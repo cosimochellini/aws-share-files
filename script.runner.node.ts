@@ -69,7 +69,7 @@ run()
   .catch((error) => {
     console.error(error);
 
-    // yarn build is `yarn run-scripts && next build`, so without this the runner exits 0
+    // pnpm build is `pnpm run run-scripts && next build`, so without this the runner exits 0
     // and the build carries on as if every script had run
     process.exitCode = 1;
   });
