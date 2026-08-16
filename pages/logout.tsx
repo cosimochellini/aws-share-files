@@ -5,6 +5,7 @@ import type { GetStaticProps } from 'next';
 import { withDefaultLayout } from '../layouts';
 import { loginPath } from '../src/hooks/auth.hook';
 import { useEffectOnceWhen } from '../src/hooks/once';
+import { notification } from '../src/instances/notification';
 
 export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
 
@@ -17,7 +18,11 @@ const Logout = () => {
   // down underneath it. So this page does not call useAuth at all, and drives the single
   // navigation itself once next-auth has actually cleared the session.
   useEffectOnceWhen(() => {
-    signOut({ redirect: false }).then(() => router.push(loginPath));
+    signOut({ redirect: false })
+      .then(() => router.push(loginPath))
+      // without this a failed sign-out request is an unhandled rejection and the visitor
+      // sits on "logging out..." for ever with nothing said
+      .catch(notification.error);
   });
 
   return (

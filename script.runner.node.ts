@@ -17,19 +17,29 @@ const scriptDirectory = fileURLToPath(new URL('./scripts/', import.meta.url));
 dotenv.config({ path: fileURLToPath(new URL('./.env', import.meta.url)), quiet: true });
 
 const run = async () => {
-  // sorted so a run is reproducible: readdir order is filesystem-dependent, and these
-  // scripts are reported (and, if one ever throws, blamed) by position in this list
-  // .ts files only: every entry is import()ed and called, so a subdirectory or a stray
-  // .DS_Store would abort the whole run -- and the run now fails the build
+  // CONVENTION: a script is a *.node.ts file. Every entry picked up here is import()ed and
+  // called, so a subdirectory, a stray .DS_Store or a .d.ts would abort the whole run --
+  // and the run now fails the build. isSymbolicLink is accepted alongside isFile because a
+  // dirent describes the link, not its target, so a symlinked script reads as neither.
+  // Whatever is left out is logged rather than silently dropped: a script that quietly does
+  // not run is the failure mode this runner was fixed to stop having.
   const files: string[] = [];
+  const ignored: string[] = [];
 
   fs.readdirSync(scriptDirectory, { withFileTypes: true }).forEach((entry) => {
-    if (entry.isFile() && entry.name.endsWith('.ts')) files.push(entry.name);
+    const runnable = (entry.isFile() || entry.isSymbolicLink()) && entry.name.endsWith('.node.ts');
+
+    if (runnable) files.push(entry.name);
+    else ignored.push(entry.name);
   });
 
+  // sorted so a run is reproducible: readdir order is filesystem-dependent, and these
+  // scripts are reported (and, if one ever throws, blamed) by position in this list
   files.sort();
 
   console.log('files:', files);
+
+  if (ignored.length) console.log('ignored (not a *.node.ts file):', ignored.sort());
 
   // CONTRACT: every script in ./scripts/ must be independent of the others. They are
   // loaded and run concurrently, so one that reads what another writes would race. If a
