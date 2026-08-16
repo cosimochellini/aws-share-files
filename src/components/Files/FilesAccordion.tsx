@@ -73,6 +73,7 @@ export const FilesAccordion = ({ currentFile }: FilesAccordionProps) => {
         id={currentFile.Key}
         expandIcon={<ExpandMore />}
         aria-controls="panel1a-content"
+        slotProps={{ root: { component: 'div' } }}
       >
         <Typography
           sx={{
