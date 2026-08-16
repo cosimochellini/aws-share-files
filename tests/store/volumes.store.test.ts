@@ -215,6 +215,58 @@ describe('volumes.store', () => {
       });
 
       expect(findFirst).toHaveBeenCalledTimes(1);
+      // the second call bails out on the remembered miss, not on a wedged loading flag
+      expect(readPersisted().volumeLoading).toBe(false);
+    });
+
+    it('drops the previous volume when a remembered missing name is asked for again', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const fetched = buildVolume('Fetched');
+
+      findFirst.mockResolvedValueOnce(undefined);
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      await act(async () => {
+        await result.current.getVolume('missing');
+      });
+
+      findFirst.mockResolvedValueOnce(fetched);
+
+      await act(async () => {
+        await result.current.getVolume('fetched');
+      });
+
+      expect(result.current.volume).toBe(fetched);
+
+      await act(async () => {
+        await result.current.getVolume('missing');
+      });
+
+      expect(findFirst).toHaveBeenCalledTimes(2);
+      expect(result.current.volume).toBeUndefined();
+    });
+
+    it('does not retry a name whose lookup failed', async () => {
+      const { findFirst, notification, useVolumeGetter } = await loadStore();
+
+      vi.spyOn(notification, 'error');
+      findFirst.mockRejectedValue(new Error('content api is down'));
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      await act(async () => {
+        await result.current.getVolume('boom');
+      });
+
+      await act(async () => {
+        await result.current.getVolume('boom');
+      });
+
+      // a failed lookup is remembered like a miss, so callers re-running on every store
+      // update cannot turn an outage into a request storm
+      expect(findFirst).toHaveBeenCalledTimes(1);
     });
 
     it('notifies and clears the loading flag when the fetch rejects', async () => {

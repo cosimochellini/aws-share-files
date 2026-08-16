@@ -34,7 +34,12 @@ export const useVolumeGetter = () => {
 
     if (state.volumeLoading) return;
 
-    if (missingVolumes.has(name)) return;
+    if (missingVolumes.has(name)) {
+      // still drop whatever the previous lookup found, or it would be shown for this name
+      if (state.volume) set({ volume: undefined });
+
+      return;
+    }
 
     const cachedVolume = state.cachedVolumes[name];
 

@@ -139,4 +139,15 @@ describe('converter API failures', () => {
 
     expect(notification.error).toHaveBeenCalledWith(error);
   });
+
+  it('rethrows a json() parse failure on the POST path too', async () => {
+    const error = new Error('bad payload');
+
+    fetchMock.mockResolvedValue({ json: () => Promise.reject(error) });
+
+    await expect(converter.convertFile({ file: 'author/book.docx', target: 'pdf' }))
+      .rejects.toBe(error);
+
+    expect(notification.error).toHaveBeenCalledWith(error);
+  });
 });
