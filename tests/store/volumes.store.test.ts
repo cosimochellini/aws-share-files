@@ -103,6 +103,60 @@ describe('volumes.store', () => {
       });
     });
 
+    it('starts one fetch when the same render calls it twice', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const inFlight = deferred();
+
+      findFirst.mockReturnValue(inFlight.promise);
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      // React StrictMode runs a mount effect twice against the same callback, so the
+      // guards have to read the live store rather than the render's snapshot
+      await act(async () => {
+        const first = result.current.getVolume('same');
+        const second = result.current.getVolume('same');
+
+        inFlight.resolve(undefined);
+
+        await Promise.all([first, second]);
+      });
+
+      expect(findFirst).toHaveBeenCalledTimes(1);
+    });
+
+    it('hands out a new getVolume once a lookup finishes, so a bounced caller retries', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const inFlight = deferred();
+
+      findFirst.mockReturnValueOnce(inFlight.promise);
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      let pending: Promise<void> = Promise.resolve();
+
+      await act(async () => {
+        pending = result.current.getVolume('slow');
+      });
+
+      const bounced = result.current.getVolume;
+
+      await act(async () => {
+        await result.current.getVolume('other');
+      });
+
+      await act(async () => {
+        inFlight.resolve(buildVolume('Slow'));
+        await pending;
+      });
+
+      // the identity change is what re-runs an effect keyed on getVolume, which is how the
+      // bounced lookup gets its second chance
+      expect(result.current.getVolume).not.toBe(bounced);
+    });
+
     it('never persists the loading flag, so a reload cannot rehydrate a wedged store', async () => {
       const { findFirst, useVolumeGetter } = await loadStore();
 

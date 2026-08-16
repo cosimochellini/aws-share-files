@@ -19,17 +19,22 @@ const defaultState: VolumesState = {
   cachedVolumes: {},
 };
 
-const useStore = create(persist<VolumesState>(() => defaultState, {
-  name: 'LS_VOLUMES',
-  // only the cache is worth keeping: persisting `volumeLoading` means a reload during a
-  // lookup rehydrates a loading flag no running promise will ever clear, wedging the
-  // store for good. `volume` is just as transient.
-  partialize: (state) => ({ cachedVolumes: state.cachedVolumes } as VolumesState),
-  merge: (persisted, current) => ({
-    ...current,
-    cachedVolumes: (persisted as VolumesState | undefined)?.cachedVolumes ?? {},
-  }),
-}));
+type PersistedVolumesState = Pick<VolumesState, 'cachedVolumes'>;
+
+const useStore = create(persist<VolumesState, [], [], PersistedVolumesState>(
+  () => defaultState,
+  {
+    name: 'LS_VOLUMES',
+    // only the cache is worth keeping: persisting `volumeLoading` means a reload during a
+    // lookup rehydrates a loading flag no running promise will ever clear, wedging the
+    // store for good. `volume` is just as transient.
+    partialize: (state) => ({ cachedVolumes: state.cachedVolumes }),
+    merge: (persisted, current) => ({
+      ...current,
+      cachedVolumes: (persisted as PersistedVolumesState | undefined)?.cachedVolumes ?? {},
+    }),
+  },
+));
 
 // names the content API has no volume for: retrying them would loop, since callers
 // re-run getVolume on every store update
