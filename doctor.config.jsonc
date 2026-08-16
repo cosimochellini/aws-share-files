@@ -1,0 +1,72 @@
+{
+  "$schema": "https://react.doctor/schema/config.json",
+
+  // The intent is maximum strictness: every diagnostic category is stamped to
+  // "error", so anything react-doctor can detect fails `yarn doctor`. Findings
+  // are meant to be fixed in the source, not silenced here.
+  //
+  // JSONC rather than doctor.config.ts on purpose: tsconfig.json uses
+  // "moduleResolution": "node", which cannot resolve the "react-doctor/api"
+  // exports subpath that defineConfig lives behind, so a .ts config breaks
+  // `yarn typecheck`.
+
+  "lint": true,
+  "scope": "full",
+
+  // Surface warning-severity diagnostics too. Combined with the categories map
+  // below every rule reports at "error", so nothing stays advisory.
+  "warnings": true,
+
+  // The legacy .eslintrc.json leaves a dozen rules at "warn"/"off" (see
+  // jsx-a11y/anchor-is-valid, no-continue, ban-ts-comment). Adopting it would
+  // let those downgrades leak into this scan, so react-doctor's own severities
+  // stay authoritative.
+  "adoptExistingLintConfig": false,
+
+  // Audit mode: inline eslint-disable / suppression comments are neutralized
+  // before scanning. A suppression written for ESLint should not silently also
+  // suppress a react-doctor rule that nobody evaluated.
+  "respectInlineDisables": false,
+
+  // Dead-code analysis is delegated to fallow (`yarn fallow`), which resolves
+  // this project's Next.js entry points and dynamic imports through its own
+  // config. Running both reports the same unused file twice, with only
+  // fallow's copy correctly scoped.
+  "deadCode": false,
+
+  // Socket.dev dependency scoring performs one network request per direct
+  // dependency, so leaving it on would make `yarn verify` fail offline and turn
+  // red on days when nothing in the repository changed. Dependency auditing
+  // belongs in a scheduled job, not in a local gate.
+  "supplyChain": { "enabled": false },
+
+  // Every rule react-doctor enables reports at error severity.
+  "categories": {
+    "Accessibility": "error",
+    "Bugs": "error",
+    "Maintainability": "error",
+    "Performance": "error",
+    "Security": "error"
+  },
+
+  // Re-enable the redundant-memoization rule that ships as a warning once the
+  // React Compiler is detected.
+  "buckets": {
+    "compiler-cleanup": "error"
+  },
+
+  "ignore": {
+    "files": [
+      // Build output. It only exists after `yarn build`, so scanning it would
+      // make the gate depend on whether someone happened to build first.
+      ".next/**",
+      "coverage/**",
+      "node_modules/**",
+      "public/**",
+      "next-env.d.ts"
+    ],
+    // Intentionally empty: fix the code rather than dropping a rule.
+    "rules": [],
+    "overrides": []
+  }
+}

@@ -1,0 +1,104 @@
+{
+  "$schema": "./node_modules/fallow/schema.json",
+
+  // Every rule is set to "error" below, so anything fallow can detect fails
+  // `yarn fallow`. Findings are meant to be fixed in the source; the handful of
+  // exceptions in this file are each justified inline.
+
+  // The Next.js plugin already discovers pages/, pages/api/ and next.config.js.
+  // script.runner.node.ts is discovered through the package.json "run-scripts"
+  // script. What it cannot see is the runner's `await import(path.join('./scripts/', file))`,
+  // whose target is a computed string, so the scripts it loads are declared here.
+  "entry": ["scripts/*.ts"],
+  "dynamicallyLoaded": ["scripts/*.ts"],
+
+  "ignorePatterns": [
+    // Build output: only exists after `yarn build`, so scanning it would make
+    // the gate depend on whether someone happened to build first.
+    ".next/**",
+    "coverage/**",
+    "public/**",
+    "next-env.d.ts"
+  ],
+
+  "ignoreDependencies": [
+    // MUI v7 peer dependencies. Nothing imports them directly, but the build
+    // fails without them.
+    "@emotion/react",
+    "@emotion/styled",
+    // Consumed by .eslintrc.json via the "next/core-web-vitals" shareable
+    // config, which fallow does not resolve back to the owning package.
+    "eslint-config-next"
+  ],
+
+  "ignoreExports": [
+    // Imported by tests through a dynamic `await import()` so the module can be
+    // re-evaluated per test; `tsc` fails if this export is removed.
+    { "file": "src/instances/notification.ts", "exports": ["notificationType"] },
+    // FileModal is loaded via next/dynamic, so fallow cannot connect the props
+    // type to its consumer. Un-exporting it would trip private-type-leaks.
+    { "file": "src/components/Files/FileModal.tsx", "exports": ["FileModalProps"] }
+  ],
+
+  "duplicates": {
+    "mode": "mild",
+    "minTokens": 50,
+    "minLines": 5,
+    "minOccurrences": 2
+  },
+
+  "rules": {
+    "unused-files": "error",
+    "unused-exports": "error",
+    "unused-types": "error",
+    "private-type-leaks": "error",
+    "unused-dependencies": "error",
+    "unused-dev-dependencies": "error",
+    "unused-optional-dependencies": "error",
+    "unused-enum-members": "error",
+    "unused-class-members": "error",
+    "unused-store-members": "error",
+    "unprovided-injects": "error",
+    "unrendered-components": "error",
+    "unused-component-props": "error",
+    "unused-component-emits": "error",
+    "unused-component-inputs": "error",
+    "unused-component-outputs": "error",
+    "unused-svelte-events": "error",
+    "unused-server-actions": "error",
+    "unused-load-data-keys": "error",
+    "prop-drilling": "error",
+    "thin-wrapper": "error",
+    "duplicate-prop-shape": "error",
+    "css-token-drift": "error",
+    "css-duplicate-block": "error",
+    "css-selector-complexity": "error",
+    "css-dead-surface": "error",
+    "css-broken-reference": "error",
+    "unresolved-imports": "error",
+    "unlisted-dependencies": "error",
+    "duplicate-exports": "error",
+    "type-only-dependencies": "error",
+    "test-only-dependencies": "error",
+    "dev-dependencies-in-production": "error",
+    "circular-dependencies": "error",
+    "re-export-cycle": "error",
+    "boundary-violation": "error",
+    "feature-flags": "error",
+    "stale-suppressions": "error",
+    "require-suppression-reason": "error",
+    "unused-catalog-entries": "error",
+    "empty-catalog-groups": "error",
+    "unresolved-catalog-references": "error",
+    "unused-dependency-overrides": "error",
+    "misconfigured-dependency-overrides": "error",
+    "security-client-server-leak": "error",
+    "security-sink": "error",
+    "policy-violation": "error",
+    "invalid-client-export": "error",
+    "mixed-client-server-barrel": "error",
+    "misplaced-directive": "error",
+    "route-collision": "error",
+    "dynamic-segment-name-conflict": "error"
+  }
+}
