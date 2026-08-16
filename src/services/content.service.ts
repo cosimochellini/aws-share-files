@@ -1,23 +1,14 @@
 import { env } from '../instances/env';
 import type { ServiceArguments, ServiceMapper } from '../types/generic';
-import { notification } from '../instances/notification';
 import type { ContentResponse } from '../types/content.types';
+import { jsonOrThrow, reportAndRethrow } from '../utils/apiResponse';
 
 const contentApiCaller = <T>(section: string, query = {}) => {
   const url = env.content.baseUrl + section;
 
   return fetch(`${url}?${new URLSearchParams(query).toString()}`)
-    .then((res) => {
-      // fetch only rejects on a transport failure, so an error status has to be raised here
-      if (!res.ok) throw new Error(`the content API answered ${section} with ${res.status}`);
-
-      return res.json();
-    })
-    .catch((error: unknown) => {
-      notification.error(error);
-
-      throw error;
-    }) as Promise<T>;
+    .then(jsonOrThrow('content', section))
+    .catch(reportAndRethrow) as Promise<T>;
 };
 
 export const content = {
