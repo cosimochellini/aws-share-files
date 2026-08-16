@@ -37,6 +37,7 @@ export const testEnv = {
   AUTH_AUTHORIZED_EMAILS: 'allowed@example.test,second@example.test',
 
   NEXTAUTH_URL: 'http://localhost:6969',
+  NEXTAUTH_SECRET: 'test-nextauth-secret',
 } as const;
 
 Object.assign(process.env, testEnv);
