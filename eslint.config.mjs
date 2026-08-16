@@ -87,6 +87,12 @@ export default [
       // the rest of what next/core-web-vitals layered on top of the shared plugins.
       // airbnb already owns react, react-hooks, jsx-a11y and import, so only Next's
       // overrides of them are reproduced here.
+      // airbnb/hooks has this at "error". eslint-config-next spread
+      // eslint-plugin-react-hooks' recommended set after it, which puts it back to
+      // "warn", and it was listed last -- so "warn" is the value this project has always
+      // linted with. Escalating it is a separate decision, not part of a version bump.
+      'react-hooks/exhaustive-deps': 'warn',
+
       'react/react-in-jsx-scope': 'off',
       'react/prop-types': 'off',
       'react/no-unknown-property': 'off',
