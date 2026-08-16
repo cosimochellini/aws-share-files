@@ -13,16 +13,16 @@ export const useAuth = () => {
     await router.push(loginPath);
   }, [router]);
 
-  const { data: session, status } = useSession({
-    onUnauthenticated,
-    required: true,
-  });
+  // no `required: true`: next-auth rewrites the status to 'loading' whenever it is
+  // 'unauthenticated' and required is set, and runs its own copy of the redirect from an
+  // internal effect. This hook would then never observe a signed-out visitor, and
+  // `authenticated` would report true for one. The effect below owns the redirect instead.
+  const { data: session, status } = useSession();
 
-  const authenticated = useMemo(() => {
-    if (status === 'loading') return true;
-
-    return !!session?.user?.email;
-  }, [session?.user?.email, status]);
+  const authenticated = useMemo(
+    () => status === 'authenticated' && !!session?.user?.email,
+    [session?.user?.email, status],
+  );
 
   useEffect(() => {
     if (status === 'loading') return;

@@ -1,6 +1,7 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import { env } from '../../src/instances/env';
+import { publicEnv } from '../../src/instances/env.public';
 
 describe('env parsing', () => {
   it('exposes the aws credentials', () => {
@@ -62,9 +63,29 @@ describe('env.emailProvider', () => {
   });
 });
 
-describe('env.defaultManifest', () => {
+describe('publicEnv', () => {
+  it('exposes the app info and the content blacklist, and nothing else', () => {
+    expect(Object.keys(publicEnv)).toEqual(['info', 'content', 'defaultManifest']);
+    expect(publicEnv.info).toEqual(env.info);
+    expect(publicEnv.content).toEqual({ invalidWords: ['ita', 'eng', 'epub'] });
+  });
+
+  /**
+   * The whole point of the split: next.config.mjs inlines everything this module reads
+   * into the browser bundle, so a credential landing here is a published credential.
+   */
+  it('carries no credential-shaped value', () => {
+    const serialised = JSON.stringify(publicEnv);
+
+    expect(serialised).not.toContain('test-secret-access-key');
+    expect(serialised).not.toContain('test-access-key-id');
+    expect(serialised).not.toContain('test-password');
+    expect(serialised).not.toContain('test-converter-key');
+    expect(serialised).not.toContain('allowed@example.test');
+  });
+
   it('derives the pwa manifest from the app info', () => {
-    expect(env.defaultManifest).toEqual({
+    expect(publicEnv.defaultManifest).toEqual({
       name: 'Test App',
       short_name: 'Test App',
       start_url: '/files/',
@@ -98,9 +119,10 @@ describe('env re-evaluation', () => {
     vi.resetModules();
 
     const { env: reloaded } = await import('../../src/instances/env');
+    const { publicEnv: reloadedPublic } = await import('../../src/instances/env.public');
 
     expect(reloaded.info.appTitle).toBe('Another App');
-    expect(reloaded.defaultManifest.short_name).toBe('Another App');
+    expect(reloadedPublic.defaultManifest.short_name).toBe('Another App');
     expect(reloaded.email.port).toBe(2525);
     expect(reloaded.emailProvider.server).toContain(':2525');
     expect(reloaded.content.invalidWords).toEqual(['fra']);

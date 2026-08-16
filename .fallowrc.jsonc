@@ -7,7 +7,7 @@
 
   // The Next.js plugin already discovers pages/, pages/api/ and next.config.mjs.
   // script.runner.node.ts is discovered through the package.json "run-scripts"
-  // script. What it cannot see is the runner's `await import(path.join('./scripts/', file))`,
+  // script. What it cannot see is the runner's `await import(pathToFileURL(...).href)`,
   // whose target is a computed string, so the scripts it loads are declared here.
   // src/sw.ts is listed because @serwist/next compiles it as a separate service-worker
   // bundle rather than importing it from application code.

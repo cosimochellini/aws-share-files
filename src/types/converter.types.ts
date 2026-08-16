@@ -81,11 +81,13 @@ export interface CredentialsRequest {
   secretaccesskey: string;
 }
 
+/**
+ * A single object behind a presigned link. The converter also accepts a `cloud` input that
+ * carries the bucket credentials outright; this app deliberately does not send one.
+ */
 export interface InputRequest {
-  type: string;
+  type: 'remote';
   source: string;
-  parameters: ParametersRequest;
-  credentials: CredentialsRequest;
 }
 
 export interface OutputTargetRequest {

@@ -14,6 +14,10 @@
     "esModuleInterop": true,
     "module": "esnext",
     "moduleResolution": "bundler",
+    // scripts/generate.manifest.node.ts is executed by Node's type stripping, which
+    // resolves specifiers literally and therefore needs the .ts extension spelled out.
+    // Legal here only because noEmit is set: nothing rewrites the specifier on the way out.
+    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",

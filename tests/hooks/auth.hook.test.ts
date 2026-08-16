@@ -39,24 +39,33 @@ describe('useAuth', () => {
     expect(loginPath).toBe('/api/auth/signin');
   });
 
-  it('asks next-auth for a required session with an unauthenticated handler', () => {
+  /**
+   * `required: true` would make next-auth report 'loading' for an unauthenticated
+   * visitor and fire its own redirect, so the hook could never see the real status.
+   */
+  it('asks next-auth for a plain session, with no options', () => {
     givenSession(buildSession('allowed@example.test'), 'authenticated');
 
     renderHook(() => useAuth());
 
-    expect(mockedUseSession).toHaveBeenCalledWith({
-      onUnauthenticated: expect.any(Function),
-      required: true,
-    });
+    expect(mockedUseSession).toHaveBeenCalledWith();
   });
 
-  it('treats a loading session as authenticated and does not redirect', () => {
+  it('is not authenticated while the session is still loading, and does not redirect', () => {
     givenSession(null, 'loading');
 
     const { result } = renderHook(() => useAuth());
 
-    expect(result.current.authenticated).toBe(true);
+    expect(result.current.authenticated).toBe(false);
     expect(push).not.toHaveBeenCalled();
+  });
+
+  it('is not authenticated when a session carries an email but the status is not authenticated', () => {
+    givenSession(buildSession('allowed@example.test'), 'loading');
+
+    const { result } = renderHook(() => useAuth());
+
+    expect(result.current.authenticated).toBe(false);
   });
 
   it('is authenticated when the session carries an email', () => {

@@ -1,12 +1,14 @@
+import { cleanup } from '@testing-library/react';
 import { afterEach, beforeEach, vi } from 'vitest';
 
 /**
- * src/instances/env.ts reads process.env eagerly at module evaluation and calls
- * .split(',') on three of the values. If any of them is missing, importing *anything*
- * that transitively reaches env.ts throws a TypeError before a single test can run.
+ * src/instances/env.ts and src/instances/env.public.ts both read process.env eagerly at
+ * module evaluation and call .split(',') between them on three of the values. If any of
+ * them is missing, importing *anything* that transitively reaches either module throws a
+ * TypeError before a single test can run.
  *
  * These assignments run at the top of the setup file, so they land before the module
- * graph under test is evaluated. Keep this list in sync with src/instances/env.ts.
+ * graph under test is evaluated. Keep this list in sync with both env modules.
  */
 export const testEnv = {
   S3_BUCKET: 'test-bucket',
@@ -97,6 +99,12 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  // @testing-library/react only registers its own cleanup when `afterEach` is a global,
+  // and vitest.config.mts sets `globals: false`. Without this call every render() and
+  // renderHook() tree stays mounted in document.body for the rest of the file, so a hook
+  // holding a timer or a resize listener would keep firing into later tests.
+  cleanup();
+
   vi.unstubAllGlobals();
   window.localStorage.clear();
 });
