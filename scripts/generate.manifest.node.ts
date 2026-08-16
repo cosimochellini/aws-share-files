@@ -1,12 +1,7 @@
 // ESM rather than require(): script.runner.node.ts loads this file with import(), and a
 // module that exports with `export default` is detected as ESM, where require() does not
-// exist. The dotenv import has to stay above the env import, because env.public.ts reads
-// process.env while it is being evaluated, and ESM evaluates imports in declaration order.
-// A side-effect import is what pins that order: `import dotenv from 'dotenv';
-// dotenv.config()` would be hoisted below both. dotenv/config defaults quiet to true, so
-// it prints nothing.
-import 'dotenv/config';
-
+// exist. .env is already loaded by script.runner.node.ts, which imports this file only
+// after doing so -- which is what lets env.public.ts read process.env at import time here.
 import { readFile, writeFile } from 'node:fs/promises';
 
 import { publicEnv } from '../src/instances/env.public.ts';

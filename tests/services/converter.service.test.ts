@@ -73,14 +73,16 @@ describe('converter.convertFile', () => {
     ]);
   });
 
-  it('rejects without calling the converter when the link cannot be signed', async () => {
+  it('reports and rejects without calling the converter when the link cannot be signed', async () => {
     const error = new Error('cannot sign');
 
+    vi.spyOn(notification, 'error').mockImplementation(() => {});
     awsMock.getSignedUrl.mockRejectedValue(error);
 
     await expect(converter.convertFile({ file: 'author/book.docx', target: 'pdf' }))
       .rejects.toBe(error);
 
+    expect(notification.error).toHaveBeenCalledWith(error);
     expect(fetchMock).not.toHaveBeenCalled();
   });
 

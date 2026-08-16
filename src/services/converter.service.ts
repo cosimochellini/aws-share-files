@@ -66,7 +66,11 @@ export const converter = {
       input: [
         {
           type: 'remote',
-          source: await s3Client.getSignedUrl(file, inputSourceExpiry),
+          // reported the same way as the fetch failures below, so a signing failure is not
+          // the one error in this file that reaches the caller without being logged
+          source: await s3Client
+            .getSignedUrl(file, inputSourceExpiry)
+            .catch(reportAndRethrow),
         },
       ],
       conversion: [
