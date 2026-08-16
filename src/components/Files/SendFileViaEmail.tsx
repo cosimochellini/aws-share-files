@@ -39,7 +39,7 @@ type EmailMenuItemProps = MenuItemProps & {
  * dropdown breaks.
  */
 const EmailMenuItem = ({ email, onSelect, ...menuItemProps }: EmailMenuItemProps) => (
-  <MenuItem value={email.email} onClick={onSelect} {...menuItemProps}>
+  <MenuItem {...menuItemProps} value={email.email} onClick={onSelect}>
     <ListItemIcon>
       <EmailIcon isDefault={email.default} />
     </ListItemIcon>
