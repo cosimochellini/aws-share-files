@@ -34,7 +34,7 @@ export type CorrectKeyProp<T> = NonNullable<{
 
 export type KeyProp<T> = [title: string, value: CorrectKeyProp<T>];
 
-type Props<T> = {
+export type FileListConfigurationProps<T> = {
   title: string;
   availableKeys: KeyProp<T>[];
   configuration: PagingConfiguration<T>;
@@ -48,7 +48,7 @@ export type PagingConfiguration<T> = {
 };
 
 // eslint-disable-next-line react/function-component-definition
-export function FileListConfiguration<T>(props: Props<T>) {
+export function FileListConfiguration<T>(props: FileListConfigurationProps<T>) {
   const {
     availableKeys,
     configuration,

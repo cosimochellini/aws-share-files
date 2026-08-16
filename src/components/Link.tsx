@@ -16,7 +16,7 @@ interface NextLinkComposedProps
   linkAs?: NextLinkProps['as'];
 }
 
-export const NextLinkComposed = forwardRef<HTMLAnchorElement, NextLinkComposedProps>(
+const NextLinkComposed = forwardRef<HTMLAnchorElement, NextLinkComposedProps>(
   (props, ref) => {
     const {
       to,
@@ -48,13 +48,29 @@ export const NextLinkComposed = forwardRef<HTMLAnchorElement, NextLinkComposedPr
   },
 );
 
-export type LinkProps = {
+type LinkProps = {
   activeClassName?: string;
   as?: NextLinkProps['as'];
   href: NextLinkProps['href'];
   linkAs?: NextLinkProps['as']; // Useful when the as prop is shallow by styled().
 } & Omit<NextLinkComposedProps, 'to' | 'linkAs' | 'href'> &
   Omit<MuiLinkProps, 'href'>;
+
+const resolvePathname = (href: LinkProps['href']) => (
+  typeof href === 'string' ? href : href.pathname
+);
+
+// A type predicate so the caller keeps the `string` narrowing it needs to pass
+// `href` straight to MuiLink.
+const isExternalHref = (href: LinkProps['href']): href is string => (
+  typeof href === 'string' && (href.startsWith('http') || href.startsWith('mailto:'))
+);
+
+const buildClassName = (
+  classNameProps: string | undefined,
+  isActive: boolean,
+  activeClassName: string,
+) => `${classNameProps} ${isActive && activeClassName ? activeClassName : ''}`;
 
 // A styled version of the Next.js Link component:
 // https://nextjs.org/docs/api-reference/next/link
@@ -76,12 +92,14 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
   } = props;
 
   const router = useRouter();
-  const pathname = typeof href === 'string' ? href : href.pathname;
-  const className = `${classNameProps} ${router.pathname === pathname && activeClassName ? activeClassName : ''}`;
+  const pathname = resolvePathname(href);
+  const className = buildClassName(
+    classNameProps,
+    router.pathname === pathname,
+    activeClassName,
+  );
 
-  const isExternal = typeof href === 'string' && (href.indexOf('http') === 0 || href.indexOf('mailto:') === 0);
-
-  if (isExternal) {
+  if (isExternalHref(href)) {
     return <MuiLink className={className} href={href} ref={ref} {...other} />;
   }
 
@@ -107,5 +125,3 @@ export const Link = forwardRef<HTMLAnchorElement, LinkProps>((props, ref) => {
     />
   );
 });
-
-export default Link;

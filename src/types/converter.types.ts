@@ -1,5 +1,4 @@
 export enum StatusCode {
-  downloading = 'downloading',
   converting = 'converting',
   completed = 'completed',
   failed = 'failed',

@@ -17,7 +17,7 @@ interface DefaultLayout {
   children: ReactElement
 }
 
-export const Layout = ({ children }: DefaultLayout) => {
+const Layout = ({ children }: DefaultLayout) => {
   const { isMobile } = useDevice();
 
   const { checkTheme, theme } = useThemeStore.getState();
