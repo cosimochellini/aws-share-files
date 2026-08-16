@@ -10,12 +10,13 @@ export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStati
 
 const Logout = () => {
   const router = useRouter();
-  const { onUnauthenticated } = useAuth();
+
+  // useAuth's own effect sends a session-less visitor to the login page, so this page does
+  // not call onUnauthenticated itself: it would fire the same redirect a second time.
+  useAuth();
 
   useEffectOnceWhen(() => {
     signOut({}).then(() => router.push('/'));
-
-    onUnauthenticated();
   });
 
   return (

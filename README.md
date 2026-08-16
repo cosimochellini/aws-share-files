@@ -79,21 +79,51 @@ yarn
 
 ### Configuration
 
-Create a `.env.local` file with your AWS configurations:
+Create a `.env` file in the repository root. Next.js loads it natively, before
+`next.config.mjs` is evaluated. These are the names the code actually reads — see
+`src/instances/env.ts`:
 
 ```
-# AWS Configuration
-AWS_REGION=your-region
-AWS_S3_BUCKET=your-bucket-name
-AWS_DYNAMODB_TABLE=your-table-name
+# AWS
+S3_BUCKET=your-bucket-name
+S3_REGION=your-region
+S3_ACCESS_KEY_ID=your-access-key-id
+S3_SECRET_ACCESS_KEY=your-secret-access-key
 
-# Auth Configuration
+# App
+APP_TITLE=Your App
+APP_LOGO_URL=https://.../logo.png
+APP_ICON_URL=https://.../icon.png
+
+# Content lookup
+CONTENT_API_URL=https://...
+CONTENT_INVALID_WORDS=ita,eng,epub
+
+# Email
+EMAIL_SIGNATURE=Your App <noreply@example.com>
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=noreply@example.com
+EMAIL_PASSWORD=your-password
+
+# Converter
+CONVERTER_API_URL=https://.../
+CONVERTER_API_KEY=your-key
+CONVERTER_API_HEADER=x-oc-api-key
+CONVERTER_API_EXTENSION=pdf,epub,mobi
+
+# Auth
+AUTH_AUTHORIZED_EMAILS=you@example.com,someone@example.com
 NEXTAUTH_URL=http://localhost:6969
 NEXTAUTH_SECRET=your-secret
-
-# Other configurations
-# ...
 ```
+
+**Only five of these reach the browser**: `APP_TITLE`, `APP_LOGO_URL`, `APP_ICON_URL`,
+`CONTENT_INVALID_WORDS` and `NEXTAUTH_URL`, listed explicitly under `env` in
+`next.config.mjs` and read through `src/instances/env.public.ts`. Everything else is
+server-only and must be reached through `src/instances/env.ts`, which only server code
+imports. Importing `env.ts` from a component or a hook publishes every credential in it to
+every visitor — that is what issue #12 was.
 
 ### Development
 
@@ -163,12 +193,13 @@ yarn test:cov
 ```
 
 Tests live in the top-level `tests/` directory, mirroring the source layout. `tests/setup.ts`
-populates the environment variables that `src/instances/env.ts` reads at import time, mocks
+populates the environment variables that `src/instances/env.ts` and `src/instances/env.public.ts`
+read at import time, mocks
 `nodemailer` so no SMTP connection is attempted, and polyfills `window.matchMedia`.
 
 `yarn test:cov` enforces a **80% global threshold on lines, statements, functions and branches**
 across the application's logic layer — `src/utils`, `src/classes`, `src/services`,
-`src/formatters`, `src/store`, `src/hooks`, `src/instances`, `src/fallback` and `pages/api`.
+`src/formatters`, `src/store`, `src/hooks`, `src/instances` and `pages/api`.
 React components and pages are outside the coverage scope.
 
 ## Application Structure
