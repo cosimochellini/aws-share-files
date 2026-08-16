@@ -39,9 +39,13 @@ export const LoadingButton = (props: LoadingButtonProps) => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<unknown>();
 
+  // the colours, not the prop objects: callers pass object literals, so depending on the
+  // objects would recompute on every render and defeat the memo
+  const fallbackColor = explicitColor(buttonProps, iconProps);
+
   const color = useMemo(
-    () => resolveColor(loading, error, explicitColor(buttonProps, iconProps)),
-    [loading, error, buttonProps, iconProps],
+    () => resolveColor(loading, error, fallbackColor),
+    [loading, error, fallbackColor],
   );
 
   const currentIcon = useMemo(() => {

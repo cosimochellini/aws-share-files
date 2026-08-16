@@ -4,20 +4,28 @@ import path from 'path';
 const scriptDirectory = './scripts/';
 
 const run = async () => {
-  const files = fs.readdirSync(scriptDirectory);
+  // sorted so a run is reproducible: readdir order is filesystem-dependent, and these
+  // scripts are reported (and, if one ever throws, blamed) by position in this list
+  const files = fs.readdirSync(scriptDirectory).sort();
 
   console.log('files:', files);
 
-  // The scripts are independent build steps, so they load and run together
-  // rather than serialising one round-trip per file.
-  await Promise.all(files.map(async (file) => {
+  // CONTRACT: every script in ./scripts/ must be independent of the others. They are
+  // loaded and run concurrently, so one that reads what another writes would race. If a
+  // script ever needs to observe another's output, run them in sequence here instead of
+  // adding it to this directory.
+  const results = await Promise.all(files.map(async (file) => {
     const modulePath = path.join(scriptDirectory, file);
     const { default: script } = await import(modulePath);
 
-    console.log(`Running ${file}`);
+    await script();
 
-    return script();
+    return file;
   }));
+
+  // logged after the fact so the output stays in `files` order rather than whichever
+  // script happened to settle first
+  results.forEach((file) => console.log(`Ran ${file}`));
 };
 
 run()
