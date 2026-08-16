@@ -86,7 +86,7 @@ const NavbarList = ({ visibility }: { visibility: Visibility }) => (
     }) => (itemVisibility === visibility ? [(
       <ListItem
         key={name}
-        // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+        // eslint-disable-next-line react/no-unstable-nested-components
         component={forwardRef((prop, _) => (
           <Link key={name} href={redirect} {...prop} />
         ))}

@@ -17,7 +17,7 @@
   // below every rule reports at "error", so nothing stays advisory.
   "warnings": true,
 
-  // The legacy .eslintrc.json leaves a dozen rules at "warn"/"off" (see
+  // eslint.config.mjs leaves a dozen rules at "warn"/"off" (see
   // jsx-a11y/anchor-is-valid, no-continue, ban-ts-comment). Adopting it would
   // let those downgrades leak into this scan, so react-doctor's own severities
   // stay authoritative.

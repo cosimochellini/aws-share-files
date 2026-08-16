@@ -37,7 +37,7 @@ const ButtonNavigation = () => {
                 // the component below renders an anchor, not a native <button>; MUI 9
                 // needs to be told so it keeps the keyboard and disabled handling right
                 nativeButton={false}
-                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+                // eslint-disable-next-line react/no-unstable-nested-components
                 component={forwardRef<HTMLAnchorElement>((prop, ref) => (
                   <Link
                     {...prop}
