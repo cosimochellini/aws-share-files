@@ -52,6 +52,11 @@ describe('env parsing', () => {
   it('splits the comma separated authorised emails', () => {
     expect(env.auth.emails).toEqual(['allowed@example.test', 'second@example.test']);
   });
+
+  it('signs sessions with a secret that is not any aws credential', () => {
+    expect(env.auth.secret).toBe('test-nextauth-secret');
+    expect(Object.values(env.aws)).not.toContain(env.auth.secret);
+  });
 });
 
 describe('env.emailProvider', () => {

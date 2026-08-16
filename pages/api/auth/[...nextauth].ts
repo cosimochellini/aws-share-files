@@ -9,7 +9,7 @@ export default NextAuth({
   // Configure one or more authentication providers
   providers: [EmailProvider(env.emailProvider)],
   adapter: DynamoDBAdapter(dynamoDbClient, { tableName: 'next-auth' }),
-  secret: env.aws.secretAccessKey,
+  secret: env.auth.secret,
   session: {
     // Choose how you want to save the user session.
     // The default is `"jwt"`, an encrypted JWT (JWE) in the session cookie.

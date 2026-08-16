@@ -52,5 +52,6 @@ export const env = {
 
   auth: {
     emails: (process.env.AUTH_AUTHORIZED_EMAILS as string).split(','),
+    secret: process.env.NEXTAUTH_SECRET as string,
   },
 } as const;

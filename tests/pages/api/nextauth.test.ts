@@ -70,10 +70,10 @@ describe('pages/api/auth/[...nextauth]', () => {
     expect(options.adapter).toEqual({ adapter: 'dynamodb' });
   });
 
-  it('signs the session with the aws secret', async () => {
+  it('signs the session with the nextauth secret', async () => {
     const { options } = await loadRoute();
 
-    expect(options.secret).toBe('test-secret-access-key');
+    expect(options.secret).toBe('test-nextauth-secret');
   });
 
   it('forces a jwt session with the documented lifetimes', async () => {

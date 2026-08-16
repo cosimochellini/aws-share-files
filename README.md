@@ -115,11 +115,13 @@ CONVERTER_API_EXTENSION=pdf,epub,mobi
 # Auth
 AUTH_AUTHORIZED_EMAILS=you@example.com,someone@example.com
 NEXTAUTH_URL=http://localhost:6969
+NEXTAUTH_SECRET=<a random string, e.g. `openssl rand -base64 32`>
 ```
 
-`NEXTAUTH_SECRET` is deliberately not in that list: nothing reads it today.
-`pages/api/auth/[...nextauth].ts` signs session JWTs with `env.aws.secretAccessKey`
-instead, which is tracked in issue #20. Setting `NEXTAUTH_SECRET` currently has no effect.
+`NEXTAUTH_SECRET` signs and encrypts every session JWT
+(`pages/api/auth/[...nextauth].ts`, via `env.auth.secret`). It must be set to a
+value unrelated to any AWS credential, and changing it signs every existing
+session out.
 
 **Only five of these reach the browser**: `APP_TITLE`, `APP_LOGO_URL`, `APP_ICON_URL`,
 `CONTENT_INVALID_WORDS` and `NEXTAUTH_URL`, listed explicitly under `env` in
