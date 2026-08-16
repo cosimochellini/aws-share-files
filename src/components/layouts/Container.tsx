@@ -79,6 +79,25 @@ const robotoFont = Roboto({
   weight: ['300', '400', '500'],
 });
 
+const NavbarList = ({ visibility }: { visibility: Visibility }) => (
+  <List>
+    {navbarItems.flatMap(({
+      name, redirect, icon, visibility: itemVisibility,
+    }) => (itemVisibility === visibility ? [(
+      <ListItem
+        key={name}
+        // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+        component={forwardRef((prop, _) => (
+          <Link key={name} href={redirect} {...prop} />
+        ))}
+      >
+        <ListItemIcon>{icon}</ListItemIcon>
+        <ListItemText primary={name} />
+      </ListItem>
+    )] : []))}
+  </List>
+);
+
 export const Container = ({ Component }: { Component: ReactElement }) => {
   const [open, setOpen] = useState<boolean>();
   const { isMobile, hasWidth } = useDevice();
@@ -139,39 +158,9 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
           </IconButton>
         </DrawerHeader>
         <Divider />
-        <List>
-          {navbarItems
-            .filter((x) => Visibility.All === x.visibility)
-            .map(({ name, redirect, icon }) => (
-              <ListItem
-                key={name}
-                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
-                component={forwardRef((prop, _) => (
-                  <Link key={name} href={redirect} {...prop} />
-                ))}
-              >
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={name} />
-              </ListItem>
-            ))}
-        </List>
+        <NavbarList visibility={Visibility.All} />
         <Divider />
-        <List>
-          {navbarItems
-            .filter((x) => Visibility.Sidebar === x.visibility)
-            .map(({ name, redirect, icon }) => (
-              <ListItem
-                key={name}
-                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
-                component={forwardRef((prop, _) => (
-                  <Link key={name} href={redirect} {...prop} />
-                ))}
-              >
-                <ListItemIcon>{icon}</ListItemIcon>
-                <ListItemText primary={name} />
-              </ListItem>
-            ))}
-        </List>
+        <NavbarList visibility={Visibility.Sidebar} />
         <Divider />
       </Drawer>
       <Main open={isOpen}>
