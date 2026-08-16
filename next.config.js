@@ -1,7 +1,9 @@
 // @ts-check
 
+// quiet: dotenv 17 prints an "injected env" banner by default, which would show up on
+// every next dev/build/start invocation and in every CI log line that shells out to them
 require('dotenv')
-  .config();
+  .config({ quiet: true });
 
 const { withPWA } = require('./plugins/pwa.plugin');
 const { withWebpack } = require('./plugins/webpack.plugin');

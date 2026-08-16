@@ -1,4 +1,5 @@
-require('dotenv').config();
+// see next.config.js for why quiet is set
+require('dotenv').config({ quiet: true });
 
 const fs = require('fs').promises;
 
