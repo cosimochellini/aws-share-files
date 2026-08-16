@@ -34,8 +34,11 @@ const ButtonNavigation = () => {
           {navbarItems.flatMap((item) => (
             [Visibility.All, Visibility.BottomBar].includes(item.visibility) ? [(
               <BottomNavigationAction
-                // the component below renders an anchor, not a native <button>; MUI 9
-                // needs to be told so it keeps the keyboard and disabled handling right
+                // BottomNavigationAction hardcodes ButtonBase's internalNativeButton, so
+                // MUI 9 warns on every render unless it is told the component below
+                // resolves to an anchor. It would also inject role="button", except
+                // src/components/Link.tsx drops any incoming role — no loss here, since
+                // the rendered <a href> already has native keyboard activation.
                 nativeButton={false}
                 // eslint-disable-next-line react/no-unstable-nested-components
                 component={forwardRef<HTMLAnchorElement>((prop, ref) => (
