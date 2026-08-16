@@ -3,26 +3,42 @@ import { Link as MuiLink } from '@mui/material';
 
 import type { Nullable } from '../../types/generic';
 
-type Props = {
+export type ReadMoreProps = {
   text: Nullable<string>;
   maxLength?: number;
 };
 
-export const ReadMore = (props: Props) => {
-  const { text, maxLength = 250 } = props;
+const DEFAULT_MAX_LENGTH = 250;
+
+const previewText = (text: string, isExpanded: boolean, maxLength: number) => (
+  isExpanded ? text : `${text.slice(0, maxLength)}...  `
+);
+
+type ToggleProps = {
+  isExpanded: boolean;
+  onToggle: () => void;
+};
+
+const ReadMoreToggle = ({ isExpanded, onToggle }: ToggleProps) => (
+  <MuiLink onClick={onToggle} className="read-more-button">
+    {isExpanded ? 'Read Less' : 'Read More'}
+  </MuiLink>
+);
+
+export const ReadMore = (props: ReadMoreProps) => {
+  const { text, maxLength = DEFAULT_MAX_LENGTH } = props;
   const [isExpanded, setIsExpanded] = useState(false);
+
   if (!text) return null;
 
   return (
     <>
-      {isExpanded ? text : `${text.slice(0, maxLength)}...  `}
+      {previewText(text, isExpanded, maxLength)}
       {text.length > maxLength && (
-        <MuiLink
-          onClick={() => setIsExpanded(!isExpanded)}
-          className="read-more-button"
-        >
-          {isExpanded ? 'Read Less' : 'Read More'}
-        </MuiLink>
+        <ReadMoreToggle
+          isExpanded={isExpanded}
+          onToggle={() => setIsExpanded(!isExpanded)}
+        />
       )}
     </>
   );

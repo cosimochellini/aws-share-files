@@ -39,10 +39,10 @@ AWS Share Files is a full-stack serverless application that provides a user-frie
 
 ### Frontend
 
-- [Next.js 15](https://nextjs.org/) - React framework for server-rendered applications
+- [Next.js 16](https://nextjs.org/) - React framework for server-rendered applications
 - [React 19](https://reactjs.org/) - UI component library
 - [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
-- [Material UI 6](https://mui.com/) - React component library
+- [Material UI 9](https://mui.com/) - React component library
 - [React Hook Form](https://react-hook-form.com/) - Form validation and management
 - [Zustand](https://github.com/pmndrs/zustand) - State management
 
@@ -117,13 +117,66 @@ yarn start
 ```bash
 # Run ESLint
 yarn lint
+
+# Run the TypeScript compiler in check-only mode
+yarn typecheck
 ```
+
+### Static Analysis
+
+Two extra analysers run over the whole codebase, both configured so that every
+rule they support reports as an error:
+
+- [**react-doctor**](https://react.doctor) (`doctor.config.jsonc`) — React and
+  Next.js correctness: state and effects, performance, accessibility, security.
+- [**fallow**](https://docs.fallow.tools) (`.fallowrc.jsonc`) — dead code,
+  unused exports and dependencies, circular imports, duplication, complexity.
+
+```bash
+# React / Next.js analysis
+yarn doctor
+
+# Dead code, cycles, duplication, complexity
+yarn fallow
+
+# The full gate: lint + typecheck + test + doctor + fallow
+yarn verify
+```
+
+Fix the code rather than lowering a rule. The few exceptions already present in
+both config files are commented with the reason they exist.
+
+### Testing
+
+The project uses [Vitest](https://vitest.dev/) with a `jsdom` environment and
+[Testing Library](https://testing-library.com/) for hooks.
+
+```bash
+# Run the suite once
+yarn test
+
+# Re-run on change
+yarn test:watch
+
+# Run with coverage (fails below the threshold)
+yarn test:cov
+```
+
+Tests live in the top-level `tests/` directory, mirroring the source layout. `tests/setup.ts`
+populates the environment variables that `src/instances/env.ts` reads at import time, mocks
+`nodemailer` so no SMTP connection is attempted, and polyfills `window.matchMedia`.
+
+`yarn test:cov` enforces a **80% global threshold on lines, statements, functions and branches**
+across the application's logic layer — `src/utils`, `src/classes`, `src/services`,
+`src/formatters`, `src/store`, `src/hooks`, `src/instances`, `src/fallback` and `pages/api`.
+React components and pages are outside the coverage scope.
 
 ## Application Structure
 
 - `/pages` - Next.js pages and API routes
 - `/pages/api` - Serverless API endpoints
 - `/src` - Core application logic
+- `/tests` - Vitest suite, mirroring the source layout
 - `/public` - Static assets
 - `/styles` - CSS and styling
 

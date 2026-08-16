@@ -1,4 +1,4 @@
-interface BaseDynamoItem {
+export interface BaseDynamoItem {
     pk: string;
     sk: string;
 }

@@ -20,7 +20,7 @@ const getSearchParams = (search: string | undefined = '') => {
   return currentQuery;
 };
 
-export const setQueryStringWithoutPageReload = debounce((qsValue: string) => {
+const setQueryStringWithoutPageReload = debounce((qsValue: string) => {
   const { window } = device;
 
   if (!window) return;

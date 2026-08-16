@@ -1,14 +1,14 @@
 import { env } from '../instances/env';
 import type { ServiceArguments, ServiceMapper } from '../types/generic';
-import { notification } from '../instances/notification';
 import type { ContentResponse } from '../types/content.types';
+import { jsonOrThrow, reportAndRethrow } from '../utils/apiResponse';
 
 const contentApiCaller = <T>(section: string, query = {}) => {
   const url = env.content.baseUrl + section;
 
   return fetch(`${url}?${new URLSearchParams(query).toString()}`)
-    .then((res) => res.json())
-    .catch(notification.error) as Promise<T>;
+    .then(jsonOrThrow('content', section))
+    .catch(reportAndRethrow) as Promise<T>;
 };
 
 export const content = {

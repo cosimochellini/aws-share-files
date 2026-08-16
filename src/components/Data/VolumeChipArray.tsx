@@ -1,3 +1,4 @@
+import type { ReactElement } from 'react';
 import { useMemo } from 'react';
 import type { ChipProps } from '@mui/material';
 import { Chip, Grid } from '@mui/material';
@@ -8,56 +9,43 @@ import {
 import { formatter } from '../../formatters/formatter';
 import type { VolumeInfo } from '../../types/content.types';
 
-type Props = {
+export type VolumeChipArrayProps = {
   volume: VolumeInfo;
 };
 
 type color = ChipProps['color'];
 
-const chipsFactory = (volume: VolumeInfo) => {
-  const authors = volume.authors?.map((label) => ({
-    label,
-    title: label,
-    icon: <Person />,
-    color: 'primary' as color,
-  }));
+// One chip per value, each labelled and titled with the value itself.
+const labelChips = (values: string[] | undefined, icon: ReactElement, chipColor: color) => (
+  values ?? []
+).map((label) => ({
+  label,
+  title: label,
+  icon,
+  color: chipColor,
+}));
 
-  const categories = volume.categories?.map((label) => ({
-    label,
-    title: label,
-    icon: <Class />,
-    color: 'warning' as color,
-  }));
+// A single chip, or none at all when the volume does not carry the field.
+const summaryChip = (label: string | null, icon: ReactElement, chipColor: color) => (
+  label ? [{ label, icon, color: chipColor }] : []
+);
 
-  const pageCount = volume.pageCount
-    ? [
-      {
-        label: `${volume.pageCount} pages`,
-        icon: <MenuBook />,
-        color: 'success' as color,
-      },
-    ]
-    : null;
+const pageCountLabel = (pageCount: VolumeInfo['pageCount']) => (
+  pageCount ? `${pageCount} pages` : null
+);
 
-  const publishedDate = volume.publishedDate
-    ? [
-      {
-        label: formatter.dateFormatter(volume.publishedDate),
-        icon: <CalendarToday />,
-        color: 'error' as color,
-      },
-    ]
-    : null;
+const publishedDateLabel = (publishedDate: VolumeInfo['publishedDate']) => (
+  publishedDate ? formatter.dateFormatter(publishedDate) : null
+);
 
-  return [
-    ...(authors ?? []),
-    ...(categories ?? []),
-    ...(pageCount ?? []),
-    ...(publishedDate ?? []),
-  ];
-};
+const chipsFactory = (volume: VolumeInfo) => [
+  ...labelChips(volume.authors, <Person />, 'primary'),
+  ...labelChips(volume.categories, <Class />, 'warning'),
+  ...summaryChip(pageCountLabel(volume.pageCount), <MenuBook />, 'success'),
+  ...summaryChip(publishedDateLabel(volume.publishedDate), <CalendarToday />, 'error'),
+];
 
-export const VolumeChipArray = (props: Props) => {
+export const VolumeChipArray = (props: VolumeChipArrayProps) => {
   const { volume } = props;
 
   const chips = useMemo(() => chipsFactory(volume), [volume]);
@@ -66,9 +54,11 @@ export const VolumeChipArray = (props: Props) => {
     <Grid
       container
       spacing={1}
-      alignItems="center"
-      justifyContent="space-around"
-      sx={{ paddingBottom: 2 }}
+      sx={{
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingBottom: 2,
+      }}
     >
       {chips.map((chip) => (
         <Grid key={chip.label}>

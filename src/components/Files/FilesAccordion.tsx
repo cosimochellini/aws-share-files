@@ -17,7 +17,7 @@ import { useRefreshFolders } from '../../store/files.store';
 
 import { SendFileViaEmail } from './SendFileViaEmail';
 
-type Props = {
+export type FilesAccordionProps = {
   currentFile: S3File;
 };
 
@@ -29,7 +29,7 @@ const downloadFile = async (key: string) => {
   downloadURI(signedUrl, fileName as string);
 };
 
-export const FilesAccordion = ({ currentFile }: Props) => {
+export const FilesAccordion = ({ currentFile }: FilesAccordionProps) => {
   const refreshFolders = useRefreshFolders();
 
   const { isMobile } = useDevice();
@@ -64,8 +64,10 @@ export const FilesAccordion = ({ currentFile }: Props) => {
       variant="outlined"
       key={currentFile.Key}
       onChange={handleChange(currentFile.Key)}
-      TransitionProps={{ unmountOnExit: true }}
       expanded={currentFile.Key === currentExpanded}
+      slotProps={{
+        transition: { unmountOnExit: true },
+      }}
     >
       <AccordionSummary
         id={currentFile.Key}

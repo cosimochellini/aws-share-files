@@ -1,7 +1,7 @@
 import { env } from '../instances/env';
 import type { ServiceArguments, ServiceMapper } from '../types/generic';
-import { notification } from '../instances/notification';
 import type { ConversionRequest, ConverterResponse } from '../types/converter.types';
+import { jsonOrThrow, reportAndRethrow } from '../utils/apiResponse';
 
 const { baseUrl, apiKey, header } = env.converter;
 const {
@@ -15,13 +15,22 @@ const credentials = {
   secretaccesskey: secretAccessKey,
 };
 
-const replaceExtension = (file: string, ext: string) => `${file.slice(0, file.lastIndexOf('.'))}.${ext}`;
+const replaceExtension = (file: string, ext: string) => {
+  const slashIndex = file.lastIndexOf('/');
+  const dotIndex = file.lastIndexOf('.');
+
+  // the dot has to belong to the file name: keys are grouped by author, and author folders
+  // are full of dots ('J.R.R. Tolkien/book')
+  const hasExtension = dotIndex > slashIndex;
+
+  return `${hasExtension ? file.slice(0, dotIndex) : file}.${ext}`;
+};
 
 const converterApiCaller = <T>(section: string, query = {}) => {
   const url = `${baseUrl + section}?${new URLSearchParams(query).toString()}`;
   return fetch(url, { headers })
-    .then((res) => res.json())
-    .catch(notification.error) as Promise<T>;
+    .then(jsonOrThrow('converter', section))
+    .catch(reportAndRethrow) as Promise<T>;
 };
 
 converterApiCaller.post = <T>(section: string, body = {}) => {
@@ -32,11 +41,11 @@ converterApiCaller.post = <T>(section: string, body = {}) => {
     method: 'POST',
     body: JSON.stringify(body),
   })
-    .then((res) => res.json())
-    .catch(notification.error) as Promise<T>;
+    .then(jsonOrThrow('converter', section))
+    .catch(reportAndRethrow) as Promise<T>;
 };
 
-export type fileConverter = {
+type fileConverter = {
   file: string;
   target: string;
 };

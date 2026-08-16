@@ -10,7 +10,6 @@ export enum Visibility {
   All = 'All',
   Sidebar = 'Sidebar',
   BottomBar = 'BottomBar',
-  Disabled = 'Disabled',
 }
 
 export const navbarItems = [

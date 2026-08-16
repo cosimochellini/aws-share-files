@@ -34,19 +34,17 @@ export const formatter = {
     return dateIntLn.format(parse(date));
   },
 
-  relativeFormatter(date: datable) {
+  relativeFormatter(date: datable): string {
     const secondsElapsed = (parse(date).getTime() - Date.now()) / 1000;
 
-    return Object.keys(ranges).find((key) => {
-      const typedKey = key as keyof typeof ranges;
+    // reversed, so the largest matching unit wins ('2 months ago', not '5184000 seconds ago')
+    const unit = (Object.keys(ranges) as Intl.RelativeTimeFormatUnit[])
+      .reverse()
+      .find((key) => ranges[key] < Math.abs(secondsElapsed));
 
-      if (ranges[typedKey] < Math.abs(secondsElapsed)) {
-        const delta = secondsElapsed / ranges[typedKey];
+    if (!unit) return rtf.format(0, 'seconds');
 
-        return rtf.format(Math.round(delta), typedKey);
-      }
-      return null;
-    });
+    return rtf.format(Math.round(secondsElapsed / ranges[unit]), unit);
   },
 
   timeFormatter(date: datable): string {

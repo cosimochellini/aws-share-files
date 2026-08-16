@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { MenuItemProps } from '@mui/material';
 import {
   Grid,
   List,
@@ -12,16 +13,44 @@ import {
 import { Mail, Send, Star } from '@mui/icons-material';
 
 import type { Nullable } from '../../types/generic';
+import type { UserEmail } from '../../types/dynamo.types';
 import { functions } from '../../instances/functions';
 import { LoadingButton } from '../Data/LoadingButton';
 import { notification } from '../../instances/notification';
 import { useEmailsStore } from '../../store/emails.store';
 
-type Props = {
+export type SendFileViaEmailProps = {
   fileKey: string
 }
 
-export const SendFileViaEmail = (props: Props) => {
+const EmailIcon = ({ isDefault }: { isDefault?: boolean }) => (
+  isDefault ? <Star fontSize="small" color="warning" /> : <Mail fontSize="small" />
+);
+
+type EmailMenuItemProps = MenuItemProps & {
+  email: UserEmail;
+  onSelect: () => void;
+};
+
+/**
+ * MenuList cloneElement's its children to drive the roving-tabindex pattern, injecting
+ * tabIndex and autoFocus onto the active item. Those land on this wrapper rather than on
+ * MenuItem, so everything it is handed has to be forwarded or keyboard navigation in the
+ * dropdown breaks.
+ */
+const EmailMenuItem = ({ email, onSelect, ...menuItemProps }: EmailMenuItemProps) => (
+  <MenuItem {...menuItemProps} value={email.email} onClick={onSelect}>
+    <ListItemIcon>
+      <EmailIcon isDefault={email.default} />
+    </ListItemIcon>
+    <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
+    <Typography variant="subtitle2" color="text.secondary" sx={{ fontSize: 'small', margin: 1 }}>
+      {`(${email.email})`}
+    </Typography>
+  </MenuItem>
+);
+
+export const SendFileViaEmail = (props: SendFileViaEmailProps) => {
   const { fileKey } = props;
   const emails = useEmailsStore((x) => x.emails);
 
@@ -60,15 +89,17 @@ export const SendFileViaEmail = (props: Props) => {
     <>
       <h4>Send file via email</h4>
       <Grid
-        sx={{ marginTop: 2 }}
         container
-        alignItems="center"
-        justifyContent="center"
-        direction={{
-          xs: 'column',
-          md: 'row',
+        sx={{
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+          marginTop: 2,
         }}
-        gap={2}
       >
         <Grid
           size={{
@@ -87,11 +118,7 @@ export const SendFileViaEmail = (props: Props) => {
           >
             <ListItem onClick={handleClickListItem}>
               <ListItemIcon>
-                {selectedEmail?.default ? (
-                  <Star fontSize="small" color="warning" />
-                ) : (
-                  <Mail fontSize="small" />
-                )}
+                <EmailIcon isDefault={selectedEmail?.default} />
               </ListItemIcon>
               <ListItemText primary={selectedEmail?.description} secondary={selectedEmail?.email} />
             </ListItem>
@@ -100,32 +127,17 @@ export const SendFileViaEmail = (props: Props) => {
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
-            MenuListProps={{ role: 'listbox' }}
+            slotProps={{
+              list: { role: 'listbox' },
+            }}
           >
             {emails.map((email, index) => (
-              <MenuItem
+              <EmailMenuItem
                 key={email.email}
-                value={email.email}
+                email={email}
                 selected={index === selectedIndex}
-                onClick={() => handleMenuItemClick(index)}
-              >
-                <ListItemIcon>
-                  {email.default ? (
-                    <Star fontSize="small" color="warning" />
-                  ) : (
-                    <Mail fontSize="small" />
-                  )}
-                </ListItemIcon>
-                <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
-                <Typography
-                  variant="subtitle2"
-                  color="text.secondary"
-                  fontSize="small"
-                  sx={{ margin: 1 }}
-                >
-                  {`(${email.email})`}
-                </Typography>
-              </MenuItem>
+                onSelect={() => handleMenuItemClick(index)}
+              />
             ))}
           </Menu>
         </Grid>

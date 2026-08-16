@@ -1,13 +1,13 @@
 import { Chip, Grid } from '@mui/material';
 
-type Props = {
+export type ResultCountProps = {
   displayedItems: number;
   totalItems: number;
   displayName: string;
   onClick?: () => void;
 };
 
-export const ResultCount = (props: Props) => {
+export const ResultCount = (props: ResultCountProps) => {
   const {
     displayedItems, totalItems, displayName, onClick,
   } = props;

@@ -29,9 +29,10 @@ const Settings = () => {
     <>
       <h1>Settings</h1>
       <Grid
-        alignItems="center"
-        justifyContent="center"
         sx={{
+          alignItems: 'center',
+          justifyContent: 'center',
+
           maxWidth: {
             xs: '100%',
             sm: '90%',
@@ -41,21 +42,21 @@ const Settings = () => {
       >
         <List>
           <Divider />
-          {navbarItems
-            .filter(({ visibility }) => Visibility.Sidebar === visibility)
-            .map(({ name, redirect, icon }) => (
-              <div key={name}>
-                <ListItem
-                  button
-                  // eslint-disable-next-line react/no-unstable-nested-components
-                  component={(prop) => <MuiLink key={name} href={redirect} {...prop} />}
-                >
-                  <ListItemIcon>{icon}</ListItemIcon>
-                  <ListItemText primary={name} />
-                </ListItem>
-                <Divider />
-              </div>
-            ))}
+          {navbarItems.flatMap(({
+            name, redirect, icon, visibility,
+          }) => (Visibility.Sidebar === visibility ? [(
+            <div key={name}>
+              <ListItem
+                button
+                // eslint-disable-next-line react/no-unstable-nested-components
+                component={(prop) => <MuiLink key={name} href={redirect} {...prop} />}
+              >
+                <ListItemIcon>{icon}</ListItemIcon>
+                <ListItemText primary={name} />
+              </ListItem>
+              <Divider />
+            </div>
+          )] : []))}
         </List>
       </Grid>
 
@@ -63,7 +64,15 @@ const Settings = () => {
         label="Dark Mode"
         control={<Checkbox checked={dark} onChange={toggleTheme} key={theme.palette.mode} />}
       />
-      <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
+      <Grid
+        container
+        spacing={0}
+        sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <Grid size={{ xs: 12 }}>
           <p>
             version:

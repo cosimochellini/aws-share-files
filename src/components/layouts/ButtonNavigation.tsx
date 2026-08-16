@@ -31,11 +31,16 @@ const ButtonNavigation = () => {
         variant="outlined"
       >
         <BottomNavigation showLabels value={currentRoute}>
-          {navbarItems
-            .filter((x) => [Visibility.All, Visibility.BottomBar].includes(x.visibility))
-            .map((item) => (
+          {navbarItems.flatMap((item) => (
+            [Visibility.All, Visibility.BottomBar].includes(item.visibility) ? [(
               <BottomNavigationAction
-                // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
+                // BottomNavigationAction hardcodes ButtonBase's internalNativeButton, so
+                // MUI 9 warns on every render unless it is told the component below
+                // resolves to an anchor. It would also inject role="button", except
+                // src/components/Link.tsx drops any incoming role — no loss here, since
+                // the rendered <a href> already has native keyboard activation.
+                nativeButton={false}
+                // eslint-disable-next-line react/no-unstable-nested-components
                 component={forwardRef<HTMLAnchorElement>((prop, ref) => (
                   <Link
                     {...prop}
@@ -48,7 +53,7 @@ const ButtonNavigation = () => {
                 label={item.name}
                 icon={item.icon}
               />
-            ))}
+            )] : []))}
         </BottomNavigation>
       </Paper>
     </>
