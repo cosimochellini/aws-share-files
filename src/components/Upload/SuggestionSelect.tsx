@@ -26,7 +26,7 @@ export const SuggestionSelect = ({
       label="Available suggestions"
       labelId="suggestions"
       onChange={(e) => onSelect(e.target.value as number)}
-      MenuProps={{ PaperProps: { style: { maxHeight, width: 250 } } }}
+      MenuProps={{ slotProps: { paper: { style: { maxHeight, width: 250 } } } }}
     >
       {volumes.map((volume, index) => (
         <MenuItem value={index} key={volume.title} style={{ fontWeight }}>

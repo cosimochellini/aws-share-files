@@ -111,16 +111,18 @@ const Folders = (props: Props) => {
           },
         }}
         onChange={(e) => setSearch(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <LoadingButton
-                type="icon"
-                icon={<Refresh />}
-                clickAction={() => refreshFolders(true)}
-              />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <LoadingButton
+                  type="icon"
+                  icon={<Refresh />}
+                  clickAction={() => refreshFolders(true)}
+                />
+              </InputAdornment>
+            ),
+          },
         }}
       />
       <FileListConfiguration

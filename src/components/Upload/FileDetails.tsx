@@ -56,7 +56,9 @@ export const FileDetails = ({
         label="Author"
         value={author}
         onChange={(e) => onAuthorChange(e.target.value)}
-        InputProps={{ endAdornment: <Person /> }}
+        slotProps={{
+          input: { endAdornment: <Person /> },
+        }}
       />
     </Grid>
     <Grid sx={fullWidth}>
@@ -64,8 +66,10 @@ export const FileDetails = ({
         fullWidth
         label="Title"
         value={title}
-        InputProps={{ endAdornment: <Book /> }}
         onChange={(e) => onTitleChange(e.target.value)}
+        slotProps={{
+          input: { endAdornment: <Book /> },
+        }}
       />
     </Grid>
   </>

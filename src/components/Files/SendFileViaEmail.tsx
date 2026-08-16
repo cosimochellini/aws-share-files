@@ -44,7 +44,14 @@ const EmailMenuItem = ({ email, onSelect, ...menuItemProps }: EmailMenuItemProps
       <EmailIcon isDefault={email.default} />
     </ListItemIcon>
     <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
-    <Typography variant="subtitle2" color="text.secondary" fontSize="small" sx={{ margin: 1 }}>
+    <Typography
+      variant="subtitle2"
+      sx={{
+        color: 'text.secondary',
+        fontSize: 'small',
+        margin: 1,
+      }}
+    >
       {`(${email.email})`}
     </Typography>
   </MenuItem>
@@ -89,15 +96,17 @@ export const SendFileViaEmail = (props: SendFileViaEmailProps) => {
     <>
       <h4>Send file via email</h4>
       <Grid
-        sx={{ marginTop: 2 }}
         container
-        alignItems="center"
-        justifyContent="center"
-        direction={{
-          xs: 'column',
-          md: 'row',
+        sx={{
+          flexDirection: {
+            xs: 'column',
+            md: 'row',
+          },
+          alignItems: 'center',
+          justifyContent: 'center',
+          gap: 2,
+          marginTop: 2,
         }}
-        gap={2}
       >
         <Grid
           size={{
@@ -125,7 +134,9 @@ export const SendFileViaEmail = (props: SendFileViaEmailProps) => {
             open={open}
             anchorEl={anchorEl}
             onClose={handleClose}
-            MenuListProps={{ role: 'listbox' }}
+            slotProps={{
+              list: { role: 'listbox' },
+            }}
           >
             {emails.map((email, index) => (
               <EmailMenuItem

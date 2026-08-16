@@ -34,6 +34,9 @@ const ButtonNavigation = () => {
           {navbarItems.flatMap((item) => (
             [Visibility.All, Visibility.BottomBar].includes(item.visibility) ? [(
               <BottomNavigationAction
+                // the component below renders an anchor, not a native <button>; MUI 9
+                // needs to be told so it keeps the keyboard and disabled handling right
+                nativeButton={false}
                 // eslint-disable-next-line react/no-unstable-nested-components, react/display-name
                 component={forwardRef<HTMLAnchorElement>((prop, ref) => (
                   <Link

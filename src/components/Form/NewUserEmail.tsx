@@ -18,15 +18,22 @@ export const NewUserEmail = () => {
   return (
     <Grid
       container
-      direction="column"
-      alignItems="center"
-      justifyContent="center"
+      sx={{
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
     >
       <Grid>
         <Card variant="outlined" sx={{ maxWidth: '30rem' }}>
           <CardContent>
             <form onSubmit={onSubmit}>
-              <Grid container gap={2}>
+              <Grid
+                container
+                sx={{
+                  gap: 2,
+                }}
+              >
                 <Grid size={12}>
                   <TextField
                     label="Email"

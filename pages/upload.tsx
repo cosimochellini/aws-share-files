@@ -115,7 +115,14 @@ const Upload = () => {
   return (
     <div>
       <h1>Upload</h1>
-      <Grid container direction="column" alignItems="center" justifyContent="center">
+      <Grid
+        container
+        sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <Grid size={{ xs: 3 }} sx={fullWidth}>
           <Card variant="elevation">
             <CardHeader title="Upload a new file" />
@@ -123,9 +130,11 @@ const Upload = () => {
               <Grid
                 container
                 spacing={2}
-                direction="column"
-                alignItems="center"
-                justifyContent="center"
+                sx={{
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
               >
                 {selectedFile && (
                   <FileDetails

@@ -110,25 +110,27 @@ export const Files = ({
         }}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <LoadingButton
-                type="icon"
-                icon={<Refresh />}
-                clickAction={() => refreshFolders(true)}
-              />
-            </InputAdornment>
-          ),
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <LoadingButton
+                  type="icon"
+                  icon={<Refresh />}
+                  clickAction={() => refreshFolders(true)}
+                />
+              </InputAdornment>
+            ),
 
-          startAdornment: currentFolder && (
-            <Chip
-              variant="outlined"
-              sx={{ marginRight: '5px' }}
-              onDelete={handleDeleteAuthor}
-              label={`Author: ${currentFolder.FolderName}`}
-            />
-          ),
+            startAdornment: currentFolder && (
+              <Chip
+                variant="outlined"
+                sx={{ marginRight: '5px' }}
+                onDelete={handleDeleteAuthor}
+                label={`Author: ${currentFolder.FolderName}`}
+              />
+            ),
+          },
         }}
       />
       <FileListConfiguration

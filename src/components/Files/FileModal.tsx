@@ -76,9 +76,11 @@ const VolumeSummary = ({ volume }: { volume: ModalVolume }) => (
       <VolumeChipArray volume={volume} />
       <Typography
         variant="body2"
-        color="text.secondary"
-        sx={{ marginBottom: 3 }}
         align="justify"
+        sx={{
+          color: 'text.secondary',
+          marginBottom: 3,
+        }}
       >
         <ReadMore text={volume.description} />
       </Typography>
