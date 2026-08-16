@@ -6,6 +6,17 @@ import type { ConversionRequest } from '../../src/types/converter.types';
 
 const fetchMock = vi.fn();
 
+const PRESIGNED_URL = 'https://test-bucket.s3.eu-south-1.amazonaws.com/author/book.docx?X-Amz-Signature=test';
+
+/**
+ * src/services/converter.service.ts presigns the input link through the real S3 client.
+ * Signing is offline, but the signature and its timestamp change on every run, so the
+ * client is mocked to keep the request-body assertions deterministic.
+ */
+const awsMock = vi.hoisted(() => ({ getSignedUrl: vi.fn() }));
+
+vi.mock('../../src/instances/aws', () => ({ s3Client: awsMock }));
+
 const headers = {
   'Content-Type': 'application/json',
   'x-oc-api-key': 'test-converter-key',
@@ -25,6 +36,7 @@ const lastPostBody = (): ConversionRequest => {
 beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock);
   fetchMock.mockResolvedValue({ ok: true, json: () => Promise.resolve({ id: 'job-1' }) });
+  awsMock.getSignedUrl.mockResolvedValue(PRESIGNED_URL);
 });
 
 describe('converter.getConversionStatus', () => {
@@ -51,21 +63,21 @@ describe('converter.convertFile', () => {
     expect(init.headers).toEqual(headers);
   });
 
-  it('describes the S3 input with the bucket credentials', async () => {
+  it('describes the input as a presigned link rather than bucket credentials', async () => {
     await converter.convertFile({ file: 'author/book.docx', target: 'pdf' });
 
+    expect(awsMock.getSignedUrl).toHaveBeenCalledWith('author/book.docx', 3600);
+
     expect(lastPostBody().input).toEqual([
-      {
-        credentials,
-        type: 'cloud',
-        source: 'amazons3',
-        parameters: {
-          bucket: 'test-bucket',
-          region: 'eu-south-1',
-          file: 'author/book.docx',
-        },
-      },
+      { type: 'remote', source: PRESIGNED_URL },
     ]);
+  });
+
+  it('never puts the bucket credentials in the input block', async () => {
+    await converter.convertFile({ file: 'author/book.docx', target: 'pdf' });
+
+    expect(JSON.stringify(lastPostBody().input)).not.toContain('test-secret-access-key');
+    expect(JSON.stringify(lastPostBody().input)).not.toContain('test-access-key-id');
   });
 
   it('targets the output at the same key with the extension swapped', async () => {

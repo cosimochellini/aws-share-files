@@ -1,4 +1,5 @@
 import { env } from '../instances/env';
+import { s3Client } from '../instances/aws';
 import type { ServiceArguments, ServiceMapper } from '../types/generic';
 import type { ConversionRequest, ConverterResponse } from '../types/converter.types';
 import { jsonOrThrow, reportAndRethrow } from '../utils/apiResponse';
@@ -10,10 +11,17 @@ const {
 
 const headers = { 'Content-Type': 'application/json', [header]: apiKey };
 
+// Only the output half still needs these: the converter writes the result straight back
+// into the bucket and its API has no presigned-PUT target type. The input half no longer
+// carries them -- see inputSourceExpiry below.
 const credentials = {
   accesskeyid: accessKeyId,
   secretaccesskey: secretAccessKey,
 };
+
+// The converter downloads the source as soon as the job is accepted, but a queued job can
+// wait, so an hour rather than the ten seconds the share links use.
+const inputSourceExpiry = 60 * 60;
 
 const replaceExtension = (file: string, ext: string) => {
   const slashIndex = file.lastIndexOf('/');
@@ -51,14 +59,14 @@ type fileConverter = {
 };
 
 export const converter = {
-  convertFile({ file, target }: fileConverter) {
+  async convertFile({ file, target }: fileConverter) {
     const body: ConversionRequest = {
+      // A presigned GET link instead of the bucket credentials: the converter only has to
+      // read one object, so it gets a link to that one object and nothing else.
       input: [
         {
-          credentials,
-          type: 'cloud',
-          source: 'amazons3',
-          parameters: { bucket, region, file },
+          type: 'remote',
+          source: await s3Client.getSignedUrl(file, inputSourceExpiry),
         },
       ],
       conversion: [
