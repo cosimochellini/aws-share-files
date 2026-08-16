@@ -44,14 +44,7 @@ const EmailMenuItem = ({ email, onSelect, ...menuItemProps }: EmailMenuItemProps
       <EmailIcon isDefault={email.default} />
     </ListItemIcon>
     <ListItemText sx={{ margin: 1 }}>{email.description}</ListItemText>
-    <Typography
-      variant="subtitle2"
-      sx={{
-        color: 'text.secondary',
-        fontSize: 'small',
-        margin: 1,
-      }}
-    >
+    <Typography variant="subtitle2" color="text.secondary" sx={{ fontSize: 'small', margin: 1 }}>
       {`(${email.email})`}
     </Typography>
   </MenuItem>

@@ -5,7 +5,7 @@
   // `yarn fallow`. Findings are meant to be fixed in the source; the handful of
   // exceptions in this file are each justified inline.
 
-  // The Next.js plugin already discovers pages/ and pages/api/.
+  // The Next.js plugin already discovers pages/, pages/api/ and next.config.mjs.
   // script.runner.node.ts is discovered through the package.json "run-scripts"
   // script. What it cannot see is the runner's `await import(path.join('./scripts/', file))`,
   // whose target is a computed string, so the scripts it loads are declared here.
