@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import type { MenuItemProps } from '@mui/material';
 import {
   Grid,
   List,
@@ -26,14 +27,19 @@ const EmailIcon = ({ isDefault }: { isDefault?: boolean }) => (
   isDefault ? <Star fontSize="small" color="warning" /> : <Mail fontSize="small" />
 );
 
-type EmailMenuItemProps = {
+type EmailMenuItemProps = MenuItemProps & {
   email: UserEmail;
-  selected: boolean;
   onSelect: () => void;
 };
 
-const EmailMenuItem = ({ email, selected, onSelect }: EmailMenuItemProps) => (
-  <MenuItem value={email.email} selected={selected} onClick={onSelect}>
+/**
+ * MenuList cloneElement's its children to drive the roving-tabindex pattern, injecting
+ * tabIndex and autoFocus onto the active item. Those land on this wrapper rather than on
+ * MenuItem, so everything it is handed has to be forwarded or keyboard navigation in the
+ * dropdown breaks.
+ */
+const EmailMenuItem = ({ email, onSelect, ...menuItemProps }: EmailMenuItemProps) => (
+  <MenuItem value={email.email} onClick={onSelect} {...menuItemProps}>
     <ListItemIcon>
       <EmailIcon isDefault={email.default} />
     </ListItemIcon>
