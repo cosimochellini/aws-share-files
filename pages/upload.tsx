@@ -10,7 +10,6 @@ import { withDefaultLayout } from '../layouts';
 import { FileDetails } from '../src/components/Upload/FileDetails';
 import { UploadActions } from '../src/components/Upload/UploadActions';
 import { fullWidth } from '../src/components/Upload/styles';
-import { bucketFallbackStrategy } from '../src/fallback/bucketFallbackStrategy';
 import { functions } from '../src/instances/functions';
 import { notification } from '../src/instances/notification';
 import { useRefreshFolders } from '../src/store/files.store';
@@ -88,10 +87,14 @@ const Upload = () => {
       extension: selectedFile.name.split('.').pop() as string,
     } as const;
 
+    // No client-side S3 fallback: the browser used to retry this through the AWS SDK with
+    // the bucket credentials, which is why they were in the bundle at all. A failed upload
+    // is now reported instead of being retried from an untrusted place.
     try {
       await functions.s3.uploadFile(payload);
-    } catch {
-      await bucketFallbackStrategy((bucket) => bucket.uploadFile(payload));
+    } catch (e) {
+      notification.error(e);
+      return;
     }
 
     await refreshFolders(true);

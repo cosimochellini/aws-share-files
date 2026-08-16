@@ -26,7 +26,6 @@ export default defineConfig({
         'src/store/**',
         'src/hooks/**',
         'src/instances/**',
-        'src/fallback/**',
         'pages/api/**',
       ],
       exclude: ['**/*.d.ts', 'src/types/**'],
