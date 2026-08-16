@@ -4,7 +4,7 @@ import Head from 'next/head';
 import type { Session } from 'next-auth';
 import { SessionProvider } from 'next-auth/react';
 
-import { env } from '../src/instances/env';
+import { publicEnv } from '../src/instances/env.public';
 import type { AppPropsWithLayout } from '../src/types';
 
 const AppGrid = (props: AppPropsWithLayout<{ session: Session }>) => {
@@ -21,7 +21,7 @@ const AppGrid = (props: AppPropsWithLayout<{ session: Session }>) => {
   return (
     <>
       <Head>
-        <title>{env.info.appTitle}</title>
+        <title>{publicEnv.info.appTitle}</title>
         <meta name="viewport" content="initial-scale=1, width=device-width" />
         <link rel="preload" href="api/s3/files.function?" as="fetch" />
 

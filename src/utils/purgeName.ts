@@ -1,6 +1,6 @@
-import { env } from '../instances/env';
+import { publicEnv } from '../instances/env.public';
 
-const { invalidWords } = env.content;
+const { invalidWords } = publicEnv.content;
 
 export const purgeName = (name = ''): string => {
   const plainName = removeExtension(name);

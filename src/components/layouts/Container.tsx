@@ -19,7 +19,7 @@ import { Menu, ChevronLeft, ChevronRight } from '@mui/icons-material';
 import { Roboto } from 'next/font/google';
 
 import { Link } from '../Link';
-import { env } from '../../instances/env';
+import { publicEnv } from '../../instances/env.public';
 import { useDevice } from '../../hooks/device.hook';
 import { navbarItems, Visibility } from '../../instances/navbar';
 
@@ -134,7 +134,7 @@ export const Container = ({ Component }: { Component: ReactElement }) => {
             </IconButton>
           )}
           <Typography variant="h6" noWrap component="div" style={{ flex: 1 }}>
-            {env.info.appTitle}
+            {publicEnv.info.appTitle}
           </Typography>
           <Conversions />
         </Toolbar>

@@ -1,3 +1,14 @@
+import { publicEnv } from './env.public';
+
+/**
+ * The server half of the configuration: every value here is either a credential or a
+ * detail the browser has no business knowing.
+ *
+ * Import it only from server-side code -- pages/api/**, the services those routes call,
+ * and the build scripts. A client component that imports this module drags all of it into
+ * the browser bundle. The browser-safe values live in env.public.ts and are re-used below
+ * so the two files never restate the same process.env read.
+ */
 export const env = {
   aws: {
     bucket: process.env.S3_BUCKET as string,
@@ -6,15 +17,11 @@ export const env = {
     secretAccessKey: process.env.S3_SECRET_ACCESS_KEY as string,
   },
 
-  info: {
-    appTitle: process.env.APP_TITLE as string,
-    appLogoUrl: process.env.APP_LOGO_URL as string,
-    appIconUrl: process.env.APP_ICON_URL as string,
-  },
+  info: publicEnv.info,
 
   content: {
     baseUrl: process.env.CONTENT_API_URL as string,
-    invalidWords: (process.env.CONTENT_INVALID_WORDS as string).split(','),
+    invalidWords: publicEnv.content.invalidWords,
   },
 
   email: {
@@ -40,24 +47,6 @@ export const env = {
     return {
       server: `smtp://${email.auth.user}:${email.auth.pass}@${email.host}:${email.port}`,
       from: email.signature,
-    };
-  },
-
-  get defaultManifest() {
-    const { info } = this;
-    return {
-      name: info.appTitle,
-      short_name: info.appTitle,
-      start_url: '/files/',
-      display: 'standalone',
-      orientation: 'portrait',
-      icons: [
-        {
-          src: info.appLogoUrl,
-          sizes: '192x192',
-          type: 'image/png',
-        },
-      ],
     };
   },
 
