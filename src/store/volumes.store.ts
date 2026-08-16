@@ -36,6 +36,9 @@ const useStore = create(persist<VolumesState, [], [], PersistedVolumesState>(
   },
 ));
 
+// both of these are module scope, like the store itself, so they assume a single consumer
+// of useVolumeGetter at a time - which is how FileModal, the only one, uses it.
+//
 // names the content API has no volume for: retrying them would loop, since callers
 // re-run getVolume on every store update
 const missingVolumes = new Set<string>();

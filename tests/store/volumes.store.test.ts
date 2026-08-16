@@ -424,14 +424,17 @@ describe('volumes.store', () => {
       expect(result.current.volume).toBeUndefined();
       expect(readPersisted().cachedVolumes).toEqual({});
 
-      // and the store is free again: the next lookup runs
-      findFirst.mockResolvedValueOnce(undefined);
+      // and the store is free again: the name that was bounced is looked up for real
+      const other = buildVolume('Other');
+
+      findFirst.mockResolvedValueOnce(other);
 
       await act(async () => {
-        await result.current.getVolume('next');
+        await result.current.getVolume('other');
       });
 
-      expect(findFirst).toHaveBeenNthCalledWith(2, 'next');
+      expect(findFirst).toHaveBeenNthCalledWith(2, 'other');
+      expect(result.current.volume).toBe(other);
     });
 
     it('notifies and clears the loading flag when the fetch rejects', async () => {

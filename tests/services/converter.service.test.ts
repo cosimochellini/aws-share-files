@@ -102,6 +102,20 @@ describe('converter.convertFile', () => {
     expect(lastPostBody().conversion[0]?.output_target[0]?.parameters.file)
       .toBe('author/book.pdf');
   });
+
+  it('ignores dots in the folder when the file name has no extension', async () => {
+    await converter.convertFile({ file: 'J.R.R. Tolkien/book', target: 'pdf' });
+
+    expect(lastPostBody().conversion[0]?.output_target[0]?.parameters.file)
+      .toBe('J.R.R. Tolkien/book.pdf');
+  });
+
+  it('still replaces the extension under a dotted folder', async () => {
+    await converter.convertFile({ file: 'J.R.R. Tolkien/book.docx', target: 'pdf' });
+
+    expect(lastPostBody().conversion[0]?.output_target[0]?.parameters.file)
+      .toBe('J.R.R. Tolkien/book.pdf');
+  });
 });
 
 describe('converter API failures', () => {

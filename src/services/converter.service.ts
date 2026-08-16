@@ -16,9 +16,14 @@ const credentials = {
 };
 
 const replaceExtension = (file: string, ext: string) => {
+  const slashIndex = file.lastIndexOf('/');
   const dotIndex = file.lastIndexOf('.');
 
-  return `${dotIndex === -1 ? file : file.slice(0, dotIndex)}.${ext}`;
+  // the dot has to belong to the file name: keys are grouped by author, and author folders
+  // are full of dots ('J.R.R. Tolkien/book')
+  const hasExtension = dotIndex > slashIndex;
+
+  return `${hasExtension ? file.slice(0, dotIndex) : file}.${ext}`;
 };
 
 const converterApiCaller = <T>(section: string, query = {}) => {
