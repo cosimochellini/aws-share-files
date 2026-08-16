@@ -3,7 +3,7 @@ import { signOut } from 'next-auth/react';
 import type { GetStaticProps } from 'next';
 
 import { withDefaultLayout } from '../layouts';
-import { useAuth } from '../src/hooks/auth.hook';
+import { loginPath } from '../src/hooks/auth.hook';
 import { useEffectOnceWhen } from '../src/hooks/once';
 
 export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStaticProps;
@@ -11,12 +11,13 @@ export const getStaticProps = (async (_) => ({ props: { } })) satisfies GetStati
 const Logout = () => {
   const router = useRouter();
 
-  // useAuth's own effect sends a session-less visitor to the login page, so this page does
-  // not call onUnauthenticated itself: it would fire the same redirect a second time.
-  useAuth();
-
+  // One owner for the navigation. signOut defaults to redirect: true with a callbackUrl of
+  // the current href, which reloads /logout in full and races whatever else is redirecting
+  // -- and useAuth's effect would be doing exactly that, since the session is being torn
+  // down underneath it. So this page does not call useAuth at all, and drives the single
+  // navigation itself once next-auth has actually cleared the session.
   useEffectOnceWhen(() => {
-    signOut({}).then(() => router.push('/'));
+    signOut({ redirect: false }).then(() => router.push(loginPath));
   });
 
   return (

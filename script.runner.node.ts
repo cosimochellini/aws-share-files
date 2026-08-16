@@ -1,21 +1,33 @@
 import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath, pathToFileURL } from 'node:url';
 
 import dotenv from 'dotenv';
 
 // resolved against this file rather than the process CWD, so the runner behaves the same
-// no matter where it is invoked from
-const scriptDirectory = new URL('./scripts/', import.meta.url);
+// no matter where it is invoked from. Kept as a filesystem path rather than a URL: joining
+// a bare filename onto a URL would let '#' or '?' in the name start a fragment or a query
+// and silently truncate the path.
+const scriptDirectory = fileURLToPath(new URL('./scripts/', import.meta.url));
 
 // The runner owns .env loading rather than each script doing its own: this runs at module
 // evaluation, and the scripts are pulled in by the dynamic import() inside run() below, so
 // process.env is already populated by the time any of them is evaluated. That ordering
 // matters -- src/instances/env.public.ts reads process.env while being evaluated.
-dotenv.config({ path: new URL('./.env', import.meta.url), quiet: true });
+dotenv.config({ path: fileURLToPath(new URL('./.env', import.meta.url)), quiet: true });
 
 const run = async () => {
   // sorted so a run is reproducible: readdir order is filesystem-dependent, and these
   // scripts are reported (and, if one ever throws, blamed) by position in this list
-  const files = fs.readdirSync(scriptDirectory).sort();
+  // .ts files only: every entry is import()ed and called, so a subdirectory or a stray
+  // .DS_Store would abort the whole run -- and the run now fails the build
+  const files: string[] = [];
+
+  fs.readdirSync(scriptDirectory, { withFileTypes: true }).forEach((entry) => {
+    if (entry.isFile() && entry.name.endsWith('.ts')) files.push(entry.name);
+  });
+
+  files.sort();
 
   console.log('files:', files);
 
@@ -27,8 +39,9 @@ const run = async () => {
     // a file URL rather than a path: path.join('./scripts/', file) normalises the leading
     // './' away, and ESM reads a specifier that starts with neither './', '../' nor '/'
     // as a bare package name, so import() went looking for a package called 'scripts'.
-    // A URL also sidesteps the Windows backslash case.
-    const modulePath = new URL(file, scriptDirectory).href;
+    // pathToFileURL percent-encodes the whole path, so '#' and '?' in a filename stay part
+    // of it, and it handles the Windows backslash case too.
+    const modulePath = pathToFileURL(path.join(scriptDirectory, file)).href;
     const { default: script } = await import(modulePath);
 
     await script();
