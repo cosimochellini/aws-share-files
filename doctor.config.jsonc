@@ -2,13 +2,13 @@
   "$schema": "https://react.doctor/schema/config.json",
 
   // The intent is maximum strictness: every diagnostic category is stamped to
-  // "error", so anything react-doctor can detect fails `yarn doctor`. Findings
+  // "error", so anything react-doctor can detect fails `pnpm react-doctor`. Findings
   // are meant to be fixed in the source, not silenced here.
   //
   // JSONC rather than doctor.config.ts on purpose: tsconfig.json uses
   // "moduleResolution": "node", which cannot resolve the "react-doctor/api"
   // exports subpath that defineConfig lives behind, so a .ts config breaks
-  // `yarn typecheck`.
+  // `pnpm typecheck`.
 
   "lint": true,
   "scope": "full",
@@ -28,14 +28,14 @@
   // suppress a react-doctor rule that nobody evaluated.
   "respectInlineDisables": false,
 
-  // Dead-code analysis is delegated to fallow (`yarn fallow`), which resolves
+  // Dead-code analysis is delegated to fallow (`pnpm fallow`), which resolves
   // this project's Next.js entry points and dynamic imports through its own
   // config. Running both reports the same unused file twice, with only
   // fallow's copy correctly scoped.
   "deadCode": false,
 
   // Socket.dev dependency scoring performs one network request per direct
-  // dependency, so leaving it on would make `yarn verify` fail offline and turn
+  // dependency, so leaving it on would make `pnpm verify` fail offline and turn
   // red on days when nothing in the repository changed. Dependency auditing
   // belongs in a scheduled job, not in a local gate.
   "supplyChain": { "enabled": false },
@@ -57,7 +57,7 @@
 
   "ignore": {
     "files": [
-      // Build output. It only exists after `yarn build`, so scanning it would
+      // Build output. It only exists after `pnpm build`, so scanning it would
       // make the gate depend on whether someone happened to build first.
       ".next/**",
       "coverage/**",

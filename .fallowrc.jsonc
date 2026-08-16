@@ -2,7 +2,7 @@
   "$schema": "./node_modules/fallow/schema.json",
 
   // Every rule is set to "error" below, so anything fallow can detect fails
-  // `yarn fallow`. Findings are meant to be fixed in the source; the handful of
+  // `pnpm fallow`. Findings are meant to be fixed in the source; the handful of
   // exceptions in this file are each justified inline.
 
   // The Next.js plugin already discovers pages/, pages/api/ and next.config.mjs.
@@ -15,7 +15,7 @@
   "dynamicallyLoaded": ["scripts/*.ts"],
 
   "ignorePatterns": [
-    // Build output: only exists after `yarn build`, so scanning it would make
+    // Build output: only exists after `pnpm build`, so scanning it would make
     // the gate depend on whether someone happened to build first.
     ".next/**",
     "coverage/**",

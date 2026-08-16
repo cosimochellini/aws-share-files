@@ -63,7 +63,8 @@ AWS Share Files is a full-stack serverless application that provides a user-frie
 ### Prerequisites
 
 - Node.js (version in .nvmrc)
-- Yarn package manager
+- pnpm, installed through Corepack (`corepack enable`), which picks up the
+  version pinned in `package.json`'s `packageManager` field
 - AWS account with configured credentials
 
 ### Installation
@@ -74,7 +75,8 @@ git clone https://github.com/yourusername/aws-share-files.git
 cd aws-share-files
 
 # Install dependencies
-yarn
+corepack enable
+pnpm install
 ```
 
 ### Configuration
@@ -134,27 +136,27 @@ every visitor — that is what issue #12 was.
 
 ```bash
 # Start the development server on port 6969
-yarn dev
+pnpm dev
 ```
 
 ### Production Build
 
 ```bash
 # Build the application for production
-yarn build
+pnpm build
 
 # Start the production server
-yarn start
+pnpm start
 ```
 
 ### Linting
 
 ```bash
 # Run ESLint
-yarn lint
+pnpm lint
 
 # Run the TypeScript compiler in check-only mode
-yarn typecheck
+pnpm typecheck
 ```
 
 ### Static Analysis
@@ -169,13 +171,13 @@ rule they support reports as an error:
 
 ```bash
 # React / Next.js analysis
-yarn doctor
+pnpm react-doctor
 
 # Dead code, cycles, duplication, complexity
-yarn fallow
+pnpm fallow
 
-# The full gate: lint + typecheck + test + doctor + fallow
-yarn verify
+# The full gate: lint + typecheck + test + react-doctor + fallow
+pnpm verify
 ```
 
 Fix the code rather than lowering a rule. The few exceptions already present in
@@ -188,13 +190,13 @@ The project uses [Vitest](https://vitest.dev/) with a `jsdom` environment and
 
 ```bash
 # Run the suite once
-yarn test
+pnpm test
 
 # Re-run on change
-yarn test:watch
+pnpm test:watch
 
 # Run with coverage (fails below the threshold)
-yarn test:cov
+pnpm test:cov
 ```
 
 Tests live in the top-level `tests/` directory, mirroring the source layout. `tests/setup.ts`
@@ -202,7 +204,7 @@ populates the environment variables that `src/instances/env.ts` and `src/instanc
 read at import time, mocks
 `nodemailer` so no SMTP connection is attempted, and polyfills `window.matchMedia`.
 
-`yarn test:cov` enforces a **80% global threshold on lines, statements, functions and branches**
+`pnpm test:cov` enforces a **80% global threshold on lines, statements, functions and branches**
 across the application's logic layer — `src/utils`, `src/classes`, `src/services`,
 `src/formatters`, `src/store`, `src/hooks`, `src/instances` and `pages/api`.
 React components and pages are outside the coverage scope.

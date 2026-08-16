@@ -1,0 +1,27 @@
+# pnpm settings live here: since v11 pnpm no longer reads the `pnpm` field of
+# package.json. This is not a monorepo, so there is deliberately no `packages:`
+# key — the file exists purely to carry the supply-chain hardening below, which
+# `react-doctor/require-pnpm-hardening` enforces as an error.
+
+# Refuse versions published less than a day ago. Malicious releases are usually
+# caught and unpublished within hours, so even a short delay filters them out.
+# react-doctor suggests 10080 (7 days), but this repo tracks dependencies
+# aggressively and its current lockfile is younger than that, so a 7-day window
+# would reject the pinned versions outright.
+minimumReleaseAge: 1440
+
+# Reject a package whose trust signals (provenance, signatures) got weaker than
+# the version it replaces, which is how a hijacked-maintainer release looks.
+trustPolicy: no-downgrade
+
+# These four are transitive-only (aws-sdk, next-auth and babel pull them in) and
+# each one is signed by the npm registry key but predates npm build provenance,
+# so `no-downgrade` reads the missing attestation as a weakened signal. Verified
+# against `npm view <pkg> dist.attestations dist.signatures`: signatures present,
+# attestations absent. Drop an entry once its upstream ships provenance — see the
+# tracking issue linked in the PR that introduced this file.
+trustPolicyExclude:
+  - "@smithy/core@3.33.0"
+  - "@smithy/node-http-handler@4.11.0"
+  - jose@4.15.9
+  - semver@6.3.1
