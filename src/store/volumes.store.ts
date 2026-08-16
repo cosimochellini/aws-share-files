@@ -19,7 +19,17 @@ const defaultState: VolumesState = {
   cachedVolumes: {},
 };
 
-const useStore = create(persist<VolumesState>(() => defaultState, { name: 'LS_VOLUMES' }));
+const useStore = create(persist<VolumesState>(() => defaultState, {
+  name: 'LS_VOLUMES',
+  // only the cache is worth keeping: persisting `volumeLoading` means a reload during a
+  // lookup rehydrates a loading flag no running promise will ever clear, wedging the
+  // store for good. `volume` is just as transient.
+  partialize: (state) => ({ cachedVolumes: state.cachedVolumes } as VolumesState),
+  merge: (persisted, current) => ({
+    ...current,
+    cachedVolumes: (persisted as VolumesState | undefined)?.cachedVolumes ?? {},
+  }),
+}));
 
 // names the content API has no volume for: retrying them would loop, since callers
 // re-run getVolume on every store update
@@ -43,12 +53,9 @@ export const useVolumeGetter = () => {
     // within one render would both pass the guards below
     const current = get();
 
-    if (current.volumeLoading) {
-      // whatever the in-flight lookup was for, it is not this name
-      if (current.volume) set({ volume: undefined });
-
-      return;
-    }
+    // a lookup already in flight has cleared `volume` itself, so there is nothing stale
+    // left to drop here
+    if (current.volumeLoading) return;
 
     if (missingVolumes.has(name)) {
       // still drop whatever the previous lookup found, or it would be shown for this name
@@ -97,6 +104,10 @@ export const useVolumeGetter = () => {
         [name]: fetchedVolume,
       },
     });
+    // `state` is not read inside - the guards deliberately read the live store - but it is
+    // kept as a dependency so callers that re-run this on identity change get another go
+    // once a lookup they were bounced from has finished
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [state]);
 
   return {

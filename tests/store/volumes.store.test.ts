@@ -26,6 +26,16 @@ const buildVolume = (title: string) => ({
   language: 'en',
 } as unknown as VolumeInfo);
 
+const deferred = () => {
+  let resolve: (volume: VolumeInfo | undefined) => void = () => {};
+
+  const promise = new Promise<VolumeInfo | undefined>((res) => {
+    resolve = res;
+  });
+
+  return { promise, resolve: (volume?: VolumeInfo) => resolve(volume) };
+};
+
 const seed = (state: PersistedVolumesState) => {
   window.localStorage.setItem(LS_KEY, JSON.stringify({ state, version: 0 }));
 };
@@ -65,39 +75,75 @@ describe('volumes.store', () => {
 
   describe('useVolumeGetter', () => {
     it('returns early while another volume is loading', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const inFlight = deferred();
+
+      findFirst.mockReturnValueOnce(inFlight.promise);
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      let pending: Promise<void> = Promise.resolve();
+
+      await act(async () => {
+        pending = result.current.getVolume('first');
+      });
+
+      await act(async () => {
+        await result.current.getVolume('second');
+      });
+
+      expect(findFirst).toHaveBeenCalledTimes(1);
+      expect(findFirst).toHaveBeenCalledWith('first');
+      expect(result.current.volume).toBeUndefined();
+
+      await act(async () => {
+        inFlight.resolve(undefined);
+        await pending;
+      });
+    });
+
+    it('never persists the loading flag, so a reload cannot rehydrate a wedged store', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const inFlight = deferred();
+
+      findFirst.mockReturnValueOnce(inFlight.promise);
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      let pending: Promise<void> = Promise.resolve();
+
+      await act(async () => {
+        pending = result.current.getVolume('slow');
+      });
+
+      // this is what a reload in the middle of a lookup would rehydrate from
+      expect(readPersisted().volumeLoading).toBeUndefined();
+
+      await act(async () => {
+        inFlight.resolve(undefined);
+        await pending;
+      });
+    });
+
+    it('ignores a loading flag left behind in storage by an older build', async () => {
       seed({ volumeLoading: true, cachedVolumes: {} });
 
       const { findFirst, useVolumeGetter } = await loadStore();
 
-      const snapshot = window.localStorage.getItem(LS_KEY);
+      const fetched = buildVolume('Fetched');
+
+      findFirst.mockResolvedValue(fetched);
 
       const { result } = renderHook(() => useVolumeGetter());
 
       await act(async () => {
-        await result.current.getVolume('anything');
+        await result.current.getVolume('fetched');
       });
 
-      expect(findFirst).not.toHaveBeenCalled();
-      expect(window.localStorage.getItem(LS_KEY)).toBe(snapshot);
-      expect(result.current.volume).toBeUndefined();
-    });
-
-    it('drops the displayed volume while another lookup is loading', async () => {
-      const current = buildVolume('Current');
-
-      seed({ volume: current, volumeLoading: true, cachedVolumes: {} });
-
-      const { findFirst, useVolumeGetter } = await loadStore();
-
-      const { result } = renderHook(() => useVolumeGetter());
-
-      await act(async () => {
-        await result.current.getVolume('anything');
-      });
-
-      // the in-flight lookup is for some other name, so its predecessor must not be shown
-      expect(findFirst).not.toHaveBeenCalled();
-      expect(result.current.volume).toBeUndefined();
+      expect(findFirst).toHaveBeenCalledWith('fetched');
+      expect(result.current.volume).toBe(fetched);
     });
 
     it('returns early when the cached volume is already the current one', async () => {
@@ -129,21 +175,26 @@ describe('volumes.store', () => {
       const current = buildVolume('Current');
       const cached = buildVolume('Cached');
 
-      seed({ volume: current, volumeLoading: false, cachedVolumes: { cached } });
+      seed({ cachedVolumes: { cached } });
 
       const { findFirst, useVolumeGetter } = await loadStore();
 
+      findFirst.mockResolvedValue(current);
+
       const { result } = renderHook(() => useVolumeGetter());
 
-      expect(result.current.volume).toEqual(current);
+      await act(async () => {
+        await result.current.getVolume('current');
+      });
+
+      expect(result.current.volume).toBe(current);
 
       await act(async () => {
         await result.current.getVolume('cached');
       });
 
-      expect(findFirst).not.toHaveBeenCalled();
+      expect(findFirst).toHaveBeenCalledTimes(1);
       expect(result.current.volume).toEqual(cached);
-      expect(readPersisted().volume).toEqual(cached);
     });
 
     it('fetches on a cache miss and caches the result', async () => {
@@ -162,10 +213,7 @@ describe('volumes.store', () => {
       expect(findFirst).toHaveBeenCalledWith('fetched');
       expect(result.current.volume).toBe(fetched);
 
-      const persisted = readPersisted();
-
-      expect(persisted.volumeLoading).toBe(false);
-      expect(persisted.cachedVolumes).toEqual({ fetched });
+      expect(readPersisted().cachedVolumes).toEqual({ fetched });
     });
 
     it('keeps the previously cached volumes when caching a new one', async () => {
@@ -202,10 +250,7 @@ describe('volumes.store', () => {
       expect(findFirst).toHaveBeenCalledTimes(1);
       expect(result.current.volume).toBeUndefined();
 
-      const persisted = readPersisted();
-
-      expect(persisted.cachedVolumes).toEqual({});
-      expect(persisted.volumeLoading).toBe(false);
+      expect(readPersisted().cachedVolumes).toEqual({});
 
       // a different name is looked up again, the loading flag no longer wedges the store
       await act(async () => {
@@ -214,7 +259,6 @@ describe('volumes.store', () => {
 
       expect(findFirst).toHaveBeenCalledTimes(2);
       expect(findFirst).toHaveBeenNthCalledWith(2, 'another');
-      expect(readPersisted().volumeLoading).toBe(false);
     });
 
     it('does not look the same missing name up twice', async () => {
@@ -233,8 +277,15 @@ describe('volumes.store', () => {
       });
 
       expect(findFirst).toHaveBeenCalledTimes(1);
-      // the second call bails out on the remembered miss, not on a wedged loading flag
-      expect(readPersisted().volumeLoading).toBe(false);
+
+      // the second call bailed out on the remembered miss, not on a wedged loading flag:
+      // another name is still looked up
+      await act(async () => {
+        await result.current.getVolume('other');
+      });
+
+      expect(findFirst).toHaveBeenCalledTimes(2);
+      expect(findFirst).toHaveBeenNthCalledWith(2, 'other');
     });
 
     it('drops the previous volume when a remembered missing name is asked for again', async () => {
@@ -294,12 +345,9 @@ describe('volumes.store', () => {
       const { findFirst, useVolumeGetter } = await loadStore();
 
       const slow = buildVolume('Slow');
+      const inFlight = deferred();
 
-      let resolveSlow: (volume: typeof slow) => void = () => {};
-
-      findFirst.mockReturnValueOnce(new Promise((resolve) => {
-        resolveSlow = resolve;
-      }));
+      findFirst.mockReturnValueOnce(inFlight.promise);
 
       const { result } = renderHook(() => useVolumeGetter());
 
@@ -315,13 +363,21 @@ describe('volumes.store', () => {
       });
 
       await act(async () => {
-        resolveSlow(slow);
+        inFlight.resolve(slow);
         await pending;
       });
 
       expect(result.current.volume).toBeUndefined();
       expect(readPersisted().cachedVolumes).toEqual({});
-      expect(readPersisted().volumeLoading).toBe(false);
+
+      // and the store is free again: the next lookup runs
+      findFirst.mockResolvedValueOnce(undefined);
+
+      await act(async () => {
+        await result.current.getVolume('next');
+      });
+
+      expect(findFirst).toHaveBeenNthCalledWith(2, 'next');
     });
 
     it('notifies and clears the loading flag when the fetch rejects', async () => {
@@ -340,7 +396,13 @@ describe('volumes.store', () => {
 
       expect(errorSpy).toHaveBeenCalledWith(error);
       expect(result.current.volume).toBeUndefined();
-      expect(readPersisted().volumeLoading).toBe(false);
+
+      // the failure released the store: a different name is still looked up
+      await act(async () => {
+        await result.current.getVolume('other');
+      });
+
+      expect(findFirst).toHaveBeenCalledTimes(2);
     });
   });
 });
