@@ -48,9 +48,12 @@ const missingVolumes = new Set<string>();
 let requestedName: string | undefined;
 
 export const useVolumeGetter = () => {
-  const state = useStore();
+  // subscribing to the whole store rerenders every consumer on any change, so only the two
+  // fields that matter are selected: `volume` is rendered, and `volumeLoading` is what makes
+  // getVolume's identity change when a lookup finishes (see the dependency note below)
+  const volume = useStore((x) => x.volume);
+  const volumeLoading = useStore((x) => x.volumeLoading);
 
-  const { volume } = state;
   const getVolume = useCallback(async (name: string) => {
     const set = useStore.setState;
     const get = useStore.getState;
@@ -112,11 +115,12 @@ export const useVolumeGetter = () => {
         [name]: fetchedVolume,
       },
     });
-    // `state` is not read inside - the guards deliberately read the live store - but it is
-    // kept as a dependency so callers that re-run this on identity change get another go
-    // once a lookup they were bounced from has finished
+    // neither dependency is read inside - the guards deliberately read the live store - but
+    // both are kept so callers that re-run this on identity change get another go once a
+    // lookup they were bounced from has finished. `volumeLoading` flipping back to false is
+    // exactly that signal, and `volume` covers a cache hit that publishes without a lookup
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [state]);
+  }, [volume, volumeLoading]);
 
   return {
     volume,
