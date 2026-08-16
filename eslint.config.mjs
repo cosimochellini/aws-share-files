@@ -5,6 +5,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 import nextPlugin from '@next/eslint-plugin-next';
 import tsParser from '@typescript-eslint/parser';
 import globals from 'globals';
+import reactPlugin from 'eslint-plugin-react';
 
 const compat = new FlatCompat({
   baseDirectory: path.dirname(fileURLToPath(import.meta.url)),
@@ -72,6 +73,13 @@ export default [
     },
 
     rules: {
+      // eslint-config-next spread this on top of whatever came before it, and it was
+      // listed last in the old .eslintrc.json, so it decided the final value of every
+      // rule airbnb and react/recommended disagree on. Dropping it would silently turn
+      // react/jsx-key and react/no-direct-mutation-state off, because airbnb sets both
+      // to "off" and react/recommended is what used to turn them back on.
+      ...reactPlugin.configs.recommended.rules,
+
       // next/core-web-vitals is the recommended set plus the core-web-vitals overrides
       ...nextPlugin.configs.recommended.rules,
       ...nextPlugin.configs['core-web-vitals'].rules,

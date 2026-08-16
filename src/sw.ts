@@ -29,8 +29,9 @@ const serwist = new Serwist({
     {
       // next-pwa unshifted this rule onto whatever runtimeCaching it was given, so the
       // start URL was always covered even though plugins/pwa.plugin.js never mentioned
-      // it. Precaching the prerendered pages covers the same ground today, but only for
-      // as long as every route stays statically generated, so the fallback is kept.
+      // it. Nothing else covers it: the generated precache manifest holds only
+      // _next/static assets and public/ files, no HTML, so this rule is the only reason
+      // the start URL is available offline. Do not remove it.
       matcher: ({ url, sameOrigin }) => sameOrigin && url.pathname === '/',
       handler: new NetworkFirst({
         cacheName: 'start-url',
