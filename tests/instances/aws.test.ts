@@ -13,12 +13,20 @@ const mocks = vi.hoisted(() => {
     constructor(public config: unknown) {}
   }
 
+  // src/instances/aws.ts calls `new DynamoDB(...)`, and Vitest 4 refuses to construct an
+  // arrow function. A function expression returning an object still overrides `this`, so
+  // `new` keeps handing back the same fixed instance the assertions below match on.
+  const dynamoDbFactory = function DynamoDBMock() {
+    return dynamoDbInstance;
+  };
+
   return {
     dynamoDbInstance,
     documentInstance,
     GetObjectCommandMock,
     S3ClientMock,
-    DynamoDB: vi.fn(() => dynamoDbInstance),
+    dynamoDbFactory,
+    DynamoDB: vi.fn(dynamoDbFactory),
     from: vi.fn(() => documentInstance),
     getSignedUrl: vi.fn(() => Promise.resolve('https://signed.example.test/object')),
   };
@@ -51,7 +59,7 @@ const importAws = () => {
 };
 
 beforeEach(() => {
-  mocks.DynamoDB.mockReturnValue(mocks.dynamoDbInstance);
+  mocks.DynamoDB.mockImplementation(mocks.dynamoDbFactory);
   mocks.from.mockReturnValue(mocks.documentInstance);
   mocks.getSignedUrl.mockResolvedValue('https://signed.example.test/object');
 });

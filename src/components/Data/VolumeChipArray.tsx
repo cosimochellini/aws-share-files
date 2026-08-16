@@ -54,9 +54,11 @@ export const VolumeChipArray = (props: VolumeChipArrayProps) => {
     <Grid
       container
       spacing={1}
-      alignItems="center"
-      justifyContent="space-around"
-      sx={{ paddingBottom: 2 }}
+      sx={{
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        paddingBottom: 2,
+      }}
     >
       {chips.map((chip) => (
         <Grid key={chip.label}>

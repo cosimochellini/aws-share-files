@@ -13,7 +13,7 @@ yarn verify
 
 It runs, in order: `lint` → `typecheck` → `test` → `doctor` → `fallow`. A
 non-zero exit means the work is not finished. Run `yarn build` too when the
-change touches `pages/`, `next.config.js` or anything under `plugins/`.
+change touches `pages/`, `next.config.mjs` or anything under `plugins/`.
 
 ## Rules
 

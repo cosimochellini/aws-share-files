@@ -29,9 +29,10 @@ const Settings = () => {
     <>
       <h1>Settings</h1>
       <Grid
-        alignItems="center"
-        justifyContent="center"
         sx={{
+          alignItems: 'center',
+          justifyContent: 'center',
+
           maxWidth: {
             xs: '100%',
             sm: '90%',
@@ -63,7 +64,15 @@ const Settings = () => {
         label="Dark Mode"
         control={<Checkbox checked={dark} onChange={toggleTheme} key={theme.palette.mode} />}
       />
-      <Grid container spacing={0} direction="column" alignItems="center" justifyContent="center">
+      <Grid
+        container
+        spacing={0}
+        sx={{
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
         <Grid size={{ xs: 12 }}>
           <p>
             version:

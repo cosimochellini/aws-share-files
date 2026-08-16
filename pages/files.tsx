@@ -22,9 +22,7 @@ const sx = {
 };
 const gridProps = {
   sx,
-  md: 6,
-  xs: 12,
-  item: true,
+  size: { xs: 12, md: 6 },
 };
 
 export const getStaticProps = (async (_) => ({ props: {} })) satisfies GetStaticProps;
@@ -49,11 +47,13 @@ const FilesPage = () => {
     <>
       <Grid
         container
-        alignItems="center"
-        justifyItems="center"
         spacing={{
           xs: 0,
           sm: 2,
+        }}
+        sx={{
+          alignItems: 'center',
+          justifyItems: 'center',
         }}
       >
         {hasWidth(900) && (

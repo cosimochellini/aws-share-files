@@ -46,11 +46,9 @@ const TEST_MESSAGE_ID = 'test-message-id';
  * scope, which would attempt a real SMTP handshake during the test run. Mocked globally
  * so no test can accidentally reach the network.
  *
- * The transport is a single hoisted object rather than one built inside the factory:
- * `restoreMocks` strips mock implementations before every test, so the implementations
- * have to be re-applied in the beforeEach below. Holding a stable reference is what
- * makes that possible — src/instances/transporter.ts captures the object once at import
- * time and keeps it for the lifetime of the module.
+ * The transport is a single hoisted object rather than one built inside the factory, so
+ * src/instances/transporter.ts can capture it once at import time and every test can
+ * still reach the same instance afterwards.
  */
 const nodemailerMock = vi.hoisted(() => {
   const transport = {
@@ -81,9 +79,11 @@ const matchMediaMock = (query: string): MediaQueryList => ({
 } as unknown as MediaQueryList);
 
 beforeEach(() => {
-  // restoreMocks has already stripped these by the time this runs, so re-apply them
-  // on every test. Without this the transport silently returns undefined from the
-  // second test of each file onwards.
+  // verify and sendMail are created as bare vi.fn() above, so this is where they get an
+  // implementation at all. It has to be a beforeEach rather than part of the factory
+  // because tests are free to override them: src/instances/transporter.ts calls verify()
+  // at module scope, and an unarmed mock returns undefined there, so the .catch() chained
+  // onto it throws a TypeError that transporter.ts's try/catch then swallows.
   nodemailerMock.createTransport.mockReturnValue(nodemailerMock.transport);
   nodemailerMock.transport.verify.mockResolvedValue(true);
   nodemailerMock.transport.sendMail.mockResolvedValue({ messageId: TEST_MESSAGE_ID });

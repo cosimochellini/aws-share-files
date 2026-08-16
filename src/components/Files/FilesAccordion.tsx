@@ -64,8 +64,10 @@ export const FilesAccordion = ({ currentFile }: FilesAccordionProps) => {
       variant="outlined"
       key={currentFile.Key}
       onChange={handleChange(currentFile.Key)}
-      TransitionProps={{ unmountOnExit: true }}
       expanded={currentFile.Key === currentExpanded}
+      slotProps={{
+        transition: { unmountOnExit: true },
+      }}
     >
       <AccordionSummary
         id={currentFile.Key}
