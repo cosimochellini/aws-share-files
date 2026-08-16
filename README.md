@@ -39,10 +39,10 @@ AWS Share Files is a full-stack serverless application that provides a user-frie
 
 ### Frontend
 
-- [Next.js 15](https://nextjs.org/) - React framework for server-rendered applications
+- [Next.js 16](https://nextjs.org/) - React framework for server-rendered applications
 - [React 19](https://reactjs.org/) - UI component library
 - [TypeScript](https://www.typescriptlang.org/) - Type-safe JavaScript
-- [Material UI 6](https://mui.com/) - React component library
+- [Material UI 9](https://mui.com/) - React component library
 - [React Hook Form](https://react-hook-form.com/) - Form validation and management
 - [Zustand](https://github.com/pmndrs/zustand) - State management
 
