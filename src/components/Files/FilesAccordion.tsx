@@ -96,7 +96,10 @@ export const FilesAccordion = ({ currentFile }: FilesAccordionProps) => {
             sx: { marginX: 1 },
           }}
           icon={<Delete />}
-          clickAction={() => deleteFile(currentFile.Key)}
+          clickAction={(event) => {
+            event.stopPropagation();
+            return deleteFile(currentFile.Key);
+          }}
         />
 
         <LoadingButton
@@ -107,7 +110,10 @@ export const FilesAccordion = ({ currentFile }: FilesAccordionProps) => {
             sx: { marginX: 1 },
           }}
           icon={<Download />}
-          clickAction={() => downloadFile(currentFile.Key)}
+          clickAction={(event) => {
+            event.stopPropagation();
+            return downloadFile(currentFile.Key);
+          }}
         />
       </AccordionSummary>
       <AccordionDetails>
