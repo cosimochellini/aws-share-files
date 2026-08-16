@@ -9,7 +9,7 @@ const fetchMock = vi.fn();
 const volumeInfo = (title: string) => ({ title } as VolumeInfo);
 
 const respondWith = (payload: unknown) => {
-  fetchMock.mockResolvedValue({ json: () => Promise.resolve(payload) });
+  fetchMock.mockResolvedValue({ ok: true, json: () => Promise.resolve(payload) });
 };
 
 const entry = (title: string) => ({ volumeInfo: volumeInfo(title) });
@@ -93,10 +93,19 @@ describe('content API failures', () => {
   it('rethrows a json() parse failure the same way', async () => {
     const parseError = new Error('invalid json');
 
-    fetchMock.mockResolvedValue({ json: () => Promise.reject(parseError) });
+    fetchMock.mockResolvedValue({ ok: true, json: () => Promise.reject(parseError) });
 
     await expect(content.findAllContent('dune')).rejects.toBe(parseError);
 
     expect(notification.error).toHaveBeenCalledWith(parseError);
+  });
+
+  it('reports an error status instead of parsing the error body as a result', async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 429, json: () => Promise.resolve({}) });
+
+    await expect(content.findFirstContent('dune'))
+      .rejects.toThrowError('the content API answered /volumes with 429');
+
+    expect(notification.error).toHaveBeenCalledTimes(1);
   });
 });

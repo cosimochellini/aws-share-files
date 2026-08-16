@@ -82,6 +82,24 @@ describe('volumes.store', () => {
       expect(result.current.volume).toBeUndefined();
     });
 
+    it('drops the displayed volume while another lookup is loading', async () => {
+      const current = buildVolume('Current');
+
+      seed({ volume: current, volumeLoading: true, cachedVolumes: {} });
+
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      await act(async () => {
+        await result.current.getVolume('anything');
+      });
+
+      // the in-flight lookup is for some other name, so its predecessor must not be shown
+      expect(findFirst).not.toHaveBeenCalled();
+      expect(result.current.volume).toBeUndefined();
+    });
+
     it('returns early when the cached volume is already the current one', async () => {
       const { findFirst, useVolumeGetter } = await loadStore();
 
@@ -251,7 +269,8 @@ describe('volumes.store', () => {
     it('does not retry a name whose lookup failed', async () => {
       const { findFirst, notification, useVolumeGetter } = await loadStore();
 
-      vi.spyOn(notification, 'error');
+      const errorSpy = vi.spyOn(notification, 'error');
+
       findFirst.mockRejectedValue(new Error('content api is down'));
 
       const { result } = renderHook(() => useVolumeGetter());
@@ -267,6 +286,42 @@ describe('volumes.store', () => {
       // a failed lookup is remembered like a miss, so callers re-running on every store
       // update cannot turn an outage into a request storm
       expect(findFirst).toHaveBeenCalledTimes(1);
+      // and the retry is silent: the failure was already reported once
+      expect(errorSpy).toHaveBeenCalledTimes(1);
+    });
+
+    it('drops a lookup that resolves after another name was asked for', async () => {
+      const { findFirst, useVolumeGetter } = await loadStore();
+
+      const slow = buildVolume('Slow');
+
+      let resolveSlow: (volume: typeof slow) => void = () => {};
+
+      findFirst.mockReturnValueOnce(new Promise((resolve) => {
+        resolveSlow = resolve;
+      }));
+
+      const { result } = renderHook(() => useVolumeGetter());
+
+      let pending: Promise<void> = Promise.resolve();
+
+      await act(async () => {
+        pending = result.current.getVolume('slow');
+      });
+
+      // the modal moved on to another file while the first lookup was still in flight
+      await act(async () => {
+        await result.current.getVolume('other');
+      });
+
+      await act(async () => {
+        resolveSlow(slow);
+        await pending;
+      });
+
+      expect(result.current.volume).toBeUndefined();
+      expect(readPersisted().cachedVolumes).toEqual({});
+      expect(readPersisted().volumeLoading).toBe(false);
     });
 
     it('notifies and clears the loading flag when the fetch rejects', async () => {

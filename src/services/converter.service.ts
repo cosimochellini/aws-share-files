@@ -24,7 +24,12 @@ const replaceExtension = (file: string, ext: string) => {
 const converterApiCaller = <T>(section: string, query = {}) => {
   const url = `${baseUrl + section}?${new URLSearchParams(query).toString()}`;
   return fetch(url, { headers })
-    .then((res) => res.json())
+    .then((res) => {
+      // fetch only rejects on a transport failure, so an error status has to be raised here
+      if (!res.ok) throw new Error(`the converter API answered ${section} with ${res.status}`);
+
+      return res.json();
+    })
     .catch((error: unknown) => {
       notification.error(error);
 
@@ -40,7 +45,11 @@ converterApiCaller.post = <T>(section: string, body = {}) => {
     method: 'POST',
     body: JSON.stringify(body),
   })
-    .then((res) => res.json())
+    .then((res) => {
+      if (!res.ok) throw new Error(`the converter API answered ${section} with ${res.status}`);
+
+      return res.json();
+    })
     .catch((error: unknown) => {
       notification.error(error);
 

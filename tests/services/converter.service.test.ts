@@ -24,7 +24,7 @@ const lastPostBody = (): ConversionRequest => {
 
 beforeEach(() => {
   vi.stubGlobal('fetch', fetchMock);
-  fetchMock.mockResolvedValue({ json: () => Promise.resolve({ id: 'job-1' }) });
+  fetchMock.mockResolvedValue({ ok: true, json: () => Promise.resolve({ id: 'job-1' }) });
 });
 
 describe('converter.getConversionStatus', () => {
@@ -133,7 +133,7 @@ describe('converter API failures', () => {
   it('rethrows a json() parse failure as well', async () => {
     const error = new Error('bad payload');
 
-    fetchMock.mockResolvedValue({ json: () => Promise.reject(error) });
+    fetchMock.mockResolvedValue({ ok: true, json: () => Promise.reject(error) });
 
     await expect(converter.getConversionStatus('job-1')).rejects.toBe(error);
 
@@ -143,11 +143,23 @@ describe('converter API failures', () => {
   it('rethrows a json() parse failure on the POST path too', async () => {
     const error = new Error('bad payload');
 
-    fetchMock.mockResolvedValue({ json: () => Promise.reject(error) });
+    fetchMock.mockResolvedValue({ ok: true, json: () => Promise.reject(error) });
 
     await expect(converter.convertFile({ file: 'author/book.docx', target: 'pdf' }))
       .rejects.toBe(error);
 
     expect(notification.error).toHaveBeenCalledWith(error);
+  });
+
+  it('reports an error status instead of parsing the error body as a job', async () => {
+    fetchMock.mockResolvedValue({ ok: false, status: 500, json: () => Promise.resolve({}) });
+
+    await expect(converter.getConversionStatus('job-1'))
+      .rejects.toThrowError('the converter API answered jobs/job-1 with 500');
+
+    await expect(converter.convertFile({ file: 'author/book.docx', target: 'pdf' }))
+      .rejects.toThrowError('the converter API answered jobs with 500');
+
+    expect(notification.error).toHaveBeenCalledTimes(2);
   });
 });
