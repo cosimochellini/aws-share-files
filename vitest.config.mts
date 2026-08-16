@@ -1,10 +1,9 @@
 import { defineConfig } from 'vitest/config';
 
+// No JSX override here: Next 16 sets tsconfig's "jsx" to "react-jsx", and Vite reads it
+// from there. Putting "preserve" back would leave JSX untransformed and break
+// src/instances/navbar.tsx, which is inside the coverage scope.
 export default defineConfig({
-  // tsconfig.json sets "jsx": "preserve" for the Next compiler, which esbuild would
-  // honour by leaving JSX untransformed. src/instances/navbar.tsx is inside the
-  // coverage scope, so the transform has to be forced on here.
-  esbuild: { jsx: 'automatic' },
   test: {
     environment: 'jsdom',
     globals: false,
@@ -12,9 +11,8 @@ export default defineConfig({
     include: ['tests/**/*.test.ts', 'tests/**/*.test.tsx'],
     // restoreMocks keeps vi.spyOn calls from leaking between tests, which is what
     // stops one spec's stubbed Storage.prototype.setItem or Date.now from silently
-    // changing the meaning of the next. Note it also strips the implementations
-    // declared inside vi.mock factories, so tests/setup.ts re-arms the nodemailer
-    // transport in a beforeEach rather than only in the factory.
+    // changing the meaning of the next. As of Vitest 4 it only touches vi.spyOn, so
+    // implementations declared inside vi.mock factories now survive on their own.
     restoreMocks: true,
     clearMocks: true,
     coverage: {

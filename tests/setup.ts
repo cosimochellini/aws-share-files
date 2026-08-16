@@ -46,11 +46,12 @@ const TEST_MESSAGE_ID = 'test-message-id';
  * scope, which would attempt a real SMTP handshake during the test run. Mocked globally
  * so no test can accidentally reach the network.
  *
- * The transport is a single hoisted object rather than one built inside the factory:
- * `restoreMocks` strips mock implementations before every test, so the implementations
- * have to be re-applied in the beforeEach below. Holding a stable reference is what
- * makes that possible — src/instances/transporter.ts captures the object once at import
- * time and keeps it for the lifetime of the module.
+ * The transport is a single hoisted object rather than one built inside the factory, and
+ * the beforeEach below re-arms it. `clearMocks` wipes the return values before every
+ * test, so without that the transport would hand back undefined from the second test of
+ * each file onwards. Holding a stable reference is what makes re-arming possible —
+ * src/instances/transporter.ts captures the object once at import time and keeps it for
+ * the lifetime of the module.
  */
 const nodemailerMock = vi.hoisted(() => {
   const transport = {
@@ -81,9 +82,9 @@ const matchMediaMock = (query: string): MediaQueryList => ({
 } as unknown as MediaQueryList);
 
 beforeEach(() => {
-  // restoreMocks has already stripped these by the time this runs, so re-apply them
-  // on every test. Without this the transport silently returns undefined from the
-  // second test of each file onwards.
+  // clearMocks has already wiped these by the time this runs, so re-apply them on every
+  // test. Without this the transport silently returns undefined from the second test of
+  // each file onwards.
   nodemailerMock.createTransport.mockReturnValue(nodemailerMock.transport);
   nodemailerMock.transport.verify.mockResolvedValue(true);
   nodemailerMock.transport.sendMail.mockResolvedValue({ messageId: TEST_MESSAGE_ID });

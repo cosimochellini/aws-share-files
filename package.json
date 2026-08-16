@@ -54,7 +54,7 @@
     "@types/react-dom": "^19.2.4",
     "@typescript-eslint/eslint-plugin": "^8.67.0",
     "@typescript-eslint/parser": "^8.67.0",
-    "@vitest/coverage-v8": "^3.2.7",
+    "@vitest/coverage-v8": "^4.1.10",
     "dotenv-webpack": "^9.0.0",
     "eslint": "^9.39.5",
     "eslint-config-airbnb": "^19.0.4",
@@ -64,12 +64,12 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "fallow": "3.16.0",
     "globals": "^17.11.0",
-    "jsdom": "^26.1.0",
+    "jsdom": "^30.0.1",
     "react-doctor": "0.9.12",
     "ts-node": "^10.9.2",
     "type-fest": "^5.8.0",
     "typescript": "6.0.3",
-    "vitest": "^3.2.7"
+    "vitest": "^4.1.10"
   },
   "resolutions": {
     "@types/minimatch": "5.1.2"

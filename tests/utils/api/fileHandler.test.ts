@@ -36,7 +36,12 @@ const resolveParseWith = (fields: Record<string, unknown>, files: Record<string,
 };
 
 beforeEach(() => {
-  mocks.incomingForm.mockImplementation(() => ({ parse: mocks.parse }));
+  // fileHandler calls `new IncomingForm(...)`, and Vitest 4 refuses to construct an
+  // arrow function. A function expression returning an object still overrides `this`,
+  // so the fake parser comes back from `new` exactly as before.
+  mocks.incomingForm.mockImplementation(function IncomingFormMock() {
+    return { parse: mocks.parse };
+  });
 });
 
 describe('fileHandler', () => {
