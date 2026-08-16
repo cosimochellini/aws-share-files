@@ -119,13 +119,18 @@ describe('useAuth', () => {
     expect(push).toHaveBeenCalledWith(loginPath);
   });
 
-  it('throws when next-auth hands back a null session outside the loading state', () => {
+  it('redirects to the login page when next-auth hands back a null session', async () => {
     givenSession(null, 'unauthenticated');
 
-    // KNOWN BUG: the hook dereferences `session.user` without a null guard, so the very
-    // case it means to handle - an unauthenticated visitor - blows up during render
-    // instead of redirecting to the login page.
-    expect(() => renderHook(() => useAuth())).toThrow(TypeError);
-    expect(push).not.toHaveBeenCalled();
+    const { result } = renderHook(() => useAuth());
+
+    expect(result.current.authenticated).toBe(false);
+    expect(result.current.session).toBeNull();
+
+    await waitFor(() => {
+      expect(push).toHaveBeenCalledWith(loginPath);
+    });
+
+    expect(push).toHaveBeenCalledTimes(1);
   });
 });
