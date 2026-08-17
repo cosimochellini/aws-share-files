@@ -1,0 +1,21 @@
+# Netlify build configuration.
+#
+# This file pins what the deploy already does today; it is not meant to change
+# behaviour. Settings declared here take precedence over the ones configured in
+# the Netlify UI, so keep the two in sync.
+
+[build]
+  command = "pnpm run build"
+  publish = ".next"
+
+[build.environment]
+  # `pnpm build` runs `node --experimental-strip-types ./script.runner.node.ts`
+  # before `next build`, and package.json declares `engines.node: >=24`.
+  # Pinning this keeps the build reproducible if Netlify moves its default.
+  NODE_VERSION = "24"
+
+# Required: the app is not statically exportable. It ships 13 API routes under
+# pages/api/, next-auth v4 with a DynamoDB adapter, and a formidable upload route
+# with `bodyParser: false`, so it needs the Next.js server runtime.
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
